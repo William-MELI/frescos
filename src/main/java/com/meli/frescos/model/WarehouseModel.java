@@ -8,15 +8,13 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-@Table(name = "representative")
-public class RepresentativeModel {
+@Table(name = "warehouse")
+public class WarehouseModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String name;
+    private String localization;
 
-    @OneToOne(optional = false)
-    private WarehouseModel warehouse;
 }

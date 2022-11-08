@@ -8,15 +8,21 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-@Table(name = "representative")
-public class RepresentativeModel {
+@Table(name = "section")
+public class SectionModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String name;
+    private String description;
 
-    @OneToOne(optional = false)
+    @Enumerated(EnumType.STRING)
+    private CategoryEnum category;
+
+    private Double totalSize;
+
+    private Double temperature;
+
+    @ManyToOne
     private WarehouseModel warehouse;
 }
