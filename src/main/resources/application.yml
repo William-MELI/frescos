@@ -1,9 +1,9 @@
 spring:
   datasource:
     username: root
-    password:
+    password: ${PASSWORD}
     url: jdbc:mysql://localhost:3306/fresh?createDatabaseIfNotExist=true&useTimezone=true&serverTimezone=UTC
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     properties:
       hibernate:
