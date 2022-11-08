@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.meli</groupId>
-    <artifactId>frescos</artifactId>
+    <artifactId>fresh</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>fresh</name>
     <description>fresh</description>
