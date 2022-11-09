@@ -1,5 +1,6 @@
 package com.meli.frescos.service;
 
+import com.meli.frescos.controller.dto.SectionRequest;
 import com.meli.frescos.model.SectionModel;
 import com.meli.frescos.repository.SectionRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,14 @@ public class SectionService implements ISectionService {
     }
 
     @Override
-    public SectionModel insert(SectionModel sectionModel) {
-        return repo.save(sectionModel);
+    public SectionModel insert(SectionRequest sectionRequest) {
+        SectionModel model = new SectionModel(sectionRequest.getDescription(),
+                sectionRequest.getCategory(),
+                sectionRequest.getTotalSize(),
+                sectionRequest.getTemperature(),
+                sectionRequest.getWarehouse());
+
+       return repo.save(model);
     }
 
     @Override
