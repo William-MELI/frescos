@@ -1,38 +1,79 @@
 package com.meli.frescos.model;
 
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+/**
+ * Main BatchStock Entity
+ */
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @Table(name = "batch_stock")
 public class BatchStockModel {
+
+    /**
+     *  BatchStockModel ID
+     *  Auto-generated
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    /**
+     *  BatchStockModel number
+     *  Not Nullable
+     */
+    @Column(nullable = false)
     private String batchNumber;
 
-    @NotNull
+    /**
+     *  BatchStockModel quantity
+     *  Not Nullable
+     */
+    @Column(nullable = false)
     private Double quantity;
 
+    /**
+     *  BatchStockModel manufacture date
+     *  Not Nullable
+     */
+    @Column(nullable = false)
     private LocalDate manufacturingDate;
 
+    /**
+     *  BatchStockModel manufacture date and time
+     *  Not Nullable
+     */
+    @Column(nullable = false)
     private LocalDateTime manufacturingTime;
 
+    /**
+     *  BatchStockModel due date
+     *  Not Nullable
+     */
+    @Column(nullable = false)
     private LocalDate dueDate;
 
+    /**
+     * Product related to BatchStockModel(Foreign key)
+     * Not Nullable
+     */
+    @Column(nullable = false)
     @ManyToOne
     private ProductModel product;
 
+    /**
+     * Section related to BatchStockModel(Foreign key)
+     * Not Nullable
+     */
+    @Column(nullable = false)
     @ManyToOne
     private SectionModel section;
 }

@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface IBatchStockService {
 
-    List<BatchStockModel>findAll() throws Exception;
+    List<BatchStockModel> findAll();
+
     BatchStockModel findById(Long id) throws BatchStockByIdNotFoundException;
 }
