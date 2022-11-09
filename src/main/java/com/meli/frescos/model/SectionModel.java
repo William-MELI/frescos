@@ -25,18 +25,53 @@ public class SectionModel {
         this.warehouse = warehouse;
     }
 
+    /**
+     *   Section ID.
+     *   Auto-generated
+     */
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
+    /**
+     *   Section description.
+     *   Not nullable.
+     */
+
+    @Column(nullable = false)
     private String description;
 
+    /**
+     *   Section category.
+     *   Not nullable.
+     */
+
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private CategoryEnum category;
 
+    /**
+     *   Section totalSize.
+     *   Not nullable.
+     */
+
+    @Column(nullable = false)
     private Double totalSize;
 
+    /**
+     *   Section temperature.
+     *   Not nullable.
+     */
+
+    @Column(nullable = false)
     private Double temperature;
+
+    /**
+     * Warehouse reference.
+     * It is an N-1 relationship
+     */
 
     @ManyToOne
     @JoinColumn(name = "warehouse_id")
