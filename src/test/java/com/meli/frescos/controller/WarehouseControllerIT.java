@@ -15,9 +15,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -116,7 +114,7 @@ class WarehouseControllerIT {
     }
 
     @Test
-    void getAll() throws Exception {
+    void getAll_returnListOfWarehouse_whenSuccess() throws Exception {
         String city = "Tramandaí";
         String district = "Zona Nova";
         String state = "Rio Grande do Sul";
@@ -131,7 +129,7 @@ class WarehouseControllerIT {
                 .postalCode(postalCode)
                 .district(district).build();
 
-        WarehouseModel warehouse = warehouseService.create(newWarehouseRequest.toEntity());
+        warehouseService.create(newWarehouseRequest.toEntity());
 
         ResultActions response = mockMvc.perform(
                 get("/warehouse/all")
