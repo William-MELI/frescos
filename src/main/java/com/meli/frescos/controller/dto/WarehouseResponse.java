@@ -3,6 +3,8 @@ package com.meli.frescos.controller.dto;
 import com.meli.frescos.model.WarehouseModel;
 import lombok.*;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,11 +17,23 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class WarehouseResponse {
 
-    String localization;
+    private String district;
+
+    private String state;
+
+    private String city;
+
+    private String street;
+
+    private String postalCode;
 
     public static WarehouseResponse toResponse(WarehouseModel warehouse){
         return WarehouseResponse.builder()
-                .localization(warehouse.getLocalization())
+                .city(warehouse.getCity())
+                .state(warehouse.getState())
+                .street(warehouse.getStreet())
+                .postalCode(warehouse.getPostalCode())
+                .district(warehouse.getDistrict())
                 .build();
     }
 
