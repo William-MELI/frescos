@@ -16,6 +16,7 @@ public class BatchStockService implements IBatchStockService {
         this.batchStockRepository = batchStockRepository;
     }
 
+    @Override
     public List<BatchStockModel> findAll() throws Exception {
         List<BatchStockModel> batchStockList = batchStockRepository.findAll();
         if(batchStockList.isEmpty()) {
@@ -24,6 +25,7 @@ public class BatchStockService implements IBatchStockService {
         return batchStockList;
     }
 
+    @Override
     public BatchStockModel findById(Long id) throws BatchStockByIdNotFoundException {
         return batchStockRepository.findById(id).orElseThrow(() -> new BatchStockByIdNotFoundException(id));
     }
