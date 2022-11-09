@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class WarehouseService implements  IWarehouseService{
@@ -28,9 +29,16 @@ public class WarehouseService implements  IWarehouseService{
     }
 
     public void update(WarehouseModel warehouseUpdate){
-        WarehouseModel warehouseOriginal = this.warehouseRepository.findById(warehouseUpdate.getId()).orElseThrow(NullPointerException::new);
+        Optional<WarehouseModel> warehouseOpt = this.warehouseRepository.findById(warehouseUpdate.getId());
+        if(warehouseOpt.isEmpty()){
+            throw new NullPointerException("Warehouse não encontrado");
+        }
+
         this.warehouseRepository.save(warehouseUpdate);
 
     }
+    public void delete(Long id){
+        this.warehouseRepository.deleteById(id);
 
+    }
 }

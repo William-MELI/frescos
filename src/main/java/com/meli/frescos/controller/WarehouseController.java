@@ -41,4 +41,9 @@ public class WarehouseController {
     return new ResponseEntity<>(warehouseResponseList,HttpStatus.FOUND);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id){
+        this.warehouseService.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

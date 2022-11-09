@@ -14,4 +14,5 @@ public interface IWarehouseService {
 
     void update(WarehouseModel warehouse);
 
+    void delete(Long id);
 }
