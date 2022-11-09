@@ -16,6 +16,8 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -133,11 +135,58 @@ class WarehouseServiceTest {
         assertThrows(NullPointerException.class, () -> {
             WarehouseModel responseWarehouse = warehouseService.getById(ArgumentMatchers.anyLong());
         });
-
     }
 
     @Test
-    void getAll() {
+    @DisplayName("Returns a List of Warehouse from Storage")
+    void getAll_returnsWarehouseList_WhenSuccess() {
+        String city1 = "Tramandaí";
+        String district1 = "Zona Nova";
+        String state1 = "Rio Grande do Sul";
+        String postalCode1 = "99999999";
+        String street1 = "Avenida Emancipacao";
+
+        String city2 = "Tramandaí";
+        String district2 = "Zona Nova";
+        String state2 = "Rio Grande do Sul";
+        String postalCode2 = "99999999";
+        String street2 = "Avenida Emancipacao";
+
+        WarehouseRequest newWarehouseRequest1 = WarehouseRequest
+                .builder()
+                .city(city1)
+                .street(street1)
+                .state(state1)
+                .postalCode(postalCode1)
+                .district(district1).build();
+
+        WarehouseModel newWarehouseEntity1 = newWarehouseRequest1.toEntity();
+
+        WarehouseRequest newWarehouseRequest2 = WarehouseRequest
+                .builder()
+                .city(city2)
+                .street(street2)
+                .state(state2)
+                .postalCode(postalCode2)
+                .district(district2).build();
+
+        WarehouseModel newWarehouseEntity2 = newWarehouseRequest2.toEntity();
+
+
+        warehouseService.create(newWarehouseEntity1);
+        warehouseService.create(newWarehouseEntity2);
+
+        List<WarehouseModel> expectedList = new ArrayList<WarehouseModel>();
+        expectedList.add(newWarehouseEntity1);
+        expectedList.add(newWarehouseEntity2);
+
+        Mockito.when(warehouseService.getAll())
+                .thenReturn(expectedList);
+
+        List<WarehouseModel> responseGetAll = warehouseService.getAll();
+
+
+        assertEquals(2, responseGetAll.size());
     }
 
     @Test
