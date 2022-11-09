@@ -1,6 +1,7 @@
 package com.meli.frescos.controller;
 
 import com.meli.frescos.controller.dto.BatchStockResponse;
+import com.meli.frescos.exception.BatchStockByIdNotFoundException;
 import com.meli.frescos.service.BatchStockService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +24,7 @@ public class BatchStockController {
     }
 
     @GetMapping
-    ResponseEntity<List<BatchStockResponse>> getAll() {
+    ResponseEntity<List<BatchStockResponse>> getAll() throws Exception {
         List<BatchStockResponse> batchStockResponseList = new ArrayList<>();
 
         batchStockService.findAll().forEach(b -> batchStockResponseList.add(BatchStockResponse.toResponse(b)));
@@ -32,7 +33,7 @@ public class BatchStockController {
     }
 
     @GetMapping("/filter-id")
-    ResponseEntity<BatchStockResponse> getById(@RequestParam Long id) throws Exception {
+    ResponseEntity<BatchStockResponse> getById(@RequestParam Long id) throws BatchStockByIdNotFoundException {
         return ResponseEntity.ok(BatchStockResponse.toResponse((batchStockService.findById(id))));
     }
 }
