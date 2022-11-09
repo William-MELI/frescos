@@ -158,10 +158,12 @@ class WarehouseControllerIT {
         WarehouseModel warehouse = warehouseService.create(newWarehouseRequest.toEntity());
 
         ResultActions response = mockMvc.perform(
-                delete("/warehouse/{id}", String.valueOf(warehouse.getId()))
+                delete("/warehouse/{id}", (warehouse.getId()))
                         .contentType(MediaType.APPLICATION_JSON)
         );
 
         response.andExpect(status().isOk());
     }
+
+
 }

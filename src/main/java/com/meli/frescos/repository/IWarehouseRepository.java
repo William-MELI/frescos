@@ -10,5 +10,5 @@ import java.util.List;
 
 public interface IWarehouseRepository extends CrudRepository<WarehouseModel, Long> {
     @Query("SELECT section FROM SectionModel section join section.warehouse wh WHERE section.warehouse.id = :warehouseId")
-    List<SectionModel> findSectionByWarehouseModelId(@Param("warehouseId") String warehouseId);
+    List<SectionModel> findSectionByWarehouseModelId(@Param("warehouseId") Long warehouseId);
 }

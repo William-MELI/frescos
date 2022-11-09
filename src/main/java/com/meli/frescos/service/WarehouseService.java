@@ -69,11 +69,11 @@ public class WarehouseService implements IWarehouseService {
      * @param id Existent Warehouse ID
      */
     public void delete(Long id) {
-        List<SectionModel> sectionList = warehouseRepository.findSectionByWarehouseModelId(String.valueOf(id));
+        List<SectionModel> sectionList = warehouseRepository.findSectionByWarehouseModelId(id);
         if (sectionList.isEmpty()) {
             this.warehouseRepository.deleteById(id);
         } else {
-            throw new NullPointerException("Warehouse is related with Section. Delete it first.")
+            throw new NullPointerException("Warehouse is related with Section. Delete it first.");
         }
     }
 }
