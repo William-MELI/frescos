@@ -39,5 +39,6 @@ public class SectionModel {
     private Double temperature;
 
     @ManyToOne
+    @JoinColumn(name = "warehouse_id")
     private WarehouseModel warehouse;
 }
