@@ -2,14 +2,12 @@ package com.meli.frescos.controller;
 
 import com.meli.frescos.controller.dto.SellerRequest;
 import com.meli.frescos.controller.dto.SellerResponse;
-import com.meli.frescos.model.SellerModel;
 import com.meli.frescos.service.ISellerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/seller")
@@ -31,20 +29,12 @@ public class SellerController {
 
     @GetMapping("/filter-id")
     public ResponseEntity<SellerResponse> findById(@RequestParam Long id){
-        Optional<SellerModel> seller = service.findById(id);
-        if(seller.isEmpty())
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-        return new ResponseEntity<>(SellerResponse.toResponse(seller.get()) , HttpStatus.OK);
+        return new ResponseEntity<>(SellerResponse.toResponse(service.findById(id)) , HttpStatus.OK);
     }
 
     @PatchMapping()
-    public ResponseEntity<SellerResponse> update(@RequestBody SellerRequest sellerRequest){
-        Optional<SellerModel> seller = service.findByCpf(sellerRequest.getCpf());
-        if(seller.isEmpty())
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-        return new ResponseEntity<>(SellerResponse.toResponse(service.save(seller.get())), HttpStatus.OK);
+    public ResponseEntity<SellerResponse> update(@RequestBody SellerRequest sellerRequest, @RequestParam Long id){
+        return new ResponseEntity<>(SellerResponse.toResponse(service.update(sellerRequest.toEntity(), id)), HttpStatus.OK);
     }
 
     @DeleteMapping
