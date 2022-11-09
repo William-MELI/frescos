@@ -38,7 +38,13 @@ public class SectionService implements ISectionService {
     }
 
     @Override
-    public Optional<SectionModel> findById(Long id) {
-        return repo.findById(id);
+    public SectionModel findById(Long id) {
+
+        Optional<SectionModel> responseDb = repo.findById(id);
+
+        if (responseDb.isEmpty()) {
+            throw new NullPointerException("Section not found");
+        }
+        return responseDb.get();
     }
 }

@@ -33,12 +33,7 @@ public class SectionController {
 
     @GetMapping("/{id}")
     ResponseEntity<SectionModel> findById(@PathVariable Long id) {
-        Optional<SectionModel> section = service.findById(id);
-
-        if(section.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        return new ResponseEntity<>(section.get(), HttpStatus.OK);
+        SectionModel section = service.findById(id);
+        return new ResponseEntity<>(section, HttpStatus.OK);
     }
 }

@@ -12,5 +12,5 @@ public interface ISectionService {
 
     SectionModel insert(SectionRequest sectionRequest);
 
-    Optional<SectionModel> findById(Long id);
+    SectionModel findById(Long id);
 }
