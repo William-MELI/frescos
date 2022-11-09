@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("warehouse")
 public class WarehouseController {
@@ -32,8 +34,11 @@ public class WarehouseController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<WarehouseModel> getAll(){
+    public ResponseEntity<List<WarehouseResponse>> getAll(){
+    List<WarehouseModel> warehouseModelList = this.warehouseService.getAll();
+    List<WarehouseResponse> warehouseResponseList = WarehouseResponse.toResponse(warehouseModelList);
 
+    return new ResponseEntity<>(warehouseResponseList,HttpStatus.FOUND);
     }
 
 }
