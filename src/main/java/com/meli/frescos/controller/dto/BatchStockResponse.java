@@ -8,7 +8,9 @@ import lombok.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-
+/**
+ * DTO response to endpoints related to BatchStock
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,20 +18,44 @@ import java.time.LocalDateTime;
 @Builder
 public class BatchStockResponse {
 
+    /**
+     * BatchStockModel id
+     */
     private Long id;
 
+    /**
+     * BatchStockModel number
+     */
     private String batchNumber;
 
+    /**
+     * BatchStockModel quantity
+     */
     private Double quantity;
 
+    /**
+     * BatchStockModel manufacturing date
+     */
     private LocalDate manufacturingDate;
 
+    /**
+     * BatchStockModel manufacturing date and time
+     */
     private LocalDateTime manufacturingTime;
 
+    /**
+     * BatchStockModel due date
+     */
     private LocalDate dueDate;
 
+    /**
+     * Product related to BatchStockModel
+     */
     private ProductModel product;
 
+    /**
+     * Section related to BatchStockModel
+     */
     private SectionModel section;
 
     public static BatchStockResponse toResponse(BatchStockModel batchStockModel) {
