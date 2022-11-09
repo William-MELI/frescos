@@ -29,7 +29,7 @@ public class SellerController {
         return new ResponseEntity<>(sellerResponseList,HttpStatus.OK);
     }
 
-   @GetMapping("/filter-id")
+    @GetMapping("/filter-id")
     public ResponseEntity<SellerResponse> findById(@RequestParam Long id){
         Optional<SellerModel> seller = service.findById(id);
         if(seller.isEmpty())
