@@ -4,7 +4,7 @@ import com.meli.frescos.controller.dto.SectionRequest;
 import com.meli.frescos.model.SectionModel;
 import com.meli.frescos.model.WarehouseModel;
 import com.meli.frescos.repository.IWarehouseRepository;
-import com.meli.frescos.repository.SectionRepo;
+import com.meli.frescos.repository.SectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ import java.util.Optional;
 public class SectionService implements ISectionService {
 
     @Autowired
-    private SectionRepo repo;
+    private SectionRepository repo;
 
     @Autowired
     private IWarehouseRepository warehouseRepo;
