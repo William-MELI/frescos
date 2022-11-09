@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class WarehouseService {
+public class WarehouseService implements  IWarehouseService{
 
     @Autowired
     IWarehouseRepository warehouseRepository;
