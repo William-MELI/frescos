@@ -24,7 +24,7 @@ public class BatchStockModel {
 
     private LocalDateTime manufacturingTime;
 
-    private LocalDate validityDate;
+    private LocalDate dueDate;
 
     @ManyToOne
     private ProductModel product;
