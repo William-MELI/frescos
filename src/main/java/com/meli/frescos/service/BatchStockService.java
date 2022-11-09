@@ -7,6 +7,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ *  This class contains all BatchStock related functions
+ *  Using @Service from spring
+ */
 @Service
 public class BatchStockService implements IBatchStockService {
 
@@ -16,15 +20,22 @@ public class BatchStockService implements IBatchStockService {
         this.batchStockRepository = batchStockRepository;
     }
 
+    /**
+     * Return all BatchStocks
+     * @return List of BatchStock
+     */
     @Override
-    public List<BatchStockModel> findAll() throws Exception {
+    public List<BatchStockModel> findAll() {
         List<BatchStockModel> batchStockList = batchStockRepository.findAll();
-        if(batchStockList.isEmpty()) {
-            throw new Exception("Nenhum lote encontrado");
-        }
         return batchStockList;
     }
 
+    /**
+     * Return BatchStockModel given id
+     * @param id the batchStockModel id
+     * @return BatchStock
+     * @throws BatchStockByIdNotFoundException
+     */
     @Override
     public BatchStockModel findById(Long id) throws BatchStockByIdNotFoundException {
         return batchStockRepository.findById(id).orElseThrow(() -> new BatchStockByIdNotFoundException(id));
