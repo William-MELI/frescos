@@ -29,32 +29,32 @@ public class BatchStockResponse {
     private String batchNumber;
 
     /**
-     * BatchStock quantity
+     * BatchStockModel quantity
      */
     private Double quantity;
 
     /**
-     * BatchStock manufacturing date
+     * BatchStockModel manufacturing date
      */
     private LocalDate manufacturingDate;
 
     /**
-     * BatchStock manufacturing date and time
+     * BatchStockModel manufacturing date and time
      */
     private LocalDateTime manufacturingTime;
 
     /**
-     * BatchStock due date
+     * BatchStockModel due date
      */
     private LocalDate dueDate;
 
     /**
-     * Product related to BatchStock
+     * Product related to BatchStockModel
      */
     private ProductModel product;
 
     /**
-     * Section related to BatchStock
+     * Section related to BatchStockModel
      */
     private SectionModel section;
 

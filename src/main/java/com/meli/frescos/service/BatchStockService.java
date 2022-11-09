@@ -22,7 +22,7 @@ public class BatchStockService implements IBatchStockService {
 
     /**
      * Return all BatchStocks
-     * @return List of BatchStock
+     * @return List of BatchStockModel
      */
     @Override
     public List<BatchStockModel> findAll() {
@@ -33,7 +33,7 @@ public class BatchStockService implements IBatchStockService {
     /**
      * Return BatchStockModel given id
      * @param id the batchStockModel id
-     * @return BatchStock
+     * @return BatchStockModel
      * @throws BatchStockByIdNotFoundException
      */
     @Override

@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 public class BatchStockModel {
 
     /**
-     *  BatchStock ID
+     *  BatchStockModel ID
      *  Auto-generated
      */
     @Id
@@ -27,42 +27,42 @@ public class BatchStockModel {
     private Long id;
 
     /**
-     *  BatchStock number
+     *  BatchStockModel number
      *  Not Nullable
      */
     @Column(nullable = false)
     private String batchNumber;
 
     /**
-     *  BatchStock quantity
+     *  BatchStockModel quantity
      *  Not Nullable
      */
     @Column(nullable = false)
     private Double quantity;
 
     /**
-     *  BatchStock manufacture date
+     *  BatchStockModel manufacture date
      *  Not Nullable
      */
     @Column(nullable = false)
     private LocalDate manufacturingDate;
 
     /**
-     *  BatchStock manufacture date and time
+     *  BatchStockModel manufacture date and time
      *  Not Nullable
      */
     @Column(nullable = false)
     private LocalDateTime manufacturingTime;
 
     /**
-     *  BatchStock due date
+     *  BatchStockModel due date
      *  Not Nullable
      */
     @Column(nullable = false)
     private LocalDate dueDate;
 
     /**
-     * Product related to BatchStock(Foreign key)
+     * Product related to BatchStockModel(Foreign key)
      * Not Nullable
      */
     @Column(nullable = false)
@@ -70,7 +70,7 @@ public class BatchStockModel {
     private ProductModel product;
 
     /**
-     * Section related to BatchStock(Foreign key)
+     * Section related to BatchStockModel(Foreign key)
      * Not Nullable
      */
     @Column(nullable = false)

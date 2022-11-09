@@ -18,8 +18,5 @@ public class BatchStockServiceTest {
     @Mock
     BatchStockModel batchStockModel;
 
-    void getById_returnBatchStock_WhenSucess() {
-        List<BatchStockModel> batchStockModelList = new ArrayList<>();
-        batchStockModelList.add(new BatchStockModel())
-    }
+
 }
