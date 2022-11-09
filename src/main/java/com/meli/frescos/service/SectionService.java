@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SectionService implements ISectionService {
@@ -21,5 +22,10 @@ public class SectionService implements ISectionService {
     @Override
     public SectionModel insert(SectionModel sectionModel) {
         return repo.save(sectionModel);
+    }
+
+    @Override
+    public Optional<SectionModel> findById(Long id) {
+        return repo.findById(id);
     }
 }

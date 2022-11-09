@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/section")
@@ -26,5 +27,16 @@ public class SectionController {
     public ResponseEntity<SectionModel> insert(@RequestBody SectionModel sectionModel) {
         SectionModel insertSection = service.insert(sectionModel);
         return new ResponseEntity<>(insertSection, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<SectionModel> findById(@PathVariable Long id) {
+        Optional<SectionModel> section = service.findById(id);
+
+        if(section.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(section.get(), HttpStatus.OK);
     }
 }
