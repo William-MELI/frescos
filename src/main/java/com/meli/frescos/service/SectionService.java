@@ -28,6 +28,11 @@ public class SectionService implements ISectionService {
     @Override
     public SectionModel insert(SectionRequest sectionRequest) {
         Optional<WarehouseModel> warehouse = warehouseRepo.findById(sectionRequest.getWarehouse());
+
+        if (warehouse.isEmpty()) {
+            throw new NullPointerException("Warehouse not found");
+        }
+
         SectionModel model = new SectionModel(sectionRequest.getDescription(),
                 sectionRequest.getCategory(),
                 sectionRequest.getTotalSize(),
