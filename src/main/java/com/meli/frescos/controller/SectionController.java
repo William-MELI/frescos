@@ -20,7 +20,7 @@ public class SectionController {
     @GetMapping
     public ResponseEntity<List<SectionModel>> findAll() {
         List<SectionModel> findAllSections = service.findAll();
-        return ResponseEntity.ok(findAllSections);
+        return new ResponseEntity<>(findAllSections, HttpStatus.OK);
     }
 
     @PostMapping
