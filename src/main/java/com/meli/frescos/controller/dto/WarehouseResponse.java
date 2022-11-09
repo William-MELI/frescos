@@ -9,12 +9,12 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class WarehouseModelResponse {
+public class WarehouseResponse {
 
     String localization;
 
-    public static WarehouseModelResponse toResponse(WarehouseModel warehouse){
-        return WarehouseModelResponse.builder()
+    public static WarehouseResponse toResponse(WarehouseModel warehouse){
+        return WarehouseResponse.builder()
                 .localization(warehouse.getLocalization())
                 .build();
     }

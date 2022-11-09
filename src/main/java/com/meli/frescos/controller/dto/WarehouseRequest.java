@@ -9,7 +9,7 @@ import javax.validation.constraints.Size;
 
 @Builder
 @Getter
-public class WarehouseModelRequest {
+public class WarehouseRequest {
 
     @NotBlank(message = "A localização não pode ser vazia")
     @Size(min = 3, message = "A localização precisa, ter no mínimo, três caracteres")
