@@ -22,6 +22,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.doReturn;
 
 @ExtendWith(MockitoExtension.class)
 class WarehouseServiceTest {
@@ -61,7 +62,6 @@ class WarehouseServiceTest {
 
         Set<ConstraintViolation<WarehouseRequest>> violations = validator.validate(newWarehouseRequest);
         Mockito.when(warehouseRepository.save(ArgumentMatchers.any())).thenReturn(newWarehouseEntity);
-
 
         WarehouseModel responseWarehouse = warehouseService.create(newWarehouseEntity);
 
@@ -189,11 +189,49 @@ class WarehouseServiceTest {
         assertEquals(2, responseGetAll.size());
     }
 
-    @Test
-    void update() {
-    }
-
-    @Test
-    void delete() {
-    }
+//    @Test
+//    @DisplayName("Update entity and capture update entity")
+//    void update_returnsUpdatedWarehouse_WhenSuccess() {
+//        String cityOriginal = "Tramandaí";
+//        String districtOriginal = "Zona Nova";
+//        String stateOriginal = "Rio Grande do Sul";
+//        String postalCodeOriginal = "99999999";
+//        String streetOriginal = "Avenida Emancipacao";
+//
+//        String cityUpdated = "Osório";
+//        String districtUpdated = "Baltazar";
+//        String stateUpdated = "Rio Grande do Sul";
+//        String postalCodeUpdated = "99999999";
+//        String streetUpdated = "Avenida Osório";
+//
+//        WarehouseRequest originalWarehouseRequest = WarehouseRequest
+//                .builder()
+//                .city(cityOriginal)
+//                .street(streetOriginal)
+//                .state(stateOriginal)
+//                .postalCode(postalCodeOriginal)
+//                .district(districtOriginal)
+//                .build();
+//
+//        WarehouseRequest updateWarehouseRequest = WarehouseRequest
+//                .builder()
+//                .city(cityOriginal)
+//                .street(streetOriginal)
+//                .state(stateOriginal)
+//                .postalCode(postalCodeOriginal)
+//                .district(districtOriginal)
+//                .build();
+//
+//        WarehouseModel updatedWarehouse = updateWarehouseRequest.toEntity();
+//
+//        WarehouseModel responseWarehouse = warehouseService.create(originalWarehouseRequest.toEntity());
+//
+//        doReturn(updatedWarehouse).when(warehouseService.update(updatedWarehouse));
+//
+//
+//    }
+//
+//    @Test
+//    void delete() {
+//    }
 }
