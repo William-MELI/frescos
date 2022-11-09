@@ -1,5 +1,6 @@
 package com.meli.frescos.service;
 
+import com.meli.frescos.exception.SellerByIdNotFoundException;
 import com.meli.frescos.model.SellerModel;
 import com.meli.frescos.repository.SellerRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,12 +25,14 @@ public class SellerService implements ISellerService{
     }
 
     @Override
-    public Optional<SellerModel> findById(Long id) {
-        return repo.findById(id);
+    public SellerModel findById(Long id) {
+        return repo.findById(id).orElseThrow(() -> new SellerByIdNotFoundException(id));
     }
 
     @Override
-    public SellerModel update(SellerModel sellerModel) {
+    public SellerModel update(SellerModel sellerModel, Long id) {
+        SellerModel seller = findById(id);
+        sellerModel.setId(seller.getId());
         return repo.save(sellerModel);
     }
 
