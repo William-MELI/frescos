@@ -94,7 +94,7 @@ class WarehouseServiceTest {
     }
 
     @Test
-    @DisplayName("Returns a Warehouse from Storage")
+    @DisplayName("Returns a Warehouse from Storage.")
     void getById_returnsWarehouse_WhenSuccess() {
         String city = "Tramandaí";
         String district = "Zona Nova";
@@ -127,11 +127,8 @@ class WarehouseServiceTest {
     }
 
     @Test
-    @DisplayName("Returns a Warehouse from Storage")
+    @DisplayName("Throw exception when ID is not found.")
     void getById_throwsException_WhenIdIsInvalid() {
-
-        BDDMockito.given(warehouseService.getById(ArgumentMatchers.anyLong()))
-                                .willThrow(new NullPointerException());
 
         assertThrows(NullPointerException.class, () -> {
             WarehouseModel responseWarehouse = warehouseService.getById(ArgumentMatchers.anyLong());
