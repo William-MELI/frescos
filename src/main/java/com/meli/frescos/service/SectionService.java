@@ -17,4 +17,9 @@ public class SectionService implements ISectionService {
     public List<SectionModel> findAll() {
         return repo.findAll();
     }
+
+    @Override
+    public SectionModel insert(SectionModel sectionModel) {
+        return repo.save(sectionModel);
+    }
 }

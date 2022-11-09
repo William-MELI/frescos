@@ -3,23 +3,28 @@ package com.meli.frescos.controller;
 import com.meli.frescos.model.SectionModel;
 import com.meli.frescos.service.ISectionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/section")
 public class SectionController {
 
     @Autowired
     private ISectionService service;
 
-    @GetMapping("/section")
+    @GetMapping
     public ResponseEntity<List<SectionModel>> findAll() {
         List<SectionModel> findAllSections = service.findAll();
         return ResponseEntity.ok(findAllSections);
+    }
+
+    @PostMapping
+    public ResponseEntity<SectionModel> insert(@RequestBody SectionModel sectionModel) {
+        SectionModel insertSection = service.insert(sectionModel);
+        return new ResponseEntity<>(insertSection, HttpStatus.CREATED);
     }
 }

@@ -7,4 +7,6 @@ import java.util.List;
 public interface ISectionService {
 
     List<SectionModel> findAll();
+
+    SectionModel insert(SectionModel sectionModel);
 }
