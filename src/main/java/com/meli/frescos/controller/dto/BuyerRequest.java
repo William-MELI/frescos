@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.br.CPF;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -28,7 +29,7 @@ public class BuyerRequest {
      * Buyer cpf
      */
     @NotBlank(message = "O CPF do comprador deve ser preenchido.")
-    @Pattern(regexp = "[\\d]{11}", message = "Preencher somente com números.")
+    @CPF(message = "Preencher somente com números.")
     private String cpf;
 
     public BuyerModel toModel() {
