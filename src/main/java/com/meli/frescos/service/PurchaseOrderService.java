@@ -41,8 +41,6 @@ public class PurchaseOrderService implements IPurchaseOrderService {
         purchase.setOrderStatus(purchaseOrderRequest.getOrderStatus());
         purchase.setDate(purchaseOrderRequest.getDate());
 
-<<<<<<< HEAD
-
         purchaseOrderRequest.getProducts().stream().map(p -> {
             stockAvailable(p.getProductModel(), p.getQuantity());
 //            return orderProductService.save(new OrderProductsRequest(
@@ -53,15 +51,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
             return null;
         });
 
-=======
         PurchaseOrderModel result = purchaseOrderRepository.save(purchase);
-
-        purchaseOrderRequest.getProducts().stream().map(p -> orderProductService.save(new OrderProductsRequest(
-                p.getProductModel(),
-                p.getQuantity(),
-                result.getId()
-        )));
->>>>>>> 03f304a4b911ea032d78f8860c53a9927b91d93f
 
         return result;
     }
