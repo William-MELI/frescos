@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -74,6 +73,12 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
 
     }
 
+    /**
+     * This method handles the BuyerNotFoundException
+     *
+     * @param ex The original exception
+     * @return A ResponseEntity to represent the HTTP error
+     */
     @ExceptionHandler(BuyerNotFoundException.class)
     public ResponseEntity<ExceptionDetails> handlerBuyerNotFoundException(BuyerNotFoundException ex) {
         return new ResponseEntity<>(
@@ -83,6 +88,17 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
                         .timestamp(LocalDateTime.now())
                         .build(),
                 HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(CpfDuplicateException.class)
+    public ResponseEntity<ExceptionDetails> handlerCpfDuplicateException(CpfDuplicateException ex) {
+            return new ResponseEntity<>(
+                    ExceptionDetails.builder()
+                            .title("CPF duplicado")
+                            .message(ex.getMessage())
+                            .timestamp(LocalDateTime.now())
+                            .build(),
+                    HttpStatus.BAD_REQUEST);
     }
 
 }

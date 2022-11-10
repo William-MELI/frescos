@@ -1,11 +1,10 @@
 package com.meli.frescos.service;
 
+import com.meli.frescos.exception.CpfDuplicateException;
 import com.meli.frescos.exception.SellerByIdNotFoundException;
 import com.meli.frescos.model.SellerModel;
 import com.meli.frescos.repository.SellerRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +28,8 @@ public class SellerService implements ISellerService {
      */
     @Override
     public SellerModel save(SellerModel sellerModel) {
+        if(cpfDuplicate(sellerModel.getCpf()))
+            throw new CpfDuplicateException(sellerModel.getCpf());
         return repo.save(sellerModel);
     }
 
@@ -81,5 +82,15 @@ public class SellerService implements ISellerService {
     @Override
     public Optional<SellerModel> findByCpf(String cpf) {
         return repo.findByCpf(cpf);
+    }
+
+    /**
+     * Return true when cpf already exists
+     * @param cpf
+     * @return boolean
+     */
+    public boolean cpfDuplicate(String cpf){
+        Optional<SellerModel> seller = findByCpf(cpf);
+        return seller.isPresent();
     }
 }
