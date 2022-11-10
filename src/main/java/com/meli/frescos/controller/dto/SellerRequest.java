@@ -5,8 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Range;
 import org.hibernate.validator.constraints.br.CPF;
 
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -35,7 +37,8 @@ public class SellerRequest {
     /**
      * Seller rating
      */
-    @Size(max = 5)
+    @Digits(integer = 1, fraction = 2, message = "A avaliação do vendedor não pode ser maior que 5 e deve conter no máximo duas casas decimais")
+    @Range(min = 0, max = 5, message = "A avaliação do vendedor deve ser de 0 à 5")
     private Double rating;
 
     public SellerModel toModel() {
