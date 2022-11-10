@@ -60,13 +60,17 @@ public class ProductController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<List<ProductResponse>> getByCategory(@RequestParam("querytype") String filter){
+    public ResponseEntity<List<ProductResponse>> getByCategory(@RequestParam("querytype") String filter) throws Exception {
         List<ProductModel> products = iProductService.getByCategory(filter);
 
         if (products.isEmpty())
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-        List<ProductResponse> productResponse = products.stream().map(p -> ProductResponse.toResponse(p,0)).toList();
+        List<ProductResponse> productResponse = new ArrayList<>();
+
+        for (ProductModel product : products) {
+            productResponse.add(ProductResponse.toResponse(product, iBatchStockService.getTotalBatchStockQuantity(product.getId())));
+        }
 
         return new ResponseEntity<>(productResponse, HttpStatus.FOUND);
     }
