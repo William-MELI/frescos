@@ -32,7 +32,7 @@ public class SectionController {
      */
     @GetMapping
     ResponseEntity<List<SectionResponse>> getAll() {
-        List<SectionResponse> findAllSections = service.findAll().stream().map(SectionResponse::toResponse).toList();
+        List<SectionResponse> findAllSections = service.getAll().stream().map(SectionResponse::toResponse).toList();
         return new ResponseEntity<>(findAllSections, HttpStatus.FOUND);
     }
 

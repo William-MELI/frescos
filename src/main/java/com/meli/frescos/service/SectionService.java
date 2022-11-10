@@ -31,7 +31,7 @@ public class SectionService implements ISectionService {
      * @return List of SectionModel
      */
     @Override
-    public List<SectionModel> findAll() {
+    public List<SectionModel> getAll() {
         return repo.findAll();
     }
 

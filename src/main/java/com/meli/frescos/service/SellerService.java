@@ -38,7 +38,7 @@ public class SellerService implements ISellerService {
      * @return List of all Seller
      */
     @Override
-    public List<SellerModel> findAll() {
+    public List<SellerModel> getAll() {
         return repo.findAll();
     }
 
@@ -49,7 +49,7 @@ public class SellerService implements ISellerService {
      * @throws SellerByIdNotFoundException Throws in case Seller does not exists
      */
     @Override
-    public SellerModel findById(Long id) {
+    public SellerModel getById(Long id) {
         return repo.findById(id).orElseThrow(() -> new SellerByIdNotFoundException(id));
     }
 
@@ -60,7 +60,7 @@ public class SellerService implements ISellerService {
      */
     @Override
     public SellerModel update(SellerModel sellerModel, Long id) {
-        SellerModel seller = findById(id);
+        SellerModel seller = getById(id);
         sellerModel.setId(seller.getId());
         return repo.save(sellerModel);
     }

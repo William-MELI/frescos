@@ -34,7 +34,7 @@ public class BatchStockController {
     ResponseEntity<List<BatchStockResponse>> getAll() {
         List<BatchStockResponse> batchStockResponseList = new ArrayList<>();
 
-        iBatchStockService.findAll().forEach(b -> batchStockResponseList.add(BatchStockResponse.toResponse(b)));
+        iBatchStockService.getAll().forEach(b -> batchStockResponseList.add(BatchStockResponse.toResponse(b)));
 
         return new ResponseEntity<>(batchStockResponseList, HttpStatus.FOUND);
     }
@@ -50,14 +50,14 @@ public class BatchStockController {
     ResponseEntity<List<BatchStockResponse>> getById(@PathVariable Long id) throws Exception {
         List<BatchStockResponse> batchStockResponseList = new ArrayList<>();
 
-        iBatchStockService.findByProduct(id).forEach(b -> batchStockResponseList.add(BatchStockResponse.toResponse(b)));
+        iBatchStockService.findByProductId(id).forEach(b -> batchStockResponseList.add(BatchStockResponse.toResponse(b)));
 
         return new ResponseEntity<>(batchStockResponseList, HttpStatus.FOUND);
     }
 
     @GetMapping("/product-id/{productId}")
     ResponseEntity<BatchStockResponse> getByProductId(@PathVariable Long productId) throws BatchStockByIdNotFoundException {
-        return new ResponseEntity<>(BatchStockResponse.toResponse((iBatchStockService.findById(productId))), HttpStatus.FOUND);
+        return new ResponseEntity<>(BatchStockResponse.toResponse((iBatchStockService.getById(productId))), HttpStatus.FOUND);
     }
 
     @PostMapping("/product-id")

@@ -10,14 +10,14 @@ public interface IBuyerService {
 
     BuyerModel save(BuyerModel buyerModel);
 
-    List<BuyerModel> findAll();
+    List<BuyerModel> getAll();
 
-    BuyerModel findById(Long id) throws BuyerNotFoundException;
+    BuyerModel getById(Long id) throws BuyerNotFoundException;
 
     BuyerModel update(BuyerModel buyerModel, Long id) throws BuyerNotFoundException;
 
 //    void deleteById(Long id);
 
-    Optional<BuyerModel> findByCpf(String cpf);
+    Optional<BuyerModel> getByCpf(String cpf);
 
 }

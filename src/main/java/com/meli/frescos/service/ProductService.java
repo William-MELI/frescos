@@ -31,7 +31,7 @@ public class ProductService implements IProductService {
 
     @Override
     public ProductModel save(ProductModel product, Long sellerCode) {
-        SellerModel savingSeller = iSellerService.findById(sellerCode);
+        SellerModel savingSeller = iSellerService.getById(sellerCode);
         product.setSeller(savingSeller);
         return productRepository.save(product);
     }

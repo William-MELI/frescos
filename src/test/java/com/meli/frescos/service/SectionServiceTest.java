@@ -156,7 +156,7 @@ public class SectionServiceTest {
         Mockito.when(sectionRepository.findAll())
                 .thenReturn(sectionList);
 
-        List<SectionModel> responseSection = sectionService.findAll();
+        List<SectionModel> responseSection = sectionService.getAll();
 
         assertEquals(sectionList, responseSection);
         assertEquals(2, responseSection.size());
