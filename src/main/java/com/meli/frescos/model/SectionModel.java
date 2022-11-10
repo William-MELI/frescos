@@ -1,14 +1,17 @@
 package com.meli.frescos.model;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
+/**
+ * Main Section Entity
+ */
 @Entity
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "section")
 public class SectionModel {
@@ -29,7 +32,6 @@ public class SectionModel {
      *   Section ID.
      *   Auto-generated
      */
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -39,7 +41,6 @@ public class SectionModel {
      *   Section description.
      *   Not nullable.
      */
-
     @Column(nullable = false)
     private String description;
 
@@ -47,7 +48,6 @@ public class SectionModel {
      *   Section category.
      *   Not nullable.
      */
-
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private CategoryEnum category;
@@ -56,7 +56,6 @@ public class SectionModel {
      *   Section totalSize.
      *   Not nullable.
      */
-
     @Column(nullable = false)
     private Double totalSize;
 
@@ -64,7 +63,6 @@ public class SectionModel {
      *   Section temperature.
      *   Not nullable.
      */
-
     @Column(nullable = false)
     private Double temperature;
 
@@ -72,7 +70,6 @@ public class SectionModel {
      * Warehouse reference.
      * It is an N-1 relationship
      */
-
     @ManyToOne
     @JoinColumn(name = "warehouse_id")
     private WarehouseModel warehouse;
