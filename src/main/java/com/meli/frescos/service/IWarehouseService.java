@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface IWarehouseService {
 
-    WarehouseModel create(WarehouseModel warehouse);
+    WarehouseModel save(WarehouseModel warehouse);
 
     WarehouseModel getById(Long id);
 

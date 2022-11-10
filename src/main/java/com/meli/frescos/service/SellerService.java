@@ -5,6 +5,7 @@ import com.meli.frescos.model.SellerModel;
 import com.meli.frescos.repository.SellerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -13,10 +14,13 @@ import java.util.Optional;
  *  Using @Service from spring
  */
 @Service
-@RequiredArgsConstructor
-public class SellerService implements ISellerService{
+public class SellerService implements ISellerService {
 
     private final SellerRepository repo;
+
+    public SellerService(SellerRepository repo) {
+        this.repo = repo;
+    }
 
     /**
      * Create a new Seller given model

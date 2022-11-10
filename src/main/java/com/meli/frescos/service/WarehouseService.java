@@ -3,7 +3,6 @@ package com.meli.frescos.service;
 import com.meli.frescos.model.SectionModel;
 import com.meli.frescos.model.WarehouseModel;
 import com.meli.frescos.repository.IWarehouseRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,8 +11,11 @@ import java.util.Optional;
 @Service
 public class WarehouseService implements IWarehouseService {
 
-    @Autowired
-    IWarehouseRepository warehouseRepository;
+    private final IWarehouseRepository warehouseRepository;
+
+    public WarehouseService(IWarehouseRepository warehouseRepository) {
+        this.warehouseRepository = warehouseRepository;
+    }
 
     /**
      * Create a new Warehouse given model
@@ -21,21 +23,19 @@ public class WarehouseService implements IWarehouseService {
      * @param warehouse New Warehouse to create
      * @return The created Warehouse
      */
-    public WarehouseModel create(WarehouseModel warehouse) {
-        WarehouseModel createdWarehouse = this.warehouseRepository.save(warehouse);
-        return createdWarehouse;
+    public WarehouseModel save(WarehouseModel warehouse) {
+        return this.warehouseRepository.save(warehouse);
     }
 
     /**
      * Returns a stored Warehouse given ID
      *
-     * @param id
+     * @param id warehouse id
      * @return The stored Warehouse
-     * @throws NullPointerException Throws in case Warehouse does not exists
+     * @throws NullPointerException Throws in case Warehouse does not exist
      */
     public WarehouseModel getById(Long id) {
-        WarehouseModel warehouse = this.warehouseRepository.findById(id).orElseThrow(NullPointerException::new);
-        return warehouse;
+        return this.warehouseRepository.findById(id).orElseThrow(NullPointerException::new);
     }
 
     /**
@@ -44,14 +44,14 @@ public class WarehouseService implements IWarehouseService {
      * @return List of all Warehouse
      */
     public List<WarehouseModel> getAll() {
-        return (List) this.warehouseRepository.findAll();
+        return this.warehouseRepository.findAll();
     }
 
     /**
      * Updates a stored Warehouse
      *
-     * @param warehouseUpdate Used as reference to update stored Warehouse. Must contains ID with existent Warehouse
-     * @throws NullPointerException Throws in case Warehouse does not exists
+     * @param warehouseUpdate Used as reference to update stored Warehouse. Must contain ID with existent Warehouse
+     * @throws NullPointerException Throws in case Warehouse does not exist
      */
     public void update(WarehouseModel warehouseUpdate) {
         Optional<WarehouseModel> warehouseOpt = this.warehouseRepository.findById(warehouseUpdate.getId());
