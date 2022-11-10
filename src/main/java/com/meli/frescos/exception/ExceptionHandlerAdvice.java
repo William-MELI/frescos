@@ -73,4 +73,16 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
         );
 
     }
+
+    @ExceptionHandler(BuyerNotFoundException.class)
+    public ResponseEntity<ExceptionDetails> handlerBuyerNotFoundException(BuyerNotFoundException ex) {
+        return new ResponseEntity<>(
+                ExceptionDetails.builder()
+                        .title("Comprador não encontrado")
+                        .message(ex.getMessage())
+                        .timestamp(LocalDateTime.now())
+                        .build(),
+                HttpStatus.NOT_FOUND);
+    }
+
 }
