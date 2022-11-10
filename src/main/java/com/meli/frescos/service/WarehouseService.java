@@ -34,7 +34,7 @@ public class WarehouseService implements IWarehouseService {
      *
      * @param id warehouse id
      * @return The stored Warehouse
-     * @throws NullPointerException Throws in case Warehouse does not exist
+     * @throws WarehouseNotFoundException Throws in case Warehouse does not exist
      */
     public WarehouseModel getById(Long id) throws WarehouseNotFoundException {
         Optional<WarehouseModel> warehouseModelOptional = this.warehouseRepository.findById(id);
@@ -60,7 +60,7 @@ public class WarehouseService implements IWarehouseService {
      * Updates a stored Warehouse
      *
      * @param warehouseUpdate Used as reference to update stored Warehouse. Must contain ID with existent Warehouse
-     * @throws NullPointerException Throws in case Warehouse does not exist
+     * @throws WarehouseNotFoundException Throws in case Warehouse does not exist
      */
     public void update(WarehouseModel warehouseUpdate) throws WarehouseNotFoundException {
         Long id = warehouseUpdate.getId();
@@ -78,6 +78,7 @@ public class WarehouseService implements IWarehouseService {
      * Deletes a Warehouse given ID
      *
      * @param id Existent Warehouse ID
+     * @throw UsedPrimaryKeyConstraintException Throws in case Warehouse is related with a Section
      */
     public void delete(Long id) throws UsedPrimaryKeyConstraintException {
         List<SectionModel> sectionList = warehouseRepository.findSectionByWarehouseModelId(id);

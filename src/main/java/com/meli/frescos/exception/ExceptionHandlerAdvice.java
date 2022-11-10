@@ -40,6 +40,17 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
                 HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(UsedPrimaryKeyConstraintException.class)
+    public ResponseEntity<ExceptionDetails> handlerWarehouseNotFoundException(UsedPrimaryKeyConstraintException ex) {
+        return new ResponseEntity<>(
+                ExceptionDetails.builder()
+                        .title("Entidade com chave primária em uso")
+                        .message(ex.getMessage())
+                        .timestamp(LocalDateTime.now())
+                        .build(),
+                HttpStatus.BAD_REQUEST);
+    }
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                   HttpHeaders headers,
@@ -62,6 +73,4 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
         );
 
     }
-
-
 }
