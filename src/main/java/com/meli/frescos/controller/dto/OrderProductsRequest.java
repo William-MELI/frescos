@@ -14,10 +14,10 @@ import javax.validation.constraints.Positive;
 @AllArgsConstructor
 public class OrderProductsRequest {
 
-    @NotNull(message = "O id do produto não pode estar em branco")
     private Long productModel;
 
-    @NotNull(message = "A quantidade não pode estar em branco")
     @Positive(message = "O valor da quantidade deve ser um número positivo")
     private int quantity;
+
+    private Long purchaseOrderModel;
 }

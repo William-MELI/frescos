@@ -23,8 +23,13 @@ public class OrderProductsModel {
     @Column(nullable = false)
     private int quantity;
 
-    public OrderProductsModel(ProductModel productModel, int quantity) {
+    @ManyToOne
+    @JoinColumn(name = "purchase_order_id")
+    private PurchaseOrderModel purchaseOrderModel;
+
+    public OrderProductsModel(ProductModel productModel, int quantity, PurchaseOrderModel purchaseOrderModel) {
         this.productModel = productModel;
         this.quantity = quantity;
+        this.purchaseOrderModel = purchaseOrderModel;
     }
 }
