@@ -34,13 +34,13 @@ public class PurchaseOrderService implements IPurchaseOrderService {
         purchase.setOrderStatus(purchaseOrderRequest.getOrderStatus());
         purchase.setDate(purchaseOrderRequest.getDate());
 
+        PurchaseOrderModel result = purchaseOrderRepository.save(purchase);
+
         purchaseOrderRequest.getProducts().stream().map(p -> orderProductService.save(new OrderProductsRequest(
                 p.getProductModel(),
                 p.getQuantity(),
-                p.getPurchaseOrderModel()
+                result.getId()
         )));
-
-        PurchaseOrderModel result = purchaseOrderRepository.save(purchase);
 
         return result;
     }
