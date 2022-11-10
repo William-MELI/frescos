@@ -1,5 +1,6 @@
 package com.meli.frescos.service;
 
+import com.meli.frescos.exception.UsedPrimaryKeyConstraintException;
 import com.meli.frescos.exception.WarehouseNotFoundException;
 import com.meli.frescos.model.WarehouseModel;
 
@@ -13,7 +14,7 @@ public interface IWarehouseService {
 
     List<WarehouseModel> getAll();
 
-    void update(WarehouseModel warehouse);
+    void update(WarehouseModel warehouse) throws WarehouseNotFoundException;
 
-    void delete(Long id);
+    void delete(Long id) throws UsedPrimaryKeyConstraintException;
 }

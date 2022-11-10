@@ -1,5 +1,6 @@
 package com.meli.frescos.service;
 
+import com.meli.frescos.exception.UsedPrimaryKeyConstraintException;
 import com.meli.frescos.exception.WarehouseNotFoundException;
 import com.meli.frescos.model.SectionModel;
 import com.meli.frescos.model.WarehouseModel;
@@ -37,11 +38,10 @@ public class WarehouseService implements IWarehouseService {
      */
     public WarehouseModel getById(Long id) throws WarehouseNotFoundException {
         Optional<WarehouseModel> warehouseModelOptional = this.warehouseRepository.findById(id);
-        if(warehouseModelOptional.isEmpty()){
+        if (warehouseModelOptional.isEmpty()) {
             String msg = String.format("Warehouse com ID %d não encontrado", id);
             throw new WarehouseNotFoundException(msg);
-        }
-        else{
+        } else {
             return warehouseModelOptional.get();
         }
 
@@ -62,10 +62,12 @@ public class WarehouseService implements IWarehouseService {
      * @param warehouseUpdate Used as reference to update stored Warehouse. Must contain ID with existent Warehouse
      * @throws NullPointerException Throws in case Warehouse does not exist
      */
-    public void update(WarehouseModel warehouseUpdate) {
-        Optional<WarehouseModel> warehouseOpt = this.warehouseRepository.findById(warehouseUpdate.getId());
+    public void update(WarehouseModel warehouseUpdate) throws WarehouseNotFoundException {
+        Long id = warehouseUpdate.getId();
+        Optional<WarehouseModel> warehouseOpt = this.warehouseRepository.findById(id);
         if (warehouseOpt.isEmpty()) {
-            throw new NullPointerException("Warehouse not found");
+            String msg = String.format("Warehouse com ID %d não encontrado", id);
+            throw new WarehouseNotFoundException(msg);
         }
 
         this.warehouseRepository.save(warehouseUpdate);
@@ -77,12 +79,13 @@ public class WarehouseService implements IWarehouseService {
      *
      * @param id Existent Warehouse ID
      */
-    public void delete(Long id) {
+    public void delete(Long id) throws UsedPrimaryKeyConstraintException {
         List<SectionModel> sectionList = warehouseRepository.findSectionByWarehouseModelId(id);
         if (sectionList.isEmpty()) {
             this.warehouseRepository.deleteById(id);
         } else {
-            throw new NullPointerException("Warehouse is related with Section. Delete it first.");
+            String msg = String.format("Warehouse está relacionada com %d Section's. Delete-os primeiro.", sectionList.size());
+            throw new UsedPrimaryKeyConstraintException(msg);
         }
     }
 }
