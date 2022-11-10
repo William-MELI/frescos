@@ -4,7 +4,6 @@ import com.meli.frescos.model.ProductModel;
 import com.meli.frescos.model.SellerModel;
 import com.meli.frescos.repository.ProductRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -34,6 +33,22 @@ public class ProductService implements IProductService {
         SellerModel savingSeller = iSellerService.findById(sellerCode);
         product.setSeller(savingSeller);
         return productRepository.save(product);
+    }
+
+    @Override
+    public List<ProductModel> getByCategory(String filter) {
+        int type = -1;
+
+        if(filter.equalsIgnoreCase("FS"))
+            type = 0;
+
+        if(filter.equalsIgnoreCase("FF"))
+            type = 1;
+
+        if(filter.equalsIgnoreCase("RF"))
+            type = 2;
+
+        return productRepository.getProductByCategory(type);
     }
 
 }

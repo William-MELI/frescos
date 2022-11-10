@@ -7,7 +7,6 @@ import com.meli.frescos.service.IProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,6 +57,18 @@ public class ProductController {
         productBatchStockResponse.setBatchStock(batchStockList);
 
         return new ResponseEntity<>(productBatchStockResponse, HttpStatus.OK);
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<ProductResponse>> getByCategory(@RequestParam("querytype") String filter){
+        List<ProductModel> products = iProductService.getByCategory(filter);
+
+        if (products.isEmpty())
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        List<ProductResponse> productResponse = products.stream().map(p -> ProductResponse.toResponse(p,0)).toList();
+
+        return new ResponseEntity<>(productResponse, HttpStatus.FOUND);
     }
 
 }
