@@ -35,4 +35,10 @@ public class OrderProductsController {
         OrderProductsModel insertOrderProduct = iservice.save(order);
         return new ResponseEntity<>(OrderProductsResponse.toResponse(insertOrderProduct), HttpStatus.CREATED);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<OrderProductsResponse> getById(@PathVariable Long id) throws Exception {
+        OrderProductsModel order = iservice.getById(id);
+        return new ResponseEntity<>(OrderProductsResponse.toResponse(order), HttpStatus.FOUND);
+    }
 }
