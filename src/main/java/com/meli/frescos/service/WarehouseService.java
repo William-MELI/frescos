@@ -1,5 +1,6 @@
 package com.meli.frescos.service;
 
+import com.meli.frescos.exception.WarehouseNotFoundException;
 import com.meli.frescos.model.SectionModel;
 import com.meli.frescos.model.WarehouseModel;
 import com.meli.frescos.repository.IWarehouseRepository;
@@ -34,8 +35,16 @@ public class WarehouseService implements IWarehouseService {
      * @return The stored Warehouse
      * @throws NullPointerException Throws in case Warehouse does not exist
      */
-    public WarehouseModel getById(Long id) {
-        return this.warehouseRepository.findById(id).orElseThrow(NullPointerException::new);
+    public WarehouseModel getById(Long id) throws WarehouseNotFoundException {
+        Optional<WarehouseModel> warehouseModelOptional = this.warehouseRepository.findById(id);
+        if(warehouseModelOptional.isEmpty()){
+            String msg = String.format("Warehouse com ID %d não encontrado", id);
+            throw new WarehouseNotFoundException(msg);
+        }
+        else{
+            return warehouseModelOptional.get();
+        }
+
     }
 
     /**
