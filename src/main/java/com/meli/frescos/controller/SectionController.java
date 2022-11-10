@@ -11,6 +11,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+
+/**
+ * All endpoints related to Section
+ * Is`s a Spring @RestController
+ */
 @RestController
 @RequestMapping("/section")
 public class SectionController {
@@ -21,18 +26,33 @@ public class SectionController {
         this.service = service;
     }
 
+    /**
+     * Endpoint to return all Sections
+     * @return a List with all SectionModel with status 200 ok
+     */
     @GetMapping
     ResponseEntity<List<SectionResponse>> getAll() {
         List<SectionResponse> findAllSections = service.findAll().stream().map(SectionResponse::toResponse).toList();
         return new ResponseEntity<>(findAllSections, HttpStatus.FOUND);
     }
 
+    /**
+     * POST endpoint to store a {@link SectionModel}.
+     *
+     * @param sectionRequest
+     * @return ResponseEntity<SectionModel> to the requester
+     */
     @PostMapping
     ResponseEntity<SectionResponse> save(@RequestBody @Valid SectionRequest sectionRequest) {
         SectionModel insertSection = service.save(sectionRequest);
         return new ResponseEntity<>(SectionResponse.toResponse(insertSection), HttpStatus.CREATED);
     }
 
+    /**
+     * Endpoint to return a sectionModel given id
+     * @param id the sectionModel id
+     * @return a SectionModel related ID
+     */
     @GetMapping("/{id}")
     ResponseEntity<SectionResponse> getById(@PathVariable Long id) throws Exception {
         SectionModel section = service.findById(id);

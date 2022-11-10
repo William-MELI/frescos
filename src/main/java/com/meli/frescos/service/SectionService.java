@@ -10,6 +10,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ *  This class contains all Section related functions
+ *  Using @Service from spring
+ */
 @Service
 public class SectionService implements ISectionService {
 
@@ -22,14 +26,29 @@ public class SectionService implements ISectionService {
         this.warehouseRepo = warehouseRepo;
     }
 
+    /**
+     * Return all Sections
+     * @return List of SectionModel
+     */
     @Override
     public List<SectionModel> findAll() {
         return repo.findAll();
     }
 
+    /**
+     * Save a new Section at storage
+     *
+     * @param sectionRequest the new Section to store
+     * @return the new created client
+     */
     @Override
     public SectionModel save(SectionRequest sectionRequest) {
         Optional<WarehouseModel> warehouse = warehouseRepo.findById(sectionRequest.getWarehouse());
+
+        if (warehouse.isEmpty()) {
+            throw new NullPointerException("Warehouse not found");
+        }
+
         SectionModel model = new SectionModel(sectionRequest.getDescription(),
                 sectionRequest.getCategory(),
                 sectionRequest.getTotalSize(),
@@ -39,6 +58,11 @@ public class SectionService implements ISectionService {
         return repo.save(model);
     }
 
+    /**
+     * Return SectionModel given id
+     * @param id the SectionModel id
+     * @return SectionModel
+     */
     @Override
     public SectionModel findById(Long id) throws Exception {
 
