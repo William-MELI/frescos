@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class OrderProductService implements IOrderProductService{
+public class OrderProductService implements IOrderProductService {
 
     private final OrderProductsRepository repo;
 
@@ -47,4 +47,13 @@ public class OrderProductService implements IOrderProductService{
                 purchaseOrder.get());
         return repo.save(model);
     }
+
+<<<<<<< HEAD
+
+=======
+    @Override
+    public OrderProductsModel getById(Long id) throws Exception {
+        return repo.findById(id).orElseThrow(() -> new Exception("OrderProduct not found"));
+    }
+>>>>>>> 03f304a4b911ea032d78f8860c53a9927b91d93f
 }
