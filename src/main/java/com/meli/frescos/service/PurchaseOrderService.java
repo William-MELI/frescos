@@ -1,6 +1,5 @@
 package com.meli.frescos.service;
 
-import com.meli.frescos.controller.dto.OrderProductsRequest;
 import com.meli.frescos.controller.dto.PurchaseOrderRequest;
 import com.meli.frescos.model.BatchStockModel;
 import com.meli.frescos.model.BuyerModel;
@@ -50,10 +49,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
 //            )
             return null;
         });
-
-        PurchaseOrderModel result = purchaseOrderRepository.save(purchase);
-
-        return result;
+        return null;
     }
 
     private boolean stockAvailable(Long productId, int quantity) {

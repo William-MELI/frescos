@@ -1,12 +1,17 @@
 package com.meli.frescos.service;
 
 import com.meli.frescos.controller.dto.OrderProductsRequest;
+import com.meli.frescos.controller.dto.PurchaseOrderRequest;
 import com.meli.frescos.model.*;
 import com.meli.frescos.repository.BatchStockRepository;
 import com.meli.frescos.repository.BuyerRepository;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
@@ -15,12 +20,16 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@ExtendWith(MockitoExtension.class)
 class PurchaseOrderServiceTest {
 
-    @Autowired
+    @InjectMocks
+    PurchaseOrderService purchaseOrderService;
+
+    @Mock
     BuyerRepository buyerRepository;
 
-    @Autowired
+    @Mock
     BatchStockRepository batchStockRepository;
 
     @Test
@@ -53,24 +62,27 @@ class PurchaseOrderServiceTest {
         List<OrderProductsRequest> products = new ArrayList<>();
         products.add(new OrderProductsRequest());
 
-        PurchaseOrderModel purchaseOrder = new PurchaseOrderModel();
-        purchaseOrder.setDate(time);
-        purchaseOrder.setOrderStatus(orderStatus);
-        purchaseOrder.setBuyer(buyer);
+        PurchaseOrderRequest request = PurchaseOrderRequest.builder()
+                .orderStatus(orderStatus)
+                .buyer(buyer.getId())
+                .date(time)
+                .products(products)
+                .build();
 
-        Mockito.when(buyerRepository.getReferenceById(ArgumentMatchers.anyLong()))
+        Mockito.when(buyerRepository.getReferenceById(ArgumentMatchers.any()))
                 .thenReturn(buyer);
 
-        Mockito.when(buyerRepository.getReferenceById(ArgumentMatchers.anyLong()))
+        Mockito.when(buyerRepository.getReferenceById(ArgumentMatchers.any()))
                 .thenReturn(buyer);
 
-        Mockito.when(
-                        batchStockRepository.findBatchStockModelsByProductIdAndDueDateGreaterThanEqual(
-                                ArgumentMatchers.any(), ArgumentMatchers.any()
-                        )
-                )
-                .thenReturn(batchList);
+//        Mockito.when(
+//                        batchStockRepository.findBatchStockModelsByProductIdAndDueDateGreaterThanEqual(
+//                                ArgumentMatchers.any(), ArgumentMatchers.any()
+//                        )
+//                )
+//                .thenReturn(batchList);
 
+        purchaseOrderService.save(request);
 
     }
 }
