@@ -80,7 +80,7 @@ public class SectionServiceTest {
         Mockito.when(warehouseRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(new WarehouseModel()));
         Mockito.when(sectionRepository.save(ArgumentMatchers.any())).thenReturn(responseModel);
 
-        SectionModel responseSection = sectionService.insert(newSectionRequest);
+        SectionModel responseSection = sectionService.save(newSectionRequest);
 
         assertEquals(description, responseSection.getDescription());
         assertEquals(category, responseSection.getCategory());
@@ -107,13 +107,13 @@ public class SectionServiceTest {
                 .build();
 
         assertThrows(NullPointerException.class, () -> {
-            SectionModel responsSection = sectionService.insert(newSectionRequest);
+            SectionModel responsSection = sectionService.save(newSectionRequest);
         });
     }
 
     @Test
     @DisplayName("Returns a Section by ID ")
-    void getById_returnsSection_WhenSuccess() {
+    void getById_returnsSection_WhenSuccess() throws Exception {
         String description = "Laranja Bahia";
         CategoryEnum category = CategoryEnum.FRESH;
         Double totalSize = 5.5;
@@ -141,15 +141,6 @@ public class SectionServiceTest {
         assertEquals(totalSize, responseSection.getTotalSize());
         assertEquals(temperature, responseSection.getTemperature());
         assertEquals(warehouse_id, responseSection.getWarehouse().getId());
-    }
-
-    @Test
-    @DisplayName("Throw exception when ID is not found.")
-    void getById_throwsException_WhenIdIsInvalid() {
-
-        assertThrows(NullPointerException.class, () -> {
-            SectionModel responsSection = sectionService.findById(ArgumentMatchers.anyLong());
-        });
     }
 
     @Test
