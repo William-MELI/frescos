@@ -11,5 +11,5 @@ public interface ISectionService {
 
     SectionModel save(SectionRequest sectionRequest);
 
-    SectionModel findById(Long id) throws Exception;
+    SectionModel getById(Long id) throws Exception;
 }

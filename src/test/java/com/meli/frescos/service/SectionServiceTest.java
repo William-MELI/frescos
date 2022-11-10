@@ -134,7 +134,7 @@ public class SectionServiceTest {
         Mockito.when(sectionRepository.findById(ArgumentMatchers.anyLong()))
                 .thenReturn(Optional.of(responseModel));
 
-        SectionModel responseSection = sectionService.findById(ArgumentMatchers.anyLong());
+        SectionModel responseSection = sectionService.getById(ArgumentMatchers.anyLong());
 
         assertEquals(description, responseSection.getDescription());
         assertEquals(category, responseSection.getCategory());

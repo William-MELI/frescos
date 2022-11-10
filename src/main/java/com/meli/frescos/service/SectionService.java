@@ -64,7 +64,7 @@ public class SectionService implements ISectionService {
      * @return SectionModel
      */
     @Override
-    public SectionModel findById(Long id) throws Exception {
+    public SectionModel getById(Long id) throws Exception {
 
         Optional<SectionModel> responseDb = repo.findById(id);
 

@@ -55,7 +55,7 @@ public class SectionController {
      */
     @GetMapping("/{id}")
     ResponseEntity<SectionResponse> getById(@PathVariable Long id) throws Exception {
-        SectionModel section = service.findById(id);
+        SectionModel section = service.getById(id);
         return new ResponseEntity<>(SectionResponse.toResponse(section), HttpStatus.FOUND);
     }
 }

@@ -61,7 +61,7 @@ public class BatchStockService implements IBatchStockService {
         }
 
         ProductModel product = iProductService.getById(productId);
-        SectionModel section = iSectionService.findById(sectionId);
+        SectionModel section = iSectionService.getById(sectionId);
 
         batchStock.setProduct(product);
         batchStock.setSection(section);
@@ -77,7 +77,7 @@ public class BatchStockService implements IBatchStockService {
 
     @Override
     public List<BatchStockModel> findBySectionId(Long sectionId) throws Exception {
-        SectionModel section = iSectionService.findById(sectionId);
+        SectionModel section = iSectionService.getById(sectionId);
         return batchStockRepository.findBySection(section);
     }
 
@@ -87,12 +87,12 @@ public class BatchStockService implements IBatchStockService {
     }
 
     private boolean isCategoryPermittedInSection(CategoryEnum category, Long sectionId) throws Exception {
-        return category.equals(iSectionService.findById(sectionId).getCategory());
+        return category.equals(iSectionService.getById(sectionId).getCategory());
     }
 
     private boolean productFitsInSection(ProductModel product, List<BatchStockModel> inboundBtchStockList, Long sectionId) throws Exception {
         double totalInboundVolume = product.getUnitVolume() * inboundBtchStockList.stream().mapToInt(BatchStockModel::getQuantity).sum();
-        return totalInboundVolume <= iSectionService.findById(sectionId).getTotalSize() - getTotalUsedRoom(sectionId);
+        return totalInboundVolume <= iSectionService.getById(sectionId).getTotalSize() - getTotalUsedRoom(sectionId);
     }
 
     private Double getTotalUsedRoom(Long sectionId) throws Exception {
