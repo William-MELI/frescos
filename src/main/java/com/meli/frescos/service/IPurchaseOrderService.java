@@ -8,5 +8,5 @@ import java.util.List;
 public interface IPurchaseOrderService {
     PurchaseOrderModel save(PurchaseOrderRequest purchaseOrderRequest);
 
-    List<PurchaseOrderModel> findAll();
+    List<PurchaseOrderModel> getAll();
 }

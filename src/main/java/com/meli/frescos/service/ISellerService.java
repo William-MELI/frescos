@@ -9,9 +9,9 @@ public interface ISellerService {
 
     SellerModel save(SellerModel sellerModel);
 
-    List<SellerModel> findAll();
+    List<SellerModel> getAll();
 
-    SellerModel findById(Long id);
+    SellerModel getById(Long id);
 
     SellerModel update(SellerModel sellerModel, Long id);
 

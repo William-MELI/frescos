@@ -63,7 +63,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
     }
 
     @Override
-    public List<PurchaseOrderModel> findAll() {
+    public List<PurchaseOrderModel> getAll() {
         return null;
     }
 }

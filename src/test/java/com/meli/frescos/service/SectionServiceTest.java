@@ -134,7 +134,7 @@ public class SectionServiceTest {
         Mockito.when(sectionRepository.findById(ArgumentMatchers.anyLong()))
                 .thenReturn(Optional.of(responseModel));
 
-        SectionModel responseSection = sectionService.findById(ArgumentMatchers.anyLong());
+        SectionModel responseSection = sectionService.getById(ArgumentMatchers.anyLong());
 
         assertEquals(description, responseSection.getDescription());
         assertEquals(category, responseSection.getCategory());
@@ -156,7 +156,7 @@ public class SectionServiceTest {
         Mockito.when(sectionRepository.findAll())
                 .thenReturn(sectionList);
 
-        List<SectionModel> responseSection = sectionService.findAll();
+        List<SectionModel> responseSection = sectionService.getAll();
 
         assertEquals(sectionList, responseSection);
         assertEquals(2, responseSection.size());

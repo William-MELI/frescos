@@ -7,7 +7,6 @@ import com.meli.frescos.service.IProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +43,10 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<ProductBatchStockResponse> save(@RequestBody ProductBatchStockRequest productBatchStockRequest) throws Exception {
+        boolean validProduct = iBatchStockService.isValid(productBatchStockRequest.toProduct(), productBatchStockRequest.toBatchStock(), productBatchStockRequest.getInboundOrder().getSectionCode());
+        if (!validProduct) {
+            throw new Exception("No room available in this section!");
+        }
         ProductModel product = iProductService.save(productBatchStockRequest.toProduct(), productBatchStockRequest.getInboundOrder().getSellerCode());
         List<BatchStockResponse> batchStockList = new ArrayList<>();
         for (BatchStockRequest batchStockRequest : productBatchStockRequest.getInboundOrder().getBatchStock()) {
@@ -58,6 +61,22 @@ public class ProductController {
         productBatchStockResponse.setBatchStock(batchStockList);
 
         return new ResponseEntity<>(productBatchStockResponse, HttpStatus.OK);
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<ProductResponse>> getByCategory(@RequestParam("querytype") String filter) throws Exception {
+        List<ProductModel> products = iProductService.getByCategory(filter);
+
+        if (products.isEmpty())
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        List<ProductResponse> productResponse = new ArrayList<>();
+
+        for (ProductModel product : products) {
+            productResponse.add(ProductResponse.toResponse(product, iBatchStockService.getTotalBatchStockQuantity(product.getId())));
+        }
+
+        return new ResponseEntity<>(productResponse, HttpStatus.FOUND);
     }
 
 }
