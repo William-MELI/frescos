@@ -13,15 +13,11 @@ import java.util.List;
 @Builder
 public class ProductBatchStockResponse {
 
-    private Long productId;
-
-    private Double unitVolume;
-
-    private Double unitWeight;
-
-    private BigDecimal price;
-
     List<BatchStockResponse> batchStock;
+    private Long productId;
+    private Double unitVolume;
+    private Double unitWeight;
+    private BigDecimal price;
 
     public static ProductBatchStockResponse toResponse(ProductModel product) {
         return ProductBatchStockResponse.builder()

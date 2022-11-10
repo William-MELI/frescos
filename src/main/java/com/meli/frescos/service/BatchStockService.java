@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- *  This class contains all BatchStock related functions
- *  Using @Service from spring
+ * This class contains all BatchStock related functions
+ * Using @Service from spring
  */
 @Service
 public class BatchStockService implements IBatchStockService {
@@ -33,19 +33,20 @@ public class BatchStockService implements IBatchStockService {
 
     /**
      * Return all BatchStocks
+     *
      * @return List of BatchStockModel
      */
     @Override
     public List<BatchStockModel> findAll() {
-        List<BatchStockModel> batchStockList = batchStockRepository.findAll();
-        return batchStockList;
+        return batchStockRepository.findAll();
     }
 
     /**
      * Return BatchStockModel given id
+     *
      * @param id the batchStockModel id
      * @return BatchStockModel
-     * @throws BatchStockByIdNotFoundException
+     * @throws BatchStockByIdNotFoundException - BatchStock not found
      */
     @Override
     public BatchStockModel findById(Long id) throws BatchStockByIdNotFoundException {
@@ -54,7 +55,7 @@ public class BatchStockService implements IBatchStockService {
 
     @Override
     public BatchStockModel save(BatchStockModel batchStock, Long productId, Long sectionId, Long representativeId, Long warehouseId) throws Exception {
-        if(!iRepresentativeService.permittedRepresentative(iRepresentativeService.getById(representativeId), warehouseId)) {
+        if (!iRepresentativeService.permittedRepresentative(iRepresentativeService.getById(representativeId), warehouseId)) {
             throw new Exception("Representative does not belong to this warehouse!");
         }
 

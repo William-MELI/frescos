@@ -21,12 +21,12 @@ public class WarehouseController {
     }
 
     @PostMapping
-    public ResponseEntity<WarehouseResponse> save(@RequestBody WarehouseRequest request){
+    public ResponseEntity<WarehouseResponse> save(@RequestBody WarehouseRequest request) {
         return new ResponseEntity<>(WarehouseResponse.toResponse(this.warehouseService.save(request.toModel())), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<WarehouseResponse> getById(@PathVariable Long id){
+    public ResponseEntity<WarehouseResponse> getById(@PathVariable Long id) {
         WarehouseModel warehouseEntity = this.warehouseService.getById(id);
         WarehouseResponse warehouseResponse = WarehouseResponse.toResponse(warehouseEntity);
 
@@ -34,13 +34,13 @@ public class WarehouseController {
     }
 
     @GetMapping
-    public ResponseEntity<List<WarehouseResponse>> getAll(){
-    List<WarehouseResponse> warehouseResponseList = this.warehouseService.getAll().stream().map(WarehouseResponse::toResponse).toList();
-    return new ResponseEntity<>(warehouseResponseList,HttpStatus.FOUND);
+    public ResponseEntity<List<WarehouseResponse>> getAll() {
+        List<WarehouseResponse> warehouseResponseList = this.warehouseService.getAll().stream().map(WarehouseResponse::toResponse).toList();
+        return new ResponseEntity<>(warehouseResponseList, HttpStatus.FOUND);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable Long id){
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         this.warehouseService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

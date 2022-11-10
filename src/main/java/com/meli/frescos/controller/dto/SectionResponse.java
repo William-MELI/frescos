@@ -4,11 +4,6 @@ import com.meli.frescos.model.CategoryEnum;
 import com.meli.frescos.model.SectionModel;
 import lombok.*;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.Size;
-
 @Getter
 @Setter
 @NoArgsConstructor

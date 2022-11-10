@@ -36,7 +36,7 @@ public class SectionService implements ISectionService {
                 sectionRequest.getTemperature(),
                 warehouse.get()
         );
-       return repo.save(model);
+        return repo.save(model);
     }
 
     @Override

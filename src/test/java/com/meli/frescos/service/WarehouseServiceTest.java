@@ -7,21 +7,22 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.ArgumentMatchers;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.doReturn;
 
 @ExtendWith(MockitoExtension.class)
 class WarehouseServiceTest {
@@ -35,9 +36,9 @@ class WarehouseServiceTest {
     private Validator validator;
 
     @BeforeEach
-    public void setUp(){
+    public void setUp() {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        validator=  factory.getValidator();
+        validator = factory.getValidator();
     }
 
     @Test
@@ -131,9 +132,7 @@ class WarehouseServiceTest {
     @DisplayName("Throw exception when ID is not found.")
     void getById_throwsException_WhenIdIsInvalid() {
 
-        assertThrows(NullPointerException.class, () -> {
-            WarehouseModel responseWarehouse = warehouseService.getById(ArgumentMatchers.anyLong());
-        });
+        assertThrows(NullPointerException.class, () -> warehouseService.getById(ArgumentMatchers.anyLong()));
     }
 
     @Test
@@ -175,7 +174,7 @@ class WarehouseServiceTest {
         warehouseService.save(newWarehouseEntity1);
         warehouseService.save(newWarehouseEntity2);
 
-        List<WarehouseModel> expectedList = new ArrayList<WarehouseModel>();
+        List<WarehouseModel> expectedList = new ArrayList<>();
         expectedList.add(newWarehouseEntity1);
         expectedList.add(newWarehouseEntity2);
 

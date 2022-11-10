@@ -16,7 +16,7 @@ public class SellerResponse {
 
     private Double rating;
 
-    public static SellerResponse toResponse(SellerModel seller){
+    public static SellerResponse toResponse(SellerModel seller) {
         return SellerResponse.builder()
                 .id(seller.getId())
                 .name(seller.getName())

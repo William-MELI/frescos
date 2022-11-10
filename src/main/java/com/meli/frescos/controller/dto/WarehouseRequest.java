@@ -35,7 +35,7 @@ public class WarehouseRequest {
     @Size(min = 8, max = 8, message = "O CEP precisa ter oito caracteres")
     private String postalCode;
 
-    public WarehouseModel toModel(){
+    public WarehouseModel toModel() {
         return WarehouseModel.builder()
                 .city(this.city)
                 .state(this.state)

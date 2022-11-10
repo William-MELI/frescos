@@ -1,8 +1,6 @@
 package com.meli.frescos.controller.dto;
 
 import com.meli.frescos.model.BatchStockModel;
-import com.meli.frescos.model.ProductModel;
-import com.meli.frescos.model.SectionModel;
 import lombok.*;
 
 import java.time.LocalDate;

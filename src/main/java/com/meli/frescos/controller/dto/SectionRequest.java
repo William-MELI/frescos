@@ -1,8 +1,6 @@
 package com.meli.frescos.controller.dto;
 
 import com.meli.frescos.model.CategoryEnum;
-import com.meli.frescos.model.WarehouseModel;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

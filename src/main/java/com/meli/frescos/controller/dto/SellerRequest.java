@@ -1,7 +1,10 @@
 package com.meli.frescos.controller.dto;
 
 import com.meli.frescos.model.SellerModel;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -19,10 +22,11 @@ public class SellerRequest {
     @Size(min = 11, max = 11, message = "Preencher somente com números.")
     private String cpf;
 
-    @Size(min = 0, max = 5)
+    @Size(max = 5)
     private Double rating;
 
-    public SellerModel toModel(){
+    public SellerModel toModel() {
+
         return SellerModel.builder()
                 .name(this.name)
                 .cpf(this.cpf)

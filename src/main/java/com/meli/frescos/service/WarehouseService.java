@@ -23,21 +23,19 @@ public class WarehouseService implements IWarehouseService {
      * @param warehouse New Warehouse to create
      * @return The created Warehouse
      */
-    public WarehouseModel save(WarehouseModel warehouse){
-        WarehouseModel createdWarehouse = this.warehouseRepository.save(warehouse);
-        return createdWarehouse;
+    public WarehouseModel save(WarehouseModel warehouse) {
+        return this.warehouseRepository.save(warehouse);
     }
 
     /**
      * Returns a stored Warehouse given ID
      *
-     * @param id
+     * @param id warehouse id
      * @return The stored Warehouse
      * @throws NullPointerException Throws in case Warehouse does not exist
      */
     public WarehouseModel getById(Long id) {
-        WarehouseModel warehouse = this.warehouseRepository.findById(id).orElseThrow(NullPointerException::new);
-        return warehouse;
+        return this.warehouseRepository.findById(id).orElseThrow(NullPointerException::new);
     }
 
     /**
@@ -46,7 +44,7 @@ public class WarehouseService implements IWarehouseService {
      * @return List of all Warehouse
      */
     public List<WarehouseModel> getAll() {
-        return (List) this.warehouseRepository.findAll();
+        return this.warehouseRepository.findAll();
     }
 
     /**

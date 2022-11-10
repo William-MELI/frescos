@@ -1,10 +1,8 @@
 package com.meli.frescos.service;
 
-import com.meli.frescos.model.BatchStockModel;
 import com.meli.frescos.model.ProductModel;
 import com.meli.frescos.model.SellerModel;
 import com.meli.frescos.repository.ProductRepository;
-import com.meli.frescos.repository.SellerRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

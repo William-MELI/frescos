@@ -27,6 +27,7 @@ public class BatchStockController {
 
     /**
      * Endpoint to return all BatchStocks
+     *
      * @return a List with all BatchStockResponse with status 200 ok
      */
     @GetMapping
@@ -40,9 +41,10 @@ public class BatchStockController {
 
     /**
      * Endpoint to return a backStockModel given id
+     *
      * @param id the backStockModel id
      * @return a BatchStockModel  related ID
-     * @throws BatchStockByIdNotFoundException
+     * @throws BatchStockByIdNotFoundException - BatchStock not found
      */
     @GetMapping("/{id}")
     ResponseEntity<List<BatchStockResponse>> getById(@PathVariable Long id) throws Exception {

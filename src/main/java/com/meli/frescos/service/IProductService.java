@@ -7,7 +7,9 @@ import java.util.List;
 public interface IProductService {
 
     List<ProductModel> getAll();
+
     ProductModel getById(Long id) throws Exception;
+
     ProductModel save(ProductModel product, Long sellerCode);
 
 }

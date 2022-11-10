@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class RepresentativeService implements IRepresentativeService{
+public class RepresentativeService implements IRepresentativeService {
 
     private final RepresentativeRepository representativeRepository;
 
