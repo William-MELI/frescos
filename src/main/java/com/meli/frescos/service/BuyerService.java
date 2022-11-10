@@ -1,8 +1,8 @@
 package com.meli.frescos.service;
 
+import com.meli.frescos.exception.BuyerNotFoundException;
 import com.meli.frescos.exception.SellerByIdNotFoundException;
 import com.meli.frescos.model.BuyerModel;
-import com.meli.frescos.model.SellerModel;
 import com.meli.frescos.repository.BuyerRepository;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +20,6 @@ public class BuyerService implements IBuyerService {
 
     @Override
     public BuyerModel save(BuyerModel buyerModel) {
-
         return repo.save(buyerModel);
     }
 
@@ -30,19 +29,20 @@ public class BuyerService implements IBuyerService {
     }
 
     @Override
-    public BuyerModel findById(Long id) {
-        return repo.findById(id).orElseThrow(() -> new SellerByIdNotFoundException(id));
+    public BuyerModel findById(Long id) throws BuyerNotFoundException {
+        return repo.findById(id).orElseThrow(() -> new BuyerNotFoundException(String.format("Comprador com ID %d não encontrado", id)));
     }
 
     @Override
-    public BuyerModel update(BuyerModel buyerModel, Long id) {
-        BuyerModel seller = findById(id);
-        buyerModel.setId(seller.getId());
+    public BuyerModel update(BuyerModel buyerModel, Long id) throws BuyerNotFoundException {
+        BuyerModel buyer = findById(id);
+        buyerModel.setId(buyer.getId());
         return repo.save(buyerModel);
     }
 
     @Override
     public void deleteById(Long id) {
+
         repo.deleteById(id);
     }
 

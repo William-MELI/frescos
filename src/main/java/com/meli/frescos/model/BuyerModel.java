@@ -22,6 +22,9 @@ public class BuyerModel {
     @Column(nullable = false, unique = true)
     private String cpf;
 
+
+//    private
+
     public BuyerModel(String name, String cpf, Double rating) {
         this.name = name;
         this.cpf = cpf;

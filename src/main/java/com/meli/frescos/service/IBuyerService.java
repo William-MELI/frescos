@@ -1,5 +1,6 @@
 package com.meli.frescos.service;
 
+import com.meli.frescos.exception.BuyerNotFoundException;
 import com.meli.frescos.model.BuyerModel;
 
 import java.util.List;
@@ -11,9 +12,9 @@ public interface IBuyerService {
 
     List<BuyerModel> findAll();
 
-    BuyerModel findById(Long id);
+    BuyerModel findById(Long id) throws BuyerNotFoundException;
 
-    BuyerModel update(BuyerModel buyerModel, Long id);
+    BuyerModel update(BuyerModel buyerModel, Long id) throws BuyerNotFoundException;
 
     void deleteById(Long id);
 
