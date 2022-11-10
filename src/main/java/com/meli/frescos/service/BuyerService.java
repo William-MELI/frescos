@@ -34,7 +34,7 @@ public class BuyerService implements IBuyerService {
      * @return A list of all BuyerModel
      */
     @Override
-    public List<BuyerModel> findAll() {
+    public List<BuyerModel> getAll() {
         return repo.findAll();
     }
 
@@ -46,7 +46,7 @@ public class BuyerService implements IBuyerService {
      * @throws BuyerNotFoundException Throws exception in case the BuyerModel with this ID does not exist
      */
     @Override
-    public BuyerModel findById(Long id) throws BuyerNotFoundException {
+    public BuyerModel getById(Long id) throws BuyerNotFoundException {
         return repo.findById(id).orElseThrow(() -> new BuyerNotFoundException(String.format("Comprador com ID %d não encontrado", id)));
     }
 
@@ -60,7 +60,7 @@ public class BuyerService implements IBuyerService {
      */
     @Override
     public BuyerModel update(BuyerModel buyerModel, Long id) throws BuyerNotFoundException {
-        BuyerModel buyer = findById(id);
+        BuyerModel buyer = getById(id);
         buyerModel.setId(buyer.getId());
         return repo.save(buyerModel);
     }
@@ -79,7 +79,7 @@ public class BuyerService implements IBuyerService {
      * @throws BuyerNotFoundException Throws exception in case the BuyerModel with this CPF does not exist
      */
     @Override
-    public Optional<BuyerModel> findByCpf(String cpf) {
+    public Optional<BuyerModel> getByCpf(String cpf) {
         return repo.findByCpf(cpf);
     }
 }

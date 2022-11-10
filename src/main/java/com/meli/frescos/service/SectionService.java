@@ -31,7 +31,7 @@ public class SectionService implements ISectionService {
      * @return List of SectionModel
      */
     @Override
-    public List<SectionModel> findAll() {
+    public List<SectionModel> getAll() {
         return repo.findAll();
     }
 
@@ -64,7 +64,7 @@ public class SectionService implements ISectionService {
      * @return SectionModel
      */
     @Override
-    public SectionModel findById(Long id) throws Exception {
+    public SectionModel getById(Long id) throws Exception {
 
         Optional<SectionModel> responseDb = repo.findById(id);
 

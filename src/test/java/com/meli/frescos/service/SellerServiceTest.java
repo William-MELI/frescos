@@ -55,7 +55,7 @@ class SellerServiceTest {
         BDDMockito.when(repository.findAll())
                 .thenReturn(sellerModelList);
 
-        List<SellerModel> sellerList = service.findAll();
+        List<SellerModel> sellerList = service.getAll();
 
         assertThat(sellerList).isNotNull();
         assertThat(sellerList).isEqualTo(sellerModelList);
@@ -73,7 +73,7 @@ class SellerServiceTest {
         BDDMockito.when(repository.findById(ArgumentMatchers.anyLong()))
                 .thenReturn(Optional.of(seller));
 
-        SellerModel sellerTest = service.findById(id);
+        SellerModel sellerTest = service.getById(id);
 
         assertThat(sellerTest).isNotNull();
         assertThat(sellerTest).isEqualTo(seller);
@@ -83,7 +83,7 @@ class SellerServiceTest {
     @DisplayName("Throw exception when ID is not found.")
     void findByIdSeller_returnSellerByIdNotFoundException_whenInvalidId() {
         assertThrows(SellerByIdNotFoundException.class, () -> {
-            SellerModel sellerModel = service.findById(ArgumentMatchers.anyLong());
+            SellerModel sellerModel = service.getById(ArgumentMatchers.anyLong());
         });
     }
 
@@ -132,7 +132,7 @@ class SellerServiceTest {
         service.deleteById(sellerTest.getId());
 
         assertThrows(SellerByIdNotFoundException.class, () -> {
-            SellerModel sellerModel = service.findById(id);
+            SellerModel sellerModel = service.getById(id);
         });
 
     }

@@ -43,6 +43,10 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<ProductBatchStockResponse> save(@RequestBody ProductBatchStockRequest productBatchStockRequest) throws Exception {
+        boolean validProduct = iBatchStockService.isValid(productBatchStockRequest.toProduct(), productBatchStockRequest.toBatchStock(), productBatchStockRequest.getInboundOrder().getSectionCode());
+        if (!validProduct) {
+            throw new Exception("No room available in this section!");
+        }
         ProductModel product = iProductService.save(productBatchStockRequest.toProduct(), productBatchStockRequest.getInboundOrder().getSellerCode());
         List<BatchStockResponse> batchStockList = new ArrayList<>();
         for (BatchStockRequest batchStockRequest : productBatchStockRequest.getInboundOrder().getBatchStock()) {

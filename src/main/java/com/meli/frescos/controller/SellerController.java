@@ -42,7 +42,7 @@ public class SellerController {
      */
     @GetMapping
     public ResponseEntity<List<SellerResponse>> getAll() {
-        List<SellerResponse> sellerResponseList = service.findAll().stream().map(SellerResponse::toResponse).toList();
+        List<SellerResponse> sellerResponseList = service.getAll().stream().map(SellerResponse::toResponse).toList();
         return new ResponseEntity<>(sellerResponseList, HttpStatus.FOUND);
     }
 
@@ -54,7 +54,7 @@ public class SellerController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<SellerResponse> getById(@PathVariable Long id) {
-        return new ResponseEntity<>(SellerResponse.toResponse(service.findById(id)), HttpStatus.FOUND);
+        return new ResponseEntity<>(SellerResponse.toResponse(service.getById(id)), HttpStatus.FOUND);
     }
 
     /**

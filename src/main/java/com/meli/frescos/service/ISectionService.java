@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface ISectionService {
 
-    List<SectionModel> findAll();
+    List<SectionModel> getAll();
 
     SectionModel save(SectionRequest sectionRequest);
 
-    SectionModel findById(Long id) throws Exception;
+    SectionModel getById(Long id) throws Exception;
 }

@@ -47,7 +47,7 @@ public class BuyerController {
      */
     @GetMapping
     public ResponseEntity<List<BuyerResponse>> getAll() {
-        List<BuyerResponse> buyerResponseList = service.findAll().stream().map(BuyerResponse::toResponse).toList();
+        List<BuyerResponse> buyerResponseList = service.getAll().stream().map(BuyerResponse::toResponse).toList();
         return new ResponseEntity<>(buyerResponseList, HttpStatus.FOUND);
     }
 
@@ -60,7 +60,7 @@ public class BuyerController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<BuyerResponse> getById(@PathVariable Long id) throws BuyerNotFoundException {
-        return new ResponseEntity<>(BuyerResponse.toResponse(service.findById(id)), HttpStatus.FOUND);
+        return new ResponseEntity<>(BuyerResponse.toResponse(service.getById(id)), HttpStatus.FOUND);
     }
 
     /**
