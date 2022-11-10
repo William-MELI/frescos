@@ -1,5 +1,6 @@
 package com.meli.frescos.service;
 
+import com.meli.frescos.exception.WarehouseNotFoundException;
 import com.meli.frescos.model.RepresentativeModel;
 import com.meli.frescos.repository.RepresentativeRepository;
 import org.springframework.stereotype.Service;
@@ -29,7 +30,7 @@ public class RepresentativeService implements IRepresentativeService {
     }
 
     @Override
-    public RepresentativeModel save(RepresentativeModel representativeModel, Long warehouseCode) {
+    public RepresentativeModel save(RepresentativeModel representativeModel, Long warehouseCode) throws WarehouseNotFoundException {
         representativeModel.setWarehouse(iWarehouseService.getById(warehouseCode));
         return representativeRepository.save(representativeModel);
     }
