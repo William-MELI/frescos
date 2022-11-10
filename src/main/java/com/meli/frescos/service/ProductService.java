@@ -1,9 +1,11 @@
 package com.meli.frescos.service;
 
+import com.meli.frescos.model.CategoryEnum;
 import com.meli.frescos.model.ProductModel;
 import com.meli.frescos.model.SellerModel;
 import com.meli.frescos.repository.ProductRepository;
 import org.springframework.stereotype.Service;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -37,18 +39,19 @@ public class ProductService implements IProductService {
 
     @Override
     public List<ProductModel> getByCategory(String filter) {
-        int type = -1;
-
-        if(filter.equalsIgnoreCase("FS"))
-            type = 0;
-
-        if(filter.equalsIgnoreCase("FF"))
-            type = 1;
-
-        if(filter.equalsIgnoreCase("RF"))
-            type = 2;
-
-        return productRepository.getProductByCategory(type);
+        List<ProductModel> productModels = new ArrayList<>();
+        switch (filter.toUpperCase()){
+            case "FS":
+                productModels = productRepository.findByCategory(CategoryEnum.FRESH);
+                break;
+            case "FF":
+                productModels = productRepository.findByCategory(CategoryEnum.FROZEN);
+                break;
+            case "RF":
+                productModels = productRepository.findByCategory(CategoryEnum.REFRIGERATED);
+                break;
+        }
+        return productModels;
     }
 
 }
