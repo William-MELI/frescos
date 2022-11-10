@@ -7,6 +7,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+/**
+ * The main Seller entity
+ */
 @Entity
 @Getter
 @Setter
@@ -14,16 +17,33 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Table(name = "seller")
 public class SellerModel {
+
+    /**
+     * SellerModel ID
+     * Auto-generated
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * SellerModel name
+     * Not nullable
+     */
     @Column(nullable = false)
     private String name;
 
+    /**
+     * SellerModel cpf
+     * Unique
+     * Not nullable
+     */
     @Column(nullable = false, unique = true)
     private String cpf;
 
+    /**
+     * SellerModel rating
+     */
     private Double rating;
 
     public SellerModel(String name, String cpf, Double rating) {
