@@ -61,30 +61,30 @@ class WarehouseControllerIT {
         response.andExpect(status().isCreated());
     }
 
-//    @Test
-//    @DisplayName("Test Warehouse creation - POST Endpoint")
-//    void create_throwException_whenPassWrongParameters() throws Exception {
-//        String city = "";
-//        String district = "";
-//        String state = "";
-//        String postalCode = "";
-//
-//        WarehouseRequest newWarehouseRequest = WarehouseRequest
-//                .builder()
-//                .city(city)
-//                .street(null)
-//                .state(state)
-//                .postalCode(postalCode)
-//                .district(district).build();
-//
-//        ResultActions response = mockMvc.perform(
-//                post("/warehouse")
-//                        .content(objectMapper.writeValueAsString(newWarehouseRequest))
-//                        .contentType(MediaType.APPLICATION_JSON)
-//        );
-//
-//        response.andExpect(status().isInternalServerError());
-//    }
+    @Test
+    @DisplayName("Test Warehouse creation - POST Endpoint")
+    void create_throwException_whenPassWrongParameters() throws Exception {
+        String city = "";
+        String district = "";
+        String state = "";
+        String postalCode = "";
+
+        WarehouseRequest newWarehouseRequest = WarehouseRequest
+                .builder()
+                .city(city)
+                .street(null)
+                .state(state)
+                .postalCode(postalCode)
+                .district(district).build();
+
+        ResultActions response = mockMvc.perform(
+                post("/warehouse")
+                        .content(objectMapper.writeValueAsString(newWarehouseRequest))
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        response.andExpect(status().isBadRequest());
+    }
 
     @Test
     @DisplayName("Test Get Warehouse by ID - GET Endpoint")
@@ -110,7 +110,17 @@ class WarehouseControllerIT {
                         .contentType(MediaType.APPLICATION_JSON));
 
         response.andExpect(status().isFound());
+    }
 
+    @Test
+    @DisplayName("Test Warehouse ID not found - GET Endpoint")
+    void getById_throwsWarehouseNotFound_whenIdDoesNotExists() throws Exception {
+        ResultActions response = mockMvc.perform(
+                get("/warehouse/{id}", -1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        response.andExpect(status().isNotFound());
     }
 
     @Test

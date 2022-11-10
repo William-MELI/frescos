@@ -2,6 +2,7 @@ package com.meli.frescos.controller;
 
 import com.meli.frescos.controller.dto.RepresentativeRequest;
 import com.meli.frescos.controller.dto.RepresentativeResponse;
+import com.meli.frescos.exception.WarehouseNotFoundException;
 import com.meli.frescos.model.RepresentativeModel;
 import com.meli.frescos.service.IRepresentativeService;
 import org.springframework.http.HttpStatus;
@@ -32,7 +33,7 @@ public class RepresentativeController {
     }
 
     @PostMapping
-    ResponseEntity<RepresentativeResponse> save(@RequestBody RepresentativeRequest representativeRequest) {
+    ResponseEntity<RepresentativeResponse> save(@RequestBody RepresentativeRequest representativeRequest) throws WarehouseNotFoundException {
         RepresentativeModel representative = representativeRequest.toRepresentative();
         RepresentativeResponse representativeResponse = RepresentativeResponse.toResponse(iRepresentativeService.save(representative, representativeRequest.getWarehouseCode()));
         return new ResponseEntity<>(representativeResponse, HttpStatus.CREATED);

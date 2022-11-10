@@ -2,6 +2,8 @@ package com.meli.frescos.controller;
 
 import com.meli.frescos.controller.dto.WarehouseRequest;
 import com.meli.frescos.controller.dto.WarehouseResponse;
+import com.meli.frescos.exception.UsedPrimaryKeyConstraintException;
+import com.meli.frescos.exception.WarehouseNotFoundException;
 import com.meli.frescos.model.WarehouseModel;
 import com.meli.frescos.service.IWarehouseService;
 import org.springframework.http.HttpStatus;
@@ -26,7 +28,7 @@ public class WarehouseController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<WarehouseResponse> getById(@PathVariable Long id) {
+    public ResponseEntity<WarehouseResponse> getById(@PathVariable Long id) throws WarehouseNotFoundException {
         WarehouseModel warehouseEntity = this.warehouseService.getById(id);
         WarehouseResponse warehouseResponse = WarehouseResponse.toResponse(warehouseEntity);
 
@@ -40,7 +42,7 @@ public class WarehouseController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) throws UsedPrimaryKeyConstraintException {
         this.warehouseService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
