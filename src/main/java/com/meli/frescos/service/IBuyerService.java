@@ -16,7 +16,7 @@ public interface IBuyerService {
 
     BuyerModel update(BuyerModel buyerModel, Long id) throws BuyerNotFoundException;
 
-    void deleteById(Long id);
+//    void deleteById(Long id);
 
     Optional<BuyerModel> findByCpf(String cpf);
 
