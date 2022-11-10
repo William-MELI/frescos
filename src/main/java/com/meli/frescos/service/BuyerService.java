@@ -40,11 +40,11 @@ public class BuyerService implements IBuyerService {
         return repo.save(buyerModel);
     }
 
-    @Override
-    public void deleteById(Long id) {
-
-        repo.deleteById(id);
-    }
+//    @Override
+//    public void deleteById(Long id) {
+//
+//        repo.deleteById(id);
+//    }
 
     @Override
     public Optional<BuyerModel> findByCpf(String cpf) {
