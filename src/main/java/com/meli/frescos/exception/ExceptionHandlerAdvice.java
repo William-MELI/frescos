@@ -74,6 +74,12 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
 
     }
 
+    /**
+     * This method handles the BuyerNotFoundException
+     *
+     * @param ex The original exception
+     * @return A ResponseEntity to represent the HTTP error
+     */
     @ExceptionHandler(BuyerNotFoundException.class)
     public ResponseEntity<ExceptionDetails> handlerBuyerNotFoundException(BuyerNotFoundException ex) {
         return new ResponseEntity<>(

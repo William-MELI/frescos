@@ -4,6 +4,9 @@ import lombok.*;
 
 import javax.persistence.*;
 
+/**
+ * Main Buyer Entity
+ */
 @Entity
 @Getter
 @Setter
@@ -12,13 +15,26 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Table(name = "buyer")
 public class BuyerModel {
+    /**
+     * Buyer ID
+     * Auto-generated. Identity Strategy
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * Buyer name.
+     * Not-nullable
+     */
     @Column(nullable = false)
     private String name;
-
+    /**
+     * Buyer CPF
+     * Unique
+     * Only numbers
+     * Not-nullable
+     */
     @Column(nullable = false, unique = true, length = 11)
     private String cpf;
 
