@@ -4,7 +4,6 @@ import com.meli.frescos.controller.dto.WarehouseRequest;
 import com.meli.frescos.controller.dto.WarehouseResponse;
 import com.meli.frescos.model.WarehouseModel;
 import com.meli.frescos.service.IWarehouseService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,34 +14,34 @@ import java.util.List;
 @RequestMapping("warehouse")
 public class WarehouseController {
 
-    @Autowired
-    IWarehouseService warehouseService;
+    private final IWarehouseService warehouseService;
 
-    @PostMapping
-    public ResponseEntity<WarehouseModel> create(@RequestBody WarehouseRequest request){
-        this.warehouseService.create(request.toEntity());
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public WarehouseController(IWarehouseService warehouseService) {
+        this.warehouseService = warehouseService;
     }
 
-    @GetMapping("get/{id}")
-    public ResponseEntity<WarehouseResponse> getById(@PathVariable Long id){
+    @PostMapping
+    public ResponseEntity<WarehouseResponse> save(@RequestBody WarehouseRequest request) {
+        return new ResponseEntity<>(WarehouseResponse.toResponse(this.warehouseService.save(request.toModel())), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<WarehouseResponse> getById(@PathVariable Long id) {
         WarehouseModel warehouseEntity = this.warehouseService.getById(id);
         WarehouseResponse warehouseResponse = WarehouseResponse.toResponse(warehouseEntity);
 
         return new ResponseEntity<>(warehouseResponse, HttpStatus.FOUND);
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<WarehouseResponse>> getAll(){
-    List<WarehouseModel> warehouseModelList = this.warehouseService.getAll();
-    List<WarehouseResponse> warehouseResponseList = WarehouseResponse.toResponse(warehouseModelList);
-
-    return new ResponseEntity<>(warehouseResponseList,HttpStatus.FOUND);
+    @GetMapping
+    public ResponseEntity<List<WarehouseResponse>> getAll() {
+        List<WarehouseResponse> warehouseResponseList = this.warehouseService.getAll().stream().map(WarehouseResponse::toResponse).toList();
+        return new ResponseEntity<>(warehouseResponseList, HttpStatus.FOUND);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id){
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         this.warehouseService.delete(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

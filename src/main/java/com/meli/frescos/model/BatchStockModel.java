@@ -3,7 +3,6 @@ package com.meli.frescos.model;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -11,52 +10,53 @@ import java.time.LocalDateTime;
  * Main BatchStock Entity
  */
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "batch_stock")
 public class BatchStockModel {
 
     /**
-     *  BatchStockModel ID
-     *  Auto-generated
+     * BatchStockModel ID
+     * Auto-generated
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     /**
-     *  BatchStockModel number
-     *  Not Nullable
+     * BatchStockModel number
+     * Not Nullable
      */
     @Column(nullable = false)
     private String batchNumber;
 
     /**
-     *  BatchStockModel quantity
-     *  Not Nullable
+     * BatchStockModel quantity
+     * Not Nullable
      */
     @Column(nullable = false)
-    private Double quantity;
+    private Integer quantity;
 
     /**
-     *  BatchStockModel manufacture date
-     *  Not Nullable
+     * BatchStockModel manufacture date
+     * Not Nullable
      */
     @Column(nullable = false)
     private LocalDate manufacturingDate;
 
     /**
-     *  BatchStockModel manufacture date and time
-     *  Not Nullable
+     * BatchStockModel manufacture date and time
+     * Not Nullable
      */
     @Column(nullable = false)
     private LocalDateTime manufacturingTime;
 
     /**
-     *  BatchStockModel due date
-     *  Not Nullable
+     * BatchStockModel due date
+     * Not Nullable
      */
     @Column(nullable = false)
     private LocalDate dueDate;
@@ -65,7 +65,7 @@ public class BatchStockModel {
      * Product related to BatchStockModel(Foreign key)
      * Not Nullable
      */
-    @Column(nullable = false)
+    @JoinColumn(nullable = false)
     @ManyToOne
     private ProductModel product;
 
@@ -73,7 +73,7 @@ public class BatchStockModel {
      * Section related to BatchStockModel(Foreign key)
      * Not Nullable
      */
-    @Column(nullable = false)
+    @JoinColumn(nullable = false)
     @ManyToOne
     private SectionModel section;
 }

@@ -6,9 +6,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @ExtendWith(MockitoExtension.class)
 public class BatchStockServiceTest {
 
@@ -17,6 +14,5 @@ public class BatchStockServiceTest {
 
     @Mock
     BatchStockModel batchStockModel;
-
 
 }

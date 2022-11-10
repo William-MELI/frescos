@@ -103,10 +103,10 @@ class WarehouseControllerIT {
                 .postalCode(postalCode)
                 .district(district).build();
 
-        WarehouseModel warehouse = warehouseService.create(newWarehouseRequest.toEntity());
+        WarehouseModel warehouse = warehouseService.save(newWarehouseRequest.toModel());
 
         ResultActions response = mockMvc.perform(
-                get("/warehouse/get/{id}", String.valueOf(warehouse.getId()))
+                get("/warehouse/{id}", String.valueOf(warehouse.getId()))
                         .contentType(MediaType.APPLICATION_JSON));
 
         response.andExpect(status().isFound());
@@ -129,10 +129,10 @@ class WarehouseControllerIT {
                 .postalCode(postalCode)
                 .district(district).build();
 
-        warehouseService.create(newWarehouseRequest.toEntity());
+        warehouseService.save(newWarehouseRequest.toModel());
 
         ResultActions response = mockMvc.perform(
-                get("/warehouse/all")
+                get("/warehouse")
                         .contentType(MediaType.APPLICATION_JSON)
         );
 
@@ -155,14 +155,14 @@ class WarehouseControllerIT {
                 .postalCode(postalCode)
                 .district(district).build();
 
-        WarehouseModel warehouse = warehouseService.create(newWarehouseRequest.toEntity());
+        WarehouseModel warehouse = warehouseService.save(newWarehouseRequest.toModel());
 
         ResultActions response = mockMvc.perform(
                 delete("/warehouse/{id}", (warehouse.getId()))
                         .contentType(MediaType.APPLICATION_JSON)
         );
 
-        response.andExpect(status().isOk());
+        response.andExpect(status().isNoContent());
     }
 
 

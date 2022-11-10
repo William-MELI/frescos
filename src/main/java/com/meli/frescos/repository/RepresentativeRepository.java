@@ -1,4 +1,7 @@
 package com.meli.frescos.repository;
 
-public interface RepresentativeRepository {
+import com.meli.frescos.model.RepresentativeModel;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface RepresentativeRepository extends JpaRepository<RepresentativeModel, Long> {
 }

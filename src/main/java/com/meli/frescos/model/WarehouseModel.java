@@ -1,9 +1,6 @@
 package com.meli.frescos.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -13,14 +10,15 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-@AllArgsConstructor
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "warehouse")
 public class WarehouseModel {
 
     /**
-    *   Warehouse ID.
-     *   Auto-generated
+     * Warehouse ID.
+     * Auto-generated
      */
 
     @Id
@@ -28,41 +26,41 @@ public class WarehouseModel {
     private Long id;
 
     /**
-     *   District name.
-     *   Not nullable.
+     * District name.
+     * Not nullable.
      */
     @Column(nullable = false)
     private String district;
 
     /**
-     *   State name
-     *   Not nullable.
+     * State name
+     * Not nullable.
      */
     @Column(nullable = false)
     private String state;
 
     /**
-     *   City name
-     *   Not nullable.
+     * City name
+     * Not nullable.
      */
     @Column(nullable = false)
     private String city;
 
     /**
-     *   Street name
-     *   Not nullable.
+     * Street name
+     * Not nullable.
      */
     @Column(nullable = false)
     private String street;
 
     /**
-     *   Postal Code value. Only numbers.
-     *   Not nullable.
+     * Postal Code value. Only numbers.
+     * Not nullable.
      */
     @Column(nullable = false)
     private String postalCode;
 
-    public WarehouseModel(String city, String state, String street, String postalCode, String district){
+    public WarehouseModel(String city, String state, String street, String postalCode, String district) {
         this.city = city;
         this.state = state;
         this.street = street;
