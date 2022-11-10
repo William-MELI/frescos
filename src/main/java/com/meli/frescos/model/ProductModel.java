@@ -25,6 +25,7 @@ public class ProductModel {
 
     private BigDecimal price;
 
+    @Enumerated(EnumType.STRING)
     private CategoryEnum category;
 
     private Double unitVolume;
