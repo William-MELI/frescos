@@ -8,10 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.validation.ConstraintViolation;
@@ -128,10 +125,11 @@ class WarehouseServiceTest {
         assertEquals(street, responseWarehouse.getStreet());
 
     }
-
     @Test
     @DisplayName("Throw exception when ID is not found.")
     void getById_throwsException_WhenIdIsInvalid() {
+        BDDMockito.given(warehouseRepository.findById(ArgumentMatchers.anyLong()))
+                        .willThrow(new WarehouseNotFoundException(("")));
 
         assertThrows(WarehouseNotFoundException.class, () -> warehouseService.getById(ArgumentMatchers.anyLong()));
     }
