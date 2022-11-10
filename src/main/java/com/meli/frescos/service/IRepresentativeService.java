@@ -10,7 +10,7 @@ public interface IRepresentativeService {
 
     List<RepresentativeModel> getAll() throws Exception;
 
-    RepresentativeModel save(RepresentativeModel representativeModel, Long warehouseCode);
+    RepresentativeModel save(RepresentativeModel representativeModel, Long warehouseCode) throws WarehouseNotFoundException;
 
     boolean permittedRepresentative(RepresentativeModel representative, Long warehouseId);
 }
