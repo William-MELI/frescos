@@ -9,4 +9,6 @@ public interface IOrderProductService {
     List<OrderProductsModel> getAll();
 
     OrderProductsModel save(OrderProductsRequest orderProductsRequest);
+
+    OrderProductsModel getById(Long id) throws Exception;
 }

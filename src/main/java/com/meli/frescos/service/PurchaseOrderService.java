@@ -36,7 +36,8 @@ public class PurchaseOrderService implements IPurchaseOrderService {
 
         purchaseOrderRequest.getProducts().stream().map(p -> orderProductService.save(new OrderProductsRequest(
                 p.getProductModel(),
-                p.getQuantity()
+                p.getQuantity(),
+                p.getPurchaseOrderModel()
         )));
 
         PurchaseOrderModel result = purchaseOrderRepository.save(purchase);
