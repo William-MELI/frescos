@@ -29,7 +29,7 @@ public class BuyerRequest {
      * Buyer cpf
      */
     @NotBlank(message = "O CPF do comprador deve ser preenchido.")
-    @CPF(message = "Preencher somente com números.")
+    @CPF
     private String cpf;
 
     public BuyerModel toModel() {

@@ -46,7 +46,7 @@ class BuyerControllerIT {
     @DisplayName("Test Buyer Successfull Creation - POST Endpoint")
     void create_returnsCreatedStatus_whenSuccess() throws Exception {
         String name = "Buyer";
-        String cpf = "12345678900";
+        String cpf = "41937616576";
 
         BuyerRequest buyerRequest = BuyerRequest.builder()
                 .cpf(cpf)
@@ -85,8 +85,8 @@ class BuyerControllerIT {
     @Test
     @DisplayName("Test Get Warehouse by ID - GET Endpoint")
     void getById_returnsWarehouse_whenIdIsAvailable() throws Exception {
-        String name = "Buyer";
         String cpf = "12345678900";
+        String name = "Buyer";
 
         BuyerRequest buyerRequest = BuyerRequest.builder()
                 .cpf(cpf)

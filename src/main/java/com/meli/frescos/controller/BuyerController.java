@@ -3,6 +3,7 @@ package com.meli.frescos.controller;
 import com.meli.frescos.controller.dto.BuyerRequest;
 import com.meli.frescos.controller.dto.BuyerResponse;
 import com.meli.frescos.exception.BuyerNotFoundException;
+import com.meli.frescos.model.BuyerModel;
 import com.meli.frescos.service.IBuyerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +34,9 @@ public class BuyerController {
      */
     @PostMapping
     public ResponseEntity<BuyerResponse> save(@Valid @RequestBody BuyerRequest buyerRequest) {
-        return new ResponseEntity<>(BuyerResponse.toResponse(service.save(buyerRequest.toModel())), HttpStatus.CREATED);
+        BuyerModel buyer = buyerRequest.toModel();
+        BuyerResponse response = BuyerResponse.toResponse(service.save(buyer));
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     /**
