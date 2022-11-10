@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.br.CPF;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -28,7 +29,7 @@ public class SellerRequest {
      * Seller cpf
      */
     @NotBlank(message = "O CPF do vendedor deve ser preenchido.")
-    @Size(min = 11, max = 11, message = "Preencher somente com números.")
+    @CPF(message = "CPF inválido")
     private String cpf;
 
     /**
