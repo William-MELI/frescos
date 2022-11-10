@@ -19,13 +19,10 @@ public class BuyerModel {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 11)
     private String cpf;
 
-
-//    private
-
-    public BuyerModel(String name, String cpf, Double rating) {
+    public BuyerModel(String name, String cpf) {
         this.name = name;
         this.cpf = cpf;
     }
