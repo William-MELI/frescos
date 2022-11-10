@@ -3,7 +3,6 @@ package com.meli.frescos.model;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -11,10 +10,11 @@ import java.time.LocalDateTime;
  * Main BatchStock Entity
  */
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "batch_stock")
 public class BatchStockModel {
 
@@ -38,7 +38,7 @@ public class BatchStockModel {
      *  Not Nullable
      */
     @Column(nullable = false)
-    private Double quantity;
+    private Integer quantity;
 
     /**
      *  BatchStockModel manufacture date
@@ -65,7 +65,7 @@ public class BatchStockModel {
      * Product related to BatchStockModel(Foreign key)
      * Not Nullable
      */
-    @Column(nullable = false)
+    @JoinColumn(nullable = false)
     @ManyToOne
     private ProductModel product;
 
@@ -73,7 +73,7 @@ public class BatchStockModel {
      * Section related to BatchStockModel(Foreign key)
      * Not Nullable
      */
-    @Column(nullable = false)
+    @JoinColumn(nullable = false)
     @ManyToOne
     private SectionModel section;
 }

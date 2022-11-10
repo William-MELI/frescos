@@ -9,13 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class WarehouseResponse {
+
+    private Long id;
 
     private String district;
 
@@ -29,6 +30,7 @@ public class WarehouseResponse {
 
     public static WarehouseResponse toResponse(WarehouseModel warehouse){
         return WarehouseResponse.builder()
+                .id(warehouse.getId())
                 .city(warehouse.getCity())
                 .state(warehouse.getState())
                 .street(warehouse.getStreet())
@@ -37,10 +39,4 @@ public class WarehouseResponse {
                 .build();
     }
 
-    public static List<WarehouseResponse> toResponse(List<WarehouseModel> warehouse){
-
-        List<WarehouseResponse> warehouseResponseList = warehouse.stream().map(w -> WarehouseResponse.toResponse(w)).collect(Collectors.toList());
-
-        return warehouseResponseList;
-    }
 }

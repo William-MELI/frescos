@@ -34,7 +34,14 @@ public class WarehouseRequest {
     @NotBlank(message = "O CEP não pode ser vazia")
     @Size(min = 8, max = 8, message = "O CEP precisa ter oito caracteres")
     private String postalCode;
-    public WarehouseModel toEntity(){
-        return new WarehouseModel(this.city, this.state, this.street, this.postalCode, this.district);
+
+    public WarehouseModel toModel(){
+        return WarehouseModel.builder()
+                .city(this.city)
+                .state(this.state)
+                .street(this.street)
+                .postalCode(this.postalCode)
+                .district(this.district)
+                .build();
     }
 }

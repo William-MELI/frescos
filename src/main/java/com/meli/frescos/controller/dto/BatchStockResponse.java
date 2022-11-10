@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 public class BatchStockResponse {
 
     /**
-     * BatchStockModel id
+     * BatchStock id
      */
     private Long id;
 
@@ -29,9 +29,14 @@ public class BatchStockResponse {
     private String batchNumber;
 
     /**
+     * Current section temperature
+     */
+    private Double currentTemperature;
+
+    /**
      * BatchStockModel quantity
      */
-    private Double quantity;
+    private Integer productQuantity;
 
     /**
      * BatchStockModel manufacturing date
@@ -48,27 +53,16 @@ public class BatchStockResponse {
      */
     private LocalDate dueDate;
 
-    /**
-     * Product related to BatchStockModel
-     */
-    private ProductModel product;
-
-    /**
-     * Section related to BatchStockModel
-     */
-    private SectionModel section;
-
     public static BatchStockResponse toResponse(BatchStockModel batchStockModel) {
 
         return BatchStockResponse.builder()
                 .id(batchStockModel.getId())
                 .batchNumber(batchStockModel.getBatchNumber())
-                .quantity(batchStockModel.getQuantity())
+                .currentTemperature(batchStockModel.getSection().getTemperature())
+                .productQuantity(batchStockModel.getQuantity())
                 .manufacturingDate(batchStockModel.getManufacturingDate())
                 .manufacturingTime(batchStockModel.getManufacturingTime())
                 .dueDate(batchStockModel.getDueDate())
-                .product(batchStockModel.getProduct())
-                .section(batchStockModel.getSection())
                 .build();
     }
 }

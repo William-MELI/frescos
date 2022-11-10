@@ -1,13 +1,12 @@
 package com.meli.frescos.controller;
 
+import com.meli.frescos.controller.dto.BatchStockRequest;
 import com.meli.frescos.controller.dto.BatchStockResponse;
 import com.meli.frescos.exception.BatchStockByIdNotFoundException;
-import com.meli.frescos.service.BatchStockService;
+import com.meli.frescos.service.IBatchStockService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,13 +16,13 @@ import java.util.List;
  * Is`s a Spring @RestController
  */
 @RestController
-@RequestMapping("/api/v1/fresh-products/batch-stock")
+@RequestMapping("/batch-stock")
 public class BatchStockController {
 
-    private final BatchStockService batchStockService;
+    private final IBatchStockService iBatchStockService;
 
-    public BatchStockController(BatchStockService batchStockService) {
-        this.batchStockService = batchStockService;
+    public BatchStockController(IBatchStockService iBatchStockService) {
+        this.iBatchStockService = iBatchStockService;
     }
 
     /**
@@ -34,9 +33,9 @@ public class BatchStockController {
     ResponseEntity<List<BatchStockResponse>> getAll() {
         List<BatchStockResponse> batchStockResponseList = new ArrayList<>();
 
-        batchStockService.findAll().forEach(b -> batchStockResponseList.add(BatchStockResponse.toResponse(b)));
+        iBatchStockService.findAll().forEach(b -> batchStockResponseList.add(BatchStockResponse.toResponse(b)));
 
-        return ResponseEntity.ok(batchStockResponseList);
+        return new ResponseEntity<>(batchStockResponseList, HttpStatus.FOUND);
     }
 
     /**
@@ -45,8 +44,32 @@ public class BatchStockController {
      * @return a BatchStockModel  related ID
      * @throws BatchStockByIdNotFoundException
      */
-    @GetMapping("/filter-id")
-    ResponseEntity<BatchStockResponse> getById(@RequestParam Long id) throws BatchStockByIdNotFoundException {
-        return ResponseEntity.ok(BatchStockResponse.toResponse((batchStockService.findById(id))));
+    @GetMapping("/{id}")
+    ResponseEntity<List<BatchStockResponse>> getById(@PathVariable Long id) throws Exception {
+        List<BatchStockResponse> batchStockResponseList = new ArrayList<>();
+
+        iBatchStockService.findByProduct(id).forEach(b -> batchStockResponseList.add(BatchStockResponse.toResponse(b)));
+
+        return new ResponseEntity<>(batchStockResponseList, HttpStatus.FOUND);
+    }
+
+    @GetMapping("/product-id/{productId}")
+    ResponseEntity<BatchStockResponse> getByProductId(@PathVariable Long productId) throws BatchStockByIdNotFoundException {
+        return new ResponseEntity<>(BatchStockResponse.toResponse((iBatchStockService.findById(productId))), HttpStatus.FOUND);
+    }
+
+    @PostMapping("/product-id")
+    ResponseEntity<BatchStockResponse> save(@RequestBody BatchStockRequest batchStockRequest,
+                                            @RequestParam Long productId,
+                                            @RequestParam Long sectionId,
+                                            @RequestParam Long representativeId,
+                                            @RequestParam Long warehouseId) throws Exception {
+
+        return new ResponseEntity<>(BatchStockResponse.toResponse(iBatchStockService.save(batchStockRequest.toModel(),
+                productId,
+                sectionId,
+                representativeId,
+                warehouseId)),
+                HttpStatus.CREATED);
     }
 }

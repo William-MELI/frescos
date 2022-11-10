@@ -3,7 +3,6 @@ package com.meli.frescos.service;
 import com.meli.frescos.controller.dto.WarehouseRequest;
 import com.meli.frescos.model.WarehouseModel;
 import com.meli.frescos.repository.IWarehouseRepository;
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -58,12 +57,12 @@ class WarehouseServiceTest {
                 .postalCode(postalCode)
                 .district(district).build();
 
-        WarehouseModel newWarehouseEntity = newWarehouseRequest.toEntity();
+        WarehouseModel newWarehouseEntity = newWarehouseRequest.toModel();
 
         Set<ConstraintViolation<WarehouseRequest>> violations = validator.validate(newWarehouseRequest);
         Mockito.when(warehouseRepository.save(ArgumentMatchers.any())).thenReturn(newWarehouseEntity);
 
-        WarehouseModel responseWarehouse = warehouseService.create(newWarehouseEntity);
+        WarehouseModel responseWarehouse = warehouseService.save(newWarehouseEntity);
 
         assertEquals(city, responseWarehouse.getCity());
         assertEquals(district, responseWarehouse.getDistrict());
@@ -112,7 +111,7 @@ class WarehouseServiceTest {
                 .postalCode(postalCode)
                 .district(district).build();
 
-        WarehouseModel newWarehouseEntity = newWarehouseRequest.toEntity();
+        WarehouseModel newWarehouseEntity = newWarehouseRequest.toModel();
 
         Mockito.when(warehouseRepository.findById(ArgumentMatchers.anyLong()))
                 .thenReturn(Optional.of(newWarehouseEntity));
@@ -160,7 +159,7 @@ class WarehouseServiceTest {
                 .postalCode(postalCode1)
                 .district(district1).build();
 
-        WarehouseModel newWarehouseEntity1 = newWarehouseRequest1.toEntity();
+        WarehouseModel newWarehouseEntity1 = newWarehouseRequest1.toModel();
 
         WarehouseRequest newWarehouseRequest2 = WarehouseRequest
                 .builder()
@@ -170,11 +169,11 @@ class WarehouseServiceTest {
                 .postalCode(postalCode2)
                 .district(district2).build();
 
-        WarehouseModel newWarehouseEntity2 = newWarehouseRequest2.toEntity();
+        WarehouseModel newWarehouseEntity2 = newWarehouseRequest2.toModel();
 
 
-        warehouseService.create(newWarehouseEntity1);
-        warehouseService.create(newWarehouseEntity2);
+        warehouseService.save(newWarehouseEntity1);
+        warehouseService.save(newWarehouseEntity2);
 
         List<WarehouseModel> expectedList = new ArrayList<WarehouseModel>();
         expectedList.add(newWarehouseEntity1);

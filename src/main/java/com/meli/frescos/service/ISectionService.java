@@ -10,7 +10,7 @@ public interface ISectionService {
 
     List<SectionModel> findAll();
 
-    SectionModel insert(SectionRequest sectionRequest);
+    SectionModel save(SectionRequest sectionRequest);
 
-    SectionModel findById(Long id);
+    SectionModel findById(Long id) throws Exception;
 }

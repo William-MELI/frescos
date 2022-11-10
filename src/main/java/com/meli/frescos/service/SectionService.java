@@ -5,7 +5,6 @@ import com.meli.frescos.model.SectionModel;
 import com.meli.frescos.model.WarehouseModel;
 import com.meli.frescos.repository.IWarehouseRepository;
 import com.meli.frescos.repository.SectionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,11 +13,14 @@ import java.util.Optional;
 @Service
 public class SectionService implements ISectionService {
 
-    @Autowired
-    private SectionRepository repo;
+    private final SectionRepository repo;
 
-    @Autowired
-    private IWarehouseRepository warehouseRepo;
+    private final IWarehouseRepository warehouseRepo;
+
+    public SectionService(SectionRepository repo, IWarehouseRepository warehouseRepo) {
+        this.repo = repo;
+        this.warehouseRepo = warehouseRepo;
+    }
 
     @Override
     public List<SectionModel> findAll() {
@@ -26,7 +28,7 @@ public class SectionService implements ISectionService {
     }
 
     @Override
-    public SectionModel insert(SectionRequest sectionRequest) {
+    public SectionModel save(SectionRequest sectionRequest) {
         Optional<WarehouseModel> warehouse = warehouseRepo.findById(sectionRequest.getWarehouse());
         SectionModel model = new SectionModel(sectionRequest.getDescription(),
                 sectionRequest.getCategory(),
@@ -38,12 +40,12 @@ public class SectionService implements ISectionService {
     }
 
     @Override
-    public SectionModel findById(Long id) {
+    public SectionModel findById(Long id) throws Exception {
 
         Optional<SectionModel> responseDb = repo.findById(id);
 
         if (responseDb.isEmpty()) {
-            throw new NullPointerException("Section not found");
+            throw new Exception("Section not found");
         }
         return responseDb.get();
     }

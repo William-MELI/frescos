@@ -3,16 +3,18 @@ package com.meli.frescos.service;
 import com.meli.frescos.exception.SellerByIdNotFoundException;
 import com.meli.frescos.model.SellerModel;
 import com.meli.frescos.repository.SellerRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class SellerService implements ISellerService{
 
     private final SellerRepository repo;
+
+    public SellerService(SellerRepository repo) {
+        this.repo = repo;
+    }
 
     @Override
     public SellerModel save(SellerModel sellerModel) {
