@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -30,7 +31,7 @@ public class SellerController {
      * @return a Seller instance
      */
     @PostMapping
-    public ResponseEntity<SellerResponse> save(@RequestBody SellerRequest sellerRequest) {
+    public ResponseEntity<SellerResponse> save(@Valid @RequestBody SellerRequest sellerRequest) {
         return new ResponseEntity<>(SellerResponse.toResponse(service.save(sellerRequest.toModel())), HttpStatus.CREATED);
     }
 
@@ -64,7 +65,7 @@ public class SellerController {
      * @return the Seller instance updated
      */
     @PutMapping("/{id}")
-    public ResponseEntity<SellerResponse> update(@RequestBody SellerRequest sellerRequest, @PathVariable Long id) {
+    public ResponseEntity<SellerResponse> update(@Valid @RequestBody SellerRequest sellerRequest, @PathVariable Long id) {
         return new ResponseEntity<>(SellerResponse.toResponse(service.update(sellerRequest.toModel(), id)), HttpStatus.OK);
     }
 
