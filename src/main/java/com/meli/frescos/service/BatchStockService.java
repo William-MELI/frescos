@@ -112,7 +112,7 @@ public class BatchStockService implements IBatchStockService {
 
     @Override
     public List<BatchStockModel> findValidProductsByDueDate(Long productModel, LocalDate dateToCompare) {
-        return this.batchStockRepository.findBatchStockModelsByProductIdAndDueDateGreaterThanEqual(productModel, dateToCompare);
+        return this.batchStockRepository.findProducts(productModel, dateToCompare);
     }
 
 }

@@ -37,7 +37,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
         purchase.setOrderStatus(purchaseOrderRequest.getOrderStatus());
         purchase.setDate(purchaseOrderRequest.getDate());
 
-        PurchaseOrderModel result = purchaseOrderRepository.save(purchase);
+//        PurchaseOrderModel result = purchaseOrderRepository.save(purchase);
 
         purchaseOrderRequest.getProducts().stream().forEach(p ->
                 {
@@ -51,18 +51,18 @@ public class PurchaseOrderService implements IPurchaseOrderService {
 //                result.getId()
 //        )));
 
-        return result;
+        return null;
     }
 
-    private boolean stockAvailable(Long productId, int quantity) {
+    private boolean stockAvailable(Long productId, int desiredQuantity) {
 
-        LocalDate dateRequirement = LocalDate.now().minusWeeks(3);
+        LocalDate dateRequirement = LocalDate.now().plusWeeks(3);
 
         List<BatchStockModel> batchStockList = this.batchStockService.findValidProductsByDueDate(productId, dateRequirement);
 
         int availableQuantity = batchStockList.stream().mapToInt(BatchStockModel::getQuantity).sum();
 
-        return availableQuantity <= quantity;
+        return desiredQuantity <= availableQuantity;
     }
 
     @Override
@@ -70,4 +70,3 @@ public class PurchaseOrderService implements IPurchaseOrderService {
         return null;
     }
 }
-
