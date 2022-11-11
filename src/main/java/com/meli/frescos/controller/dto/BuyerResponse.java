@@ -5,7 +5,7 @@ import com.meli.frescos.model.SellerModel;
 import lombok.*;
 
 /**
- * DTO response to endpoints related to Buyer
+ * Response DTO for Buyer related endpoints
  */
 @Getter
 @Setter
@@ -24,6 +24,11 @@ public class BuyerResponse {
      */
     private String name;
 
+    /**
+     * Maps BuyerModel to BuyerResponse
+     * @param buyer BuyerModel
+     * @return BuyerResponse
+     */
     public static BuyerResponse toResponse(BuyerModel buyer) {
         return BuyerResponse.builder()
                 .id(buyer.getId())

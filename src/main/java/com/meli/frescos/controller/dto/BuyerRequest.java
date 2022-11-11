@@ -11,7 +11,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 /**
- * DTO request to endpoints related to Buyer
+ * Request DTO for Buyer related endpoints
  */
 @Builder
 @Getter
@@ -32,6 +32,10 @@ public class BuyerRequest {
     @CPF
     private String cpf;
 
+    /**
+     * Maps BuyerRequest to BuyerModel
+     * @return BuyerModel
+     */
     public BuyerModel toModel() {
 
         return BuyerModel.builder()
