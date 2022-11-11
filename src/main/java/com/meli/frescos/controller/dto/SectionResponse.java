@@ -4,6 +4,9 @@ import com.meli.frescos.model.CategoryEnum;
 import com.meli.frescos.model.SectionModel;
 import lombok.*;
 
+/**
+ *
+ */
 @Getter
 @Setter
 @NoArgsConstructor

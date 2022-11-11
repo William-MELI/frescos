@@ -1,5 +1,6 @@
 package com.meli.frescos.service;
 
+import com.meli.frescos.exception.ProductByIdNotFoundException;
 import com.meli.frescos.model.CategoryEnum;
 import com.meli.frescos.model.ProductModel;
 import com.meli.frescos.model.SellerModel;
@@ -26,8 +27,8 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public ProductModel getById(Long id) throws Exception {
-        return productRepository.findById(id).orElseThrow(() -> new Exception("Product not found."));
+    public ProductModel getById(Long id) {
+        return productRepository.findById(id).orElseThrow(() -> new ProductByIdNotFoundException(id));
     }
 
     @Override

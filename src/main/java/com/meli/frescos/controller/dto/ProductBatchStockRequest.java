@@ -11,14 +11,24 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Request DTO for ProductBatchStock POST
+ */
 @Builder
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductBatchStockRequest {
 
+    /**
+     * InboundOrder data
+     */
     private InboundOrderRequest inboundOrder;
 
+    /**
+     * Maps ProductBatchStockRequest to ProductModel
+     * @return ProductModel
+     */
     public ProductModel toProduct() {
         return ProductModel.builder()
                 .productTitle(inboundOrder.getProductTitle())

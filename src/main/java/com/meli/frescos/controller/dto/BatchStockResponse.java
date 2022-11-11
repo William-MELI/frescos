@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
- * DTO response to endpoints related to BatchStock
+ * Response DTO for BatchStock related endpoints
  */
 @Getter
 @Setter
@@ -51,6 +51,11 @@ public class BatchStockResponse {
      */
     private LocalDate dueDate;
 
+    /**
+     * Maps BatchStockModel to BatchStockResponse
+     * @param batchStockModel BatchStockModel
+     * @return BatchStockResponse
+     */
     public static BatchStockResponse toResponse(BatchStockModel batchStockModel) {
 
         return BatchStockResponse.builder()

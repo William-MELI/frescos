@@ -5,12 +5,19 @@ import com.meli.frescos.model.ProductModel;
 import com.meli.frescos.model.PurchaseOrderModel;
 import lombok.*;
 
+/**
+ * Response DTO for PurchaseOrder related endpoints
+ */
 @Builder
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderProductsResponse {
+
+    /**
+     * Order id
+     */
     private Long id;
 
     private ProductModel productModel;
