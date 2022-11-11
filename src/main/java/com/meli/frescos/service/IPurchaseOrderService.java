@@ -9,4 +9,6 @@ public interface IPurchaseOrderService {
     PurchaseOrderModel save(PurchaseOrderRequest purchaseOrderRequest);
 
     List<PurchaseOrderModel> findAll();
+
+    PurchaseOrderModel updateStatus(Long id, String orderStatus);
 }

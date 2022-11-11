@@ -10,6 +10,7 @@ import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PurchaseOrderService implements IPurchaseOrderService {
@@ -48,5 +49,19 @@ public class PurchaseOrderService implements IPurchaseOrderService {
     @Override
     public List<PurchaseOrderModel> findAll() {
         return null;
+    }
+
+    @Override
+    public PurchaseOrderModel updateStatus(Long id, String orderStatus) {
+        Optional<PurchaseOrderModel> findbyIdPurchaceOrder = purchaseOrderRepository.findById(id);
+
+        if (findbyIdPurchaceOrder.isEmpty()) {
+            throw new NullPointerException("PurchaceOrder_id not found");
+        }
+        findbyIdPurchaceOrder.get().setOrderStatus(orderStatus);
+
+        PurchaseOrderModel result = purchaseOrderRepository.save(findbyIdPurchaceOrder.get());
+
+        return result;
     }
 }

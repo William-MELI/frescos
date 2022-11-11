@@ -9,10 +9,7 @@ import com.meli.frescos.model.SectionModel;
 import com.meli.frescos.service.PurchaseOrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -33,5 +30,11 @@ public class PurchaseOrderController {
 
         return new ResponseEntity<>(PurchaseOrderResponse.toResponse(insertPurchase), HttpStatus.CREATED);
 
+    }
+
+    @PatchMapping("/{id}")
+    ResponseEntity<PurchaseOrderResponse> updateStatus(@PathVariable Long id, @RequestBody String orderStatus) {
+        PurchaseOrderModel updateStatus = purchaseOrderService.updateStatus(id, orderStatus);
+        return new ResponseEntity<>(PurchaseOrderResponse.toResponse(updateStatus), HttpStatus.OK);
     }
 }
