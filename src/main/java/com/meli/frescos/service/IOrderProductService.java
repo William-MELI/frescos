@@ -11,4 +11,6 @@ public interface IOrderProductService {
     OrderProductsModel save(OrderProductsRequest orderProductsRequest);
 
     OrderProductsModel getById(Long id) throws Exception;
+
+    List<OrderProductsModel> getByPurchaseId(Long id) throws Exception;
 }
