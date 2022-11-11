@@ -65,16 +65,11 @@ public class PurchaseOrderService implements IPurchaseOrderService {
     }
 
     @Override
-    public PurchaseOrderModel updateStatus(Long id, String orderStatus) {
-        Optional<PurchaseOrderModel> findbyIdPurchaceOrder = purchaseOrderRepository.findById(id);
+    public void updateStatus(Long id, String orderStatus) throws Exception {
+        PurchaseOrderModel findbyIdPurchaseOrder = purchaseOrderRepository.findById(id)
+                .orElseThrow(() -> new Exception("Purchase_id not found"));
 
-        if (findbyIdPurchaceOrder.isEmpty()) {
-            throw new NullPointerException("PurchaceOrder_id not found");
-        }
-        findbyIdPurchaceOrder.get().setOrderStatus(orderStatus);
-
-        PurchaseOrderModel result = purchaseOrderRepository.save(findbyIdPurchaceOrder.get());
-
-        return result;
+        findbyIdPurchaseOrder.setOrderStatus(orderStatus);
+        purchaseOrderRepository.save(findbyIdPurchaseOrder);
     }
 }

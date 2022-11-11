@@ -10,5 +10,5 @@ public interface IPurchaseOrderService {
 
     List<PurchaseOrderModel> getAll();
 
-    PurchaseOrderModel updateStatus(Long id, String orderStatus);
+   void updateStatus(Long id, String orderStatus)  throws Exception;
 }
