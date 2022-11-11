@@ -8,7 +8,6 @@ import com.meli.frescos.model.BatchStockModel;
 import com.meli.frescos.model.BuyerModel;
 import com.meli.frescos.model.OrderProductsModel;
 import com.meli.frescos.model.PurchaseOrderModel;
-import com.meli.frescos.repository.BuyerRepository;
 import com.meli.frescos.repository.PurchaseOrderRepository;
 import org.springframework.stereotype.Service;
 
@@ -17,20 +16,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-        import com.meli.frescos.model.BuyerModel;
-        import com.meli.frescos.model.OrderProductsModel;
-        import com.meli.frescos.model.PurchaseOrderModel;
-        import com.meli.frescos.repository.PurchaseOrderRepository;
-        import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-        import java.math.BigDecimal;
-        import java.time.LocalDate;
-        import java.util.ArrayList;
-        import java.util.List;
-        import java.util.stream.Collectors;
 
 @Service
 public class PurchaseOrderService implements IPurchaseOrderService {
