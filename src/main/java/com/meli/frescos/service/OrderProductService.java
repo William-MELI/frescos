@@ -35,7 +35,7 @@ public class OrderProductService implements IOrderProductService {
     @Override
     public OrderProductsModel save(OrderProductsRequest orderProductsRequest) {
         Optional<ProductModel> product = productRepo.findById(orderProductsRequest.getProductModel());
-//        Optional<PurchaseOrderModel> purchaseOrder = purchaseOrderRepo.findById(orderProductsRequest.getPurchaseOrderModel());
+        Optional<PurchaseOrderModel> purchaseOrder = purchaseOrderRepo.findById(orderProductsRequest.getPurchaseOrderModel());
 
         if (product.isEmpty()) {
             throw new NullPointerException("Product_id not found");
@@ -43,8 +43,8 @@ public class OrderProductService implements IOrderProductService {
 
         OrderProductsModel model = new OrderProductsModel(
                 product.get(),
-                orderProductsRequest.getQuantity(), null);
-//                purchaseOrder.get());
+                orderProductsRequest.getQuantity(),
+                purchaseOrder.get());
         return repo.save(model);
     }
 

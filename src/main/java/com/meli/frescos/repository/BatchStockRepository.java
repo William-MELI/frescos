@@ -16,9 +16,6 @@ public interface BatchStockRepository extends JpaRepository<BatchStockModel, Lon
     List<BatchStockModel> findByProduct(ProductModel product);
 
     List<BatchStockModel> findBySection(SectionModel section);
-
-
-    //    List<BatchStockModel> findProducts(@Param("productId")Long productModel);
     @Query("FROM BatchStockModel bsm where bsm.product.id = :productId and bsm.dueDate >= :dateToCompare")
     List<BatchStockModel> findProducts(@Param("productId") Long productModel, @Param("dateToCompare") LocalDate dateToCompare);
 }
