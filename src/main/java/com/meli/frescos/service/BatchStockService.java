@@ -125,8 +125,8 @@ public class BatchStockService implements IBatchStockService {
         return this.batchStockRepository.findProducts(productModel, dateToCompare);
     }
 
-    private List<BatchStockModel> findValidProductsByDueDate(ProductModel productModel, LocalDate minDueDate) throws Exception {
-        return batchStockRepository.findByProductAndDueDateGreaterThanEqual(productModel, minDueDate);
+    private List<BatchStockModel> findValidProductsByDueDate(ProductModel productModel) throws Exception {
+        return batchStockRepository.findByProductAndDueDateGreaterThanEqual(productModel, LocalDate.now().plusWeeks(3));
     }
 
     public void consumeBatchStockOnPurchase(PurchaseOrderModel purchaseOrderModel) throws Exception {
@@ -138,7 +138,7 @@ public class BatchStockService implements IBatchStockService {
     }
 
     private void debitBatchStock(ProductModel productModel, Integer quantity) throws Exception {
-        List<BatchStockModel> batchStockList = findValidProductsByDueDate(productModel, LocalDate.now().plusWeeks(3));
+        List<BatchStockModel> batchStockList = findValidProductsByDueDate(productModel);
         batchStockList.sort(Comparator.comparing(BatchStockModel::getDueDate));
 
         for (BatchStockModel batchStock : batchStockList) {
