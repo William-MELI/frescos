@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("purchase-order")
@@ -29,7 +30,7 @@ public class PurchaseOrderController {
     @PostMapping
     ResponseEntity<PurchaseOrderResponse> save(@RequestBody @Valid PurchaseOrderRequest purchaseOrderRequest) {
 
-        PurchaseOrderModel insertPurchase = purchaseOrderService.save(purchaseOrderRequest.toModel());
+        BigDecimal insertPurchase = purchaseOrderService.getTotalPrice(purchaseOrderRequest.toModel());
 
         return new ResponseEntity<>(PurchaseOrderResponse.toResponse(insertPurchase), HttpStatus.CREATED);
 
