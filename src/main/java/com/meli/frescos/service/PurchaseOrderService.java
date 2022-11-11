@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PurchaseOrderService implements IPurchaseOrderService {
@@ -61,5 +62,14 @@ public class PurchaseOrderService implements IPurchaseOrderService {
     @Override
     public List<PurchaseOrderModel> getAll() {
         return null;
+    }
+
+    @Override
+    public void updateStatus(Long id, String orderStatus) throws Exception {
+        PurchaseOrderModel findbyIdPurchaseOrder = purchaseOrderRepository.findById(id)
+                .orElseThrow(() -> new Exception("Purchase_id not found"));
+
+        findbyIdPurchaseOrder.setOrderStatus(orderStatus);
+        purchaseOrderRepository.save(findbyIdPurchaseOrder);
     }
 }

@@ -9,4 +9,6 @@ public interface IPurchaseOrderService {
     PurchaseOrderModel save(PurchaseOrderRequest purchaseOrderRequest);
 
     List<PurchaseOrderModel> getAll();
+
+   void updateStatus(Long id, String orderStatus)  throws Exception;
 }
