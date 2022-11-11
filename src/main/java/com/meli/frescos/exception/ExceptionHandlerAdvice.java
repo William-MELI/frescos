@@ -101,4 +101,15 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
                     HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(OrderProductIsInvalidException.class)
+    public ResponseEntity<ExceptionDetails> handlerOrderProductIsInvalidException(OrderProductIsInvalidException ex) {
+        return new ResponseEntity<>(
+                ExceptionDetails.builder()
+                        .title("Pedido de compra inválido")
+                        .message(ex.getMessage())
+                        .timestamp(LocalDateTime.now())
+                        .build(),
+                HttpStatus.BAD_REQUEST);
+    }
+
 }
