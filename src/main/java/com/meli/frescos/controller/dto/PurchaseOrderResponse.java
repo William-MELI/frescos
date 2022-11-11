@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Getter
@@ -15,17 +16,12 @@ import java.time.LocalDate;
 public class PurchaseOrderResponse {
 
 
-    private LocalDate date;
+    private BigDecimal totalprice;
 
-    private String orderStatus;
 
-    private BuyerModel buyer;
-
-    public static PurchaseOrderResponse toResponse(PurchaseOrderModel purchaseOrderModel) {
+    public static PurchaseOrderResponse toResponse(BigDecimal totalprice) {
         return PurchaseOrderResponse.builder()
-                .date(purchaseOrderModel.getDate())
-                .orderStatus(purchaseOrderModel.getOrderStatus())
-                .buyer(purchaseOrderModel.getBuyer())
+                .totalprice(totalprice)
                 .build();
 
     }
