@@ -6,6 +6,9 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * Response DTO for ProductBatchStock POST
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -13,12 +16,36 @@ import java.util.List;
 @Builder
 public class ProductBatchStockResponse {
 
-    List<BatchStockResponse> batchStock;
+    /**
+     * Product id
+     */
     private Long productId;
+
+    /**
+     * Average product volume
+     */
     private Double unitVolume;
+
+    /**
+     * Average product weight
+     */
     private Double unitWeight;
+
+    /**
+     * Product Unit price
+     */
     private BigDecimal price;
 
+    /**
+     * List of Product batches
+     */
+    List<BatchStockResponse> batchStock;
+
+    /**
+     * Maps ProductModel to ProductBatchStockResponse
+     * @param product ProductModel
+     * @return ProductBatchStockResponse
+     */
     public static ProductBatchStockResponse toResponse(ProductModel product) {
         return ProductBatchStockResponse.builder()
                 .productId(product.getId())
