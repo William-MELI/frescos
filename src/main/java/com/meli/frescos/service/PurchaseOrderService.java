@@ -40,7 +40,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
         return purchaseOrderRepository.save(purchase);
     }
 
-    public BigDecimal getTotalPrice(PurchaseOrderRequest purchaseOrderRequest) {
+    public BigDecimal savePurchaseGetPrice(PurchaseOrderRequest purchaseOrderRequest) {
         PurchaseOrderModel purchaseOrderModel = save(purchaseOrderRequest);
 
         List<OrderProductsModel> orderProductsModels = new ArrayList<>();
