@@ -8,6 +8,7 @@ import com.meli.frescos.model.SectionModel;
 import com.meli.frescos.repository.BatchStockRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -109,6 +110,11 @@ public class BatchStockService implements IBatchStockService {
     @Override
     public boolean isValid(ProductModel product, List<BatchStockModel> batchStockList, Long sectionId) throws Exception {
         return isCategoryPermittedInSection(product.getCategory(), sectionId) && productFitsInSection(product, batchStockList, sectionId);
+    }
+
+    @Override
+    public List<BatchStockModel> findValidProductsByDueDate(Long productModel, LocalDate dateToCompare) {
+        return this.batchStockRepository.findProducts(productModel, dateToCompare);
     }
 
     @Override
