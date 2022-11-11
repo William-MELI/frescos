@@ -2,20 +2,16 @@ package com.meli.frescos.service;
 
 import com.meli.frescos.controller.dto.OrderProductsRequest;
 import com.meli.frescos.controller.dto.PurchaseOrderRequest;
-import com.meli.frescos.exception.ProductByIdNotFoundException;
 import com.meli.frescos.exception.PurchaseOrderByIdNotFoundException;
 import com.meli.frescos.model.BuyerModel;
 import com.meli.frescos.model.OrderProductsModel;
 import com.meli.frescos.model.PurchaseOrderModel;
-import com.meli.frescos.repository.BuyerRepository;
 import com.meli.frescos.repository.PurchaseOrderRepository;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PurchaseOrderService implements IPurchaseOrderService {
