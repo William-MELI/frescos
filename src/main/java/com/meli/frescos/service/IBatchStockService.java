@@ -23,5 +23,5 @@ public interface IBatchStockService {
 
     boolean isValid(ProductModel product, List<BatchStockModel> batchStockList, Long sectionId) throws Exception;
 
-    List<BatchStockModel> findValidProductsByDueDate(Long productModel, LocalDate dateToCompare);
+    List<BatchStockModel> findValidProductsByDueDate(Long productModel, LocalDate minDueDate) throws Exception;
 }

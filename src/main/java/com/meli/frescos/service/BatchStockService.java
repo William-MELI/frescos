@@ -1,14 +1,12 @@
 package com.meli.frescos.service;
 
 import com.meli.frescos.exception.BatchStockByIdNotFoundException;
-import com.meli.frescos.model.BatchStockModel;
-import com.meli.frescos.model.CategoryEnum;
-import com.meli.frescos.model.ProductModel;
-import com.meli.frescos.model.SectionModel;
+import com.meli.frescos.model.*;
 import com.meli.frescos.repository.BatchStockRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -26,11 +24,14 @@ public class BatchStockService implements IBatchStockService {
 
     private final IRepresentativeService iRepresentativeService;
 
-    public BatchStockService(BatchStockRepository batchStockRepository, IProductService iProductService, ISectionService iSectionService, IRepresentativeService iRepresentativeService) {
+    private final IOrderProductService iOrderProductService;
+
+    public BatchStockService(BatchStockRepository batchStockRepository, IProductService iProductService, ISectionService iSectionService, IRepresentativeService iRepresentativeService, IOrderProductService iOrderProductService) {
         this.batchStockRepository = batchStockRepository;
         this.iProductService = iProductService;
         this.iSectionService = iSectionService;
         this.iRepresentativeService = iRepresentativeService;
+        this.iOrderProductService = iOrderProductService;
     }
 
     /**
@@ -68,6 +69,15 @@ public class BatchStockService implements IBatchStockService {
         batchStock.setSection(section);
 
         return batchStockRepository.save(batchStock);
+    }
+
+    public List<BatchStockModel> save(List<BatchStockModel> batchStockList) throws Exception {
+        for (BatchStockModel batchStock : batchStockList) {
+            if (batchStock.getSection() == null || batchStock.getProduct() == null) {
+                throw new Exception("BatchStock inválido!");
+            }
+        }
+        return batchStockRepository.saveAll(batchStockList);
     }
 
     @Override
@@ -115,4 +125,38 @@ public class BatchStockService implements IBatchStockService {
         return this.batchStockRepository.findProducts(productModel, dateToCompare);
     }
 
+    private List<BatchStockModel> findValidProductsByDueDate(ProductModel productModel, LocalDate minDueDate) throws Exception {
+        return batchStockRepository.findByProductAndDueDateGreaterThanEqual(productModel, minDueDate);
+    }
+
+    public void consumeBatchStockOnPurchase(PurchaseOrderModel purchaseOrderModel) throws Exception {
+        List<OrderProductsModel> orderProductsList = iOrderProductService.getByPurchaseId(purchaseOrderModel.getId());
+
+        for (OrderProductsModel orderProducts : orderProductsList) {
+            debitBatchStock(orderProducts.getProductModel(),orderProducts.getQuantity());
+        }
+    }
+
+    private void debitBatchStock(ProductModel productModel, Integer quantity) throws Exception {
+        List<BatchStockModel> batchStockList = findValidProductsByDueDate(productModel, LocalDate.now().plusWeeks(3));
+        batchStockList.sort(Comparator.comparing(BatchStockModel::getDueDate));
+
+        for (BatchStockModel batchStock : batchStockList) {
+            Integer batchStockQuantity = batchStock.getQuantity();
+            if (quantity <= batchStockQuantity) {
+                batchStock.setQuantity(batchStock.getQuantity() - quantity);
+                quantity = 0;
+                break;
+            } else {
+                batchStock.setQuantity(0);
+                quantity -= batchStockQuantity;
+            }
+        }
+
+        if (quantity != 0) {
+            throw new Exception("Estoque não suficiente para atender o pedido!");
+        }
+
+        save(batchStockList);
+    }
 }

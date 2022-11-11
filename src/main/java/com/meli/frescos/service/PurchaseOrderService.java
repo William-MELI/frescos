@@ -68,8 +68,8 @@ public class PurchaseOrderService implements IPurchaseOrderService {
         return desiredQuantity <= availableQuantity;
     }
 
-    private boolean verifyOrderIsValid(List<OrderProductsRequest> orderProductsList) {
-        List<Long> productIdListException = new ArrayList<Long>();
+    private boolean verifyOrderIsValid(List<OrderProductsRequest> orderProductsList) throws Exception {
+        List<Long> productIdListException = new ArrayList<>();
         boolean isFailure = false;
         for (OrderProductsRequest orderProduct : orderProductsList) {
             boolean response = stockAvailable(orderProduct.getProductModel(), orderProduct.getQuantity());
@@ -89,7 +89,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
         return true;
     }
 
-    public BigDecimal savePurchaseGetPrice(PurchaseOrderRequest purchaseOrderRequest) {
+    public BigDecimal savePurchaseGetPrice(PurchaseOrderRequest purchaseOrderRequest) throws Exception {
         boolean isOrderValid = (verifyOrderIsValid(purchaseOrderRequest.getProducts()));
         if (isOrderValid) {
 
@@ -121,7 +121,6 @@ public class PurchaseOrderService implements IPurchaseOrderService {
         return purchaseOrderRepository.findById(purchaseId).orElseThrow(() -> new PurchaseOrderByIdNotFoundException(purchaseId));
     }
 
-
     @Override
     public List<PurchaseOrderModel> getAll() {
         return null;
@@ -129,10 +128,20 @@ public class PurchaseOrderService implements IPurchaseOrderService {
 
     @Override
     public void updateStatus(Long id, String orderStatus) throws Exception {
-        PurchaseOrderModel findbyIdPurchaseOrder = purchaseOrderRepository.findById(id)
-                .orElseThrow(() -> new Exception("Purchase_id not found"));
+        List<OrderProductsModel> orderProductsList = orderProductService.getByPurchaseId(id);
+        List<OrderProductsRequest> orderProductsRequestList = new ArrayList<>();
+        orderProductsList.forEach(item -> orderProductsRequestList.add(OrderProductsRequest.builder()
+                        .productModel(item.getProductModel().getId())
+                        .quantity(item.getQuantity())
+                        .purchaseOrderModel(item.getPurchaseOrderModel().getId())
+                .build()));
 
+        verifyOrderIsValid(orderProductsRequestList);
+
+        PurchaseOrderModel findbyIdPurchaseOrder = getById(id);
         findbyIdPurchaseOrder.setOrderStatus(orderStatus);
-        purchaseOrderRepository.save(findbyIdPurchaseOrder);
+        findbyIdPurchaseOrder = purchaseOrderRepository.save(findbyIdPurchaseOrder);
+
+        batchStockService.consumeBatchStockOnPurchase(findbyIdPurchaseOrder);
     }
 }
