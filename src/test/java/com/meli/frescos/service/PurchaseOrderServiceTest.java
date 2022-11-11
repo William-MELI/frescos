@@ -3,8 +3,8 @@ package com.meli.frescos.service;
 import com.meli.frescos.controller.dto.OrderProductsRequest;
 import com.meli.frescos.controller.dto.PurchaseOrderRequest;
 import com.meli.frescos.model.*;
-import com.meli.frescos.repository.BatchStockRepository;
 import com.meli.frescos.repository.BuyerRepository;
+import com.meli.frescos.repository.PurchaseOrderRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
@@ -12,13 +12,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 class PurchaseOrderServiceTest {
@@ -30,13 +31,17 @@ class PurchaseOrderServiceTest {
     BuyerRepository buyerRepository;
 
     @Mock
-    BatchStockRepository batchStockRepository;
+    PurchaseOrderRepository purchaseOrderRepository;
+
+
+    @Mock
+    BatchStockService batchStockService;
 
     @Test
     void save_returnPurchaseOrderModel_whenSuccess() {
         String name = "Buyer";
         String cpf = "41937616576";
-        BuyerModel buyer = new BuyerModel(name, cpf);
+        BuyerModel buyer = new BuyerModel(1L, name, cpf);
 
         String batchNumber = "L-123";
         int quantity = 10;
@@ -58,7 +63,7 @@ class PurchaseOrderServiceTest {
         batchList.add(batch);
 
         LocalDate time = LocalDate.now();
-        String orderStatus = "";
+        String orderStatus = "VALIDO";
         List<OrderProductsRequest> products = new ArrayList<>();
         products.add(new OrderProductsRequest());
 
@@ -69,20 +74,33 @@ class PurchaseOrderServiceTest {
                 .products(products)
                 .build();
 
-        Mockito.when(buyerRepository.getReferenceById(ArgumentMatchers.any()))
-                .thenReturn(buyer);
+        PurchaseOrderModel purchaseRequestModel = new PurchaseOrderModel();
+        purchaseRequestModel.setId(1L);
+        purchaseRequestModel.setOrderStatus(orderStatus);
+        purchaseRequestModel.setDate(time);
+        purchaseRequestModel.setBuyer(buyer);
 
         Mockito.when(buyerRepository.getReferenceById(ArgumentMatchers.any()))
                 .thenReturn(buyer);
 
-//        Mockito.when(
-//                        batchStockRepository.findBatchStockModelsByProductIdAndDueDateGreaterThanEqual(
-//                                ArgumentMatchers.any(), ArgumentMatchers.any()
-//                        )
-//                )
-//                .thenReturn(batchList);
+        Mockito.when(buyerRepository.getReferenceById(ArgumentMatchers.any()))
+                .thenReturn(buyer);
 
-        purchaseOrderService.save(request);
+        Mockito.when(purchaseOrderRepository.save(ArgumentMatchers.any()))
+                .thenReturn(purchaseRequestModel);
 
+        Mockito.when(
+                        batchStockService.findValidProductsByDueDate(
+                                ArgumentMatchers.any(), ArgumentMatchers.any()
+                        )
+                )
+                .thenReturn(batchList);
+
+        PurchaseOrderModel purchaseOrderModel = purchaseOrderService.save(request);
+
+        assertEquals(purchaseOrderModel.getOrderStatus(), orderStatus);
+        assertEquals(purchaseOrderModel.getBuyer().getId(), buyer.getId());
+        assertEquals(purchaseOrderModel.getBuyer().getId(), buyer.getId());
+        assertEquals(purchaseOrderModel.getDate(), time);
     }
 }
