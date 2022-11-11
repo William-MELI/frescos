@@ -2,6 +2,8 @@ package com.meli.frescos.service;
 
 import com.meli.frescos.controller.dto.OrderProductsRequest;
 import com.meli.frescos.controller.dto.PurchaseOrderRequest;
+import com.meli.frescos.exception.ProductByIdNotFoundException;
+import com.meli.frescos.exception.PurchaseOrderByIdNotFoundException;
 import com.meli.frescos.model.BuyerModel;
 import com.meli.frescos.model.OrderProductsModel;
 import com.meli.frescos.model.PurchaseOrderModel;
@@ -58,6 +60,11 @@ public class PurchaseOrderService implements IPurchaseOrderService {
         }
         return totalPrice;
     }
+
+    public PurchaseOrderModel getById(Long purchaseId) {
+        return purchaseOrderRepository.findById(purchaseId).orElseThrow(() -> new PurchaseOrderByIdNotFoundException(purchaseId));
+    }
+
 
     @Override
     public List<PurchaseOrderModel> getAll() {

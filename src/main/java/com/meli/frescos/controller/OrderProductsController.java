@@ -41,4 +41,12 @@ public class OrderProductsController {
         OrderProductsModel order = iservice.getById(id);
         return new ResponseEntity<>(OrderProductsResponse.toResponse(order), HttpStatus.FOUND);
     }
+
+    @GetMapping("/idOrder")
+    public ResponseEntity<List<OrderProductsResponse>> getByPurchaseId(@PathVariable Long idOrder) throws Exception {
+        List<OrderProductsModel> orderByPurchase = iservice.getByPurchaseId(idOrder);
+        List<OrderProductsResponse> orderProductsResponses = new ArrayList<>();
+        orderByPurchase.forEach(o -> orderProductsResponses.add(OrderProductsResponse.toResponse(o)));
+        return new ResponseEntity<>(orderProductsResponses, HttpStatus.FOUND);
+    }
 }

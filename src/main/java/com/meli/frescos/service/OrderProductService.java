@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class OrderProductService implements IOrderProductService{
+public class OrderProductService implements IOrderProductService {
 
     private final OrderProductsRepository repo;
 
@@ -46,6 +46,13 @@ public class OrderProductService implements IOrderProductService{
                 orderProductsRequest.getQuantity(),
                 purchaseOrder.get());
         return repo.save(model);
+    }
+
+    public List<OrderProductsModel> getByPurchaseId(Long purchaseId) {
+        PurchaseOrderModel purchaseOrderModel = purchaseOrderRepo.getById(purchaseId);
+        List<OrderProductsModel> orderProductsModels = repo.findByPurchaseOrderModel(purchaseOrderModel);
+
+        return orderProductsModels;
     }
 
     @Override
