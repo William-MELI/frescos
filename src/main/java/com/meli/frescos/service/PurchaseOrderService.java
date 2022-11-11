@@ -2,6 +2,7 @@ package com.meli.frescos.service;
 
 import com.meli.frescos.controller.dto.OrderProductsRequest;
 import com.meli.frescos.controller.dto.PurchaseOrderRequest;
+import com.meli.frescos.exception.OrderProductIsInvalidException;
 import com.meli.frescos.model.BatchStockModel;
 import com.meli.frescos.model.BuyerModel;
 import com.meli.frescos.model.OrderProductsModel;
@@ -13,6 +14,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PurchaseOrderService implements IPurchaseOrderService {
@@ -55,22 +57,51 @@ public class PurchaseOrderService implements IPurchaseOrderService {
         return desiredQuantity <= availableQuantity;
     }
 
+    private boolean verifyOrderIsValid(List<OrderProductsRequest> orderProductsList) {
+        List<Long> productIdListException = new ArrayList<Long>();
+        boolean isFailure = false;
+        for (OrderProductsRequest orderProduct : orderProductsList) {
+            boolean response = stockAvailable(orderProduct.getProductModel(), orderProduct.getQuantity());
+            if (!response) {
+                isFailure = true;
+                productIdListException.add(orderProduct.getProductModel());
+            }
+        }
+        if (isFailure) {
+            String auxMessage = productIdListException.stream().map(String::valueOf).collect(Collectors.joining(","));
+
+            String exceptionMessage = String.format("Pedido de compra inválido. Produtos com ID %s em quantidades insuficiente", auxMessage);
+
+            throw new OrderProductIsInvalidException(exceptionMessage);
+        }
+
+        return true;
+    }
+
     public BigDecimal savePurchaseGetPrice(PurchaseOrderRequest purchaseOrderRequest) {
-        PurchaseOrderModel purchaseOrderModel = save(purchaseOrderRequest);
+        boolean isOrderValid = (verifyOrderIsValid(purchaseOrderRequest.getProducts()));
+        if (isOrderValid) {
+
+
+            PurchaseOrderModel purchaseOrderModel = save(purchaseOrderRequest);
 
         List<OrderProductsModel> orderProductsModels = new ArrayList<>();
 
         BigDecimal totalPrice = new BigDecimal(0);
 
-        purchaseOrderRequest.getProducts().forEach(p -> orderProductsModels.add(orderProductService.save(new OrderProductsRequest(
-                p.getProductModel(),
-                p.getQuantity(),
-                purchaseOrderModel.getId()
-        ))));
+        purchaseOrderRequest.getProducts().forEach(p -> orderProductsModels.add(orderProductService.save(
+                new OrderProductsRequest(
+                        p.getProductModel(),
+                        p.getQuantity(),
+                        purchaseOrderModel.getId()
+                ))));
+
         for (OrderProductsModel orderProductsModel : orderProductsModels) {
             totalPrice = totalPrice.add(orderProductsModel.getProductModel().getPrice().multiply(BigDecimal.valueOf(orderProductsModel.getQuantity())));
         }
         return totalPrice;
+
+    }
     }
 
     @Override
