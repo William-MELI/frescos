@@ -7,7 +7,7 @@ public interface IProductService {
 
     List<ProductModel> getAll();
 
-    ProductModel getById(Long id) throws Exception;
+    ProductModel getById(Long id);
 
     ProductModel save(ProductModel product, Long sellerCode);
 

@@ -8,7 +8,9 @@ import com.meli.frescos.model.SectionModel;
 import com.meli.frescos.repository.BatchStockRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * This class contains all BatchStock related functions
@@ -70,7 +72,7 @@ public class BatchStockService implements IBatchStockService {
     }
 
     @Override
-    public List<BatchStockModel> findByProductId(Long productId) throws Exception {
+    public List<BatchStockModel> findByProductId(Long productId) {
         ProductModel product = iProductService.getById(productId);
         return batchStockRepository.findByProduct(product);
     }
@@ -107,5 +109,28 @@ public class BatchStockService implements IBatchStockService {
     @Override
     public boolean isValid(ProductModel product, List<BatchStockModel> batchStockList, Long sectionId) throws Exception {
         return isCategoryPermittedInSection(product.getCategory(), sectionId) && productFitsInSection(product, batchStockList, sectionId);
+    }
+
+    @Override
+    public List<BatchStockModel> findByProductOrder(Long id, String order) {
+        List<BatchStockModel> batchStockList = findByProductId(id);
+        switch (order.toUpperCase()){
+            case "L":
+                batchStockList = batchStockList.stream()
+                        .sorted(Comparator.comparing(BatchStockModel::getBatchNumber))
+                        .collect(Collectors.toList());
+                break;
+            case "Q":
+                batchStockList = batchStockList.stream()
+                        .sorted(Comparator.comparing(BatchStockModel::getQuantity))
+                        .collect(Collectors.toList());
+                break;
+            case "V":
+                batchStockList = batchStockList.stream()
+                        .sorted(Comparator.comparing(BatchStockModel::getDueDate))
+                        .collect(Collectors.toList());
+                break;
+        }
+        return batchStockList;
     }
 }

@@ -79,4 +79,15 @@ public class ProductController {
         return new ResponseEntity<>(productResponse, HttpStatus.FOUND);
     }
 
+    @GetMapping("/list/batch-stock")
+    public ResponseEntity<List<BatchStockResponse>> getBatchStockByProduct(@RequestParam("idProduct") Long id) throws Exception {
+        return new ResponseEntity<>(iBatchStockService.findByProductId(id).stream().map(BatchStockResponse::toResponse).toList(), HttpStatus.FOUND);
+    }
+
+    @GetMapping("/list/batch-stock-order")
+    public ResponseEntity<List<BatchStockResponse>> getBatchStockByProductOrder(@RequestParam("idProduct") Long id, @RequestParam("order") String order) throws Exception {
+        List<BatchStockResponse> list = iBatchStockService.findByProductOrder(id, order).stream().map(BatchStockResponse::toResponse).toList();
+        return new ResponseEntity<>(list, HttpStatus.FOUND);
+    }
+
 }
