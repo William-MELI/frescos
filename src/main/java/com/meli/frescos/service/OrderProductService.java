@@ -48,6 +48,13 @@ public class OrderProductService implements IOrderProductService {
         return repo.save(model);
     }
 
+    public List<OrderProductsModel> getByPurchaseId(Long purchaseId) {
+        PurchaseOrderModel purchaseOrderModel = purchaseOrderRepo.getById(purchaseId);
+        List<OrderProductsModel> orderProductsModels = repo.findByPurchaseOrderModel(purchaseOrderModel);
+
+        return orderProductsModels;
+    }
+
     @Override
     public OrderProductsModel getById(Long id) throws Exception {
         return repo.findById(id).orElseThrow(() -> new Exception("OrderProduct not found"));

@@ -3,18 +3,29 @@ package com.meli.frescos.service;
 import com.meli.frescos.controller.dto.OrderProductsRequest;
 import com.meli.frescos.controller.dto.PurchaseOrderRequest;
 import com.meli.frescos.exception.OrderProductIsInvalidException;
+import com.meli.frescos.exception.PurchaseOrderByIdNotFoundException;
 import com.meli.frescos.model.BatchStockModel;
 import com.meli.frescos.model.BuyerModel;
 import com.meli.frescos.model.OrderProductsModel;
 import com.meli.frescos.model.PurchaseOrderModel;
 import com.meli.frescos.repository.PurchaseOrderRepository;
-import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+        import com.meli.frescos.model.BuyerModel;
+        import com.meli.frescos.model.OrderProductsModel;
+        import com.meli.frescos.model.PurchaseOrderModel;
+        import com.meli.frescos.repository.PurchaseOrderRepository;
+        import org.springframework.stereotype.Service;
+
+        import java.math.BigDecimal;
+        import java.time.LocalDate;
+        import java.util.ArrayList;
+        import java.util.List;
+        import java.util.stream.Collectors;
 
 @Service
 public class PurchaseOrderService implements IPurchaseOrderService {
@@ -85,24 +96,31 @@ public class PurchaseOrderService implements IPurchaseOrderService {
 
             PurchaseOrderModel purchaseOrderModel = save(purchaseOrderRequest);
 
-        List<OrderProductsModel> orderProductsModels = new ArrayList<>();
+            List<OrderProductsModel> orderProductsModels = new ArrayList<>();
 
-        BigDecimal totalPrice = new BigDecimal(0);
+            BigDecimal totalPrice = new BigDecimal(0);
 
-        purchaseOrderRequest.getProducts().forEach(p -> orderProductsModels.add(orderProductService.save(
-                new OrderProductsRequest(
-                        p.getProductModel(),
-                        p.getQuantity(),
-                        purchaseOrderModel.getId()
-                ))));
+            purchaseOrderRequest.getProducts().forEach(p -> orderProductsModels.add(orderProductService.save(
+                    new OrderProductsRequest(
+                            p.getProductModel(),
+                            p.getQuantity(),
+                            purchaseOrderModel.getId()
+                    ))));
 
-        for (OrderProductsModel orderProductsModel : orderProductsModels) {
-            totalPrice = totalPrice.add(orderProductsModel.getProductModel().getPrice().multiply(BigDecimal.valueOf(orderProductsModel.getQuantity())));
+            for (OrderProductsModel orderProductsModel : orderProductsModels) {
+                totalPrice = totalPrice.add(orderProductsModel.getProductModel().getPrice().multiply(BigDecimal.valueOf(orderProductsModel.getQuantity())));
+            }
+            return totalPrice;
+
+        } else {
+            throw new OrderProductIsInvalidException("Pedido de compra inválido");
         }
-        return totalPrice;
+    }
 
+    public PurchaseOrderModel getById(Long purchaseId) {
+        return purchaseOrderRepository.findById(purchaseId).orElseThrow(() -> new PurchaseOrderByIdNotFoundException(purchaseId));
     }
-    }
+
 
     @Override
     public List<PurchaseOrderModel> getAll() {
