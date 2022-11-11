@@ -29,4 +29,6 @@ public class OrderProductsRequest {
     @Positive(message = "O valor da quantidade deve ser um número positivo")
     private int quantity;
 
+    private Long purchaseOrderModel;
+
 }
