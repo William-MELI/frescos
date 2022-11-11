@@ -2,6 +2,7 @@ package com.meli.frescos.service;
 
 import com.meli.frescos.exception.BatchStockByIdNotFoundException;
 import com.meli.frescos.model.BatchStockModel;
+import com.meli.frescos.model.CategoryEnum;
 import com.meli.frescos.model.ProductModel;
 import com.meli.frescos.model.SectionModel;
 import com.meli.frescos.repository.BatchStockRepository;
@@ -37,7 +38,7 @@ public class BatchStockService implements IBatchStockService {
      * @return List of BatchStockModel
      */
     @Override
-    public List<BatchStockModel> findAll() {
+    public List<BatchStockModel> getAll() {
         return batchStockRepository.findAll();
     }
 
@@ -49,7 +50,7 @@ public class BatchStockService implements IBatchStockService {
      * @throws BatchStockByIdNotFoundException - BatchStock not found
      */
     @Override
-    public BatchStockModel findById(Long id) throws BatchStockByIdNotFoundException {
+    public BatchStockModel getById(Long id) throws BatchStockByIdNotFoundException {
         return batchStockRepository.findById(id).orElseThrow(() -> new BatchStockByIdNotFoundException(id));
     }
 
@@ -60,7 +61,7 @@ public class BatchStockService implements IBatchStockService {
         }
 
         ProductModel product = iProductService.getById(productId);
-        SectionModel section = iSectionService.findById(sectionId);
+        SectionModel section = iSectionService.getById(sectionId);
 
         batchStock.setProduct(product);
         batchStock.setSection(section);
@@ -69,13 +70,42 @@ public class BatchStockService implements IBatchStockService {
     }
 
     @Override
-    public List<BatchStockModel> findByProduct(Long productId) throws Exception {
+    public List<BatchStockModel> findByProductId(Long productId) throws Exception {
         ProductModel product = iProductService.getById(productId);
         return batchStockRepository.findByProduct(product);
     }
 
     @Override
+    public List<BatchStockModel> findBySectionId(Long sectionId) throws Exception {
+        SectionModel section = iSectionService.getById(sectionId);
+        return batchStockRepository.findBySection(section);
+    }
+
+    @Override
     public Integer getTotalBatchStockQuantity(Long productId) throws Exception {
-        return findByProduct(productId).stream().mapToInt(BatchStockModel::getQuantity).sum();
+        return findByProductId(productId).stream().mapToInt(BatchStockModel::getQuantity).sum();
+    }
+
+    private boolean isCategoryPermittedInSection(CategoryEnum category, Long sectionId) throws Exception {
+        return category.equals(iSectionService.getById(sectionId).getCategory());
+    }
+
+    private boolean productFitsInSection(ProductModel product, List<BatchStockModel> inboundBtchStockList, Long sectionId) throws Exception {
+        double totalInboundVolume = product.getUnitVolume() * inboundBtchStockList.stream().mapToInt(BatchStockModel::getQuantity).sum();
+        return totalInboundVolume <= iSectionService.getById(sectionId).getTotalSize() - getTotalUsedRoom(sectionId);
+    }
+
+    private Double getTotalUsedRoom(Long sectionId) throws Exception {
+        List<BatchStockModel> batchStockList = findBySectionId(sectionId);
+        double usedRoom = 0D;
+        for (BatchStockModel batchStock : batchStockList) {
+            usedRoom += batchStock.getQuantity() * batchStock.getProduct().getUnitVolume();
+        }
+        return usedRoom;
+    }
+
+    @Override
+    public boolean isValid(ProductModel product, List<BatchStockModel> batchStockList, Long sectionId) throws Exception {
+        return isCategoryPermittedInSection(product.getCategory(), sectionId) && productFitsInSection(product, batchStockList, sectionId);
     }
 }
