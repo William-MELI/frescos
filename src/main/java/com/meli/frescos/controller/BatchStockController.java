@@ -47,7 +47,7 @@ public class BatchStockController {
 
         iBatchStockService.getAll().forEach(b -> batchStockResponseList.add(BatchStockResponse.toResponse(b)));
 
-        return new ResponseEntity<>(batchStockResponseList, HttpStatus.FOUND);
+        return new ResponseEntity<>(batchStockResponseList, HttpStatus.OK);
     }
 
     /**
@@ -59,7 +59,7 @@ public class BatchStockController {
      */
     @GetMapping("/{id}")
     ResponseEntity<BatchStockResponse> getById(@PathVariable Long id) {
-        return new ResponseEntity<>(BatchStockResponse.toResponse((iBatchStockService.getById(id))), HttpStatus.FOUND);
+        return new ResponseEntity<>(BatchStockResponse.toResponse((iBatchStockService.getById(id))), HttpStatus.OK);
     }
 
     @GetMapping("/section")
@@ -70,7 +70,7 @@ public class BatchStockController {
                 .stream()
                 .sorted(Comparator.comparing(BatchStockModel::getDueDate))
                 .map(BatchStockResponse::toResponse).toList();
-        return new ResponseEntity<>(batchStockResponseList, HttpStatus.FOUND);
+        return new ResponseEntity<>(batchStockResponseList, HttpStatus.OK);
     }
 
     @GetMapping("/category")
@@ -81,12 +81,12 @@ public class BatchStockController {
                 .stream()
                 .sorted(Comparator.comparing(BatchStockModel::getDueDate))
                 .map(BatchStockResponse::toResponse).toList();
-        return new ResponseEntity<>(batchStockResponseList, HttpStatus.FOUND);
+        return new ResponseEntity<>(batchStockResponseList, HttpStatus.OK);
     }
 
     @GetMapping("/product-id/{productId}")
     ResponseEntity<BatchStockResponse> getByProductId(@PathVariable Long productId) throws BatchStockByIdNotFoundException {
-        return new ResponseEntity<>(BatchStockResponse.toResponse((iBatchStockService.getById(productId))), HttpStatus.FOUND);
+        return new ResponseEntity<>(BatchStockResponse.toResponse((iBatchStockService.getById(productId))), HttpStatus.OK);
     }
 
     @PostMapping("/product-id")
@@ -107,7 +107,7 @@ public class BatchStockController {
         if(batchStock.isEmpty())
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-        return new ResponseEntity<>(batchStock, HttpStatus.FOUND);
+        return new ResponseEntity<>(batchStock, HttpStatus.OK);
     }
 
     @GetMapping("/list/order")
@@ -115,7 +115,7 @@ public class BatchStockController {
         List<BatchStockModel> batchStock = iBatchStockService.getByProductOrder(id, order);
 
         if(batchStock.isEmpty())
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        return new ResponseEntity<>(batchStock.stream().map(BatchStockOrderResponse::toResponse).toList(), HttpStatus.FOUND);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(batchStock.stream().map(BatchStockOrderResponse::toResponse).toList(), HttpStatus.OK);
     }
 }

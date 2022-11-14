@@ -144,7 +144,7 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
                         .message(ex.getMessage())
                         .timestamp(LocalDateTime.now())
                         .build(),
-                HttpStatus.NOT_FOUND);
+                HttpStatus.NO_CONTENT);
     }
 
     /**

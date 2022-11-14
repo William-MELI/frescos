@@ -33,7 +33,7 @@ public class SectionController {
     @GetMapping
     ResponseEntity<List<SectionResponse>> getAll() {
         List<SectionResponse> findAllSections = service.getAll().stream().map(SectionResponse::toResponse).toList();
-        return new ResponseEntity<>(findAllSections, HttpStatus.FOUND);
+        return new ResponseEntity<>(findAllSections, HttpStatus.OK);
     }
 
     /**
@@ -56,6 +56,6 @@ public class SectionController {
     @GetMapping("/{id}")
     ResponseEntity<SectionResponse> getById(@PathVariable Long id) throws Exception {
         SectionModel section = service.getById(id);
-        return new ResponseEntity<>(SectionResponse.toResponse(section), HttpStatus.FOUND);
+        return new ResponseEntity<>(SectionResponse.toResponse(section), HttpStatus.OK);
     }
 }

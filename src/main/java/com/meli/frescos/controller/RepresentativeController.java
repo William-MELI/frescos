@@ -25,12 +25,12 @@ public class RepresentativeController {
     @GetMapping
     ResponseEntity<List<RepresentativeResponse>> getAll() throws Exception {
         List<RepresentativeResponse> representativeResponseList = iRepresentativeService.getAll().stream().map(RepresentativeResponse::toResponse).toList();
-        return new ResponseEntity<>(representativeResponseList, HttpStatus.FOUND);
+        return new ResponseEntity<>(representativeResponseList, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     ResponseEntity<RepresentativeResponse> getById(@PathVariable Long id) throws Exception {
-        return new ResponseEntity<>(RepresentativeResponse.toResponse(iRepresentativeService.getById(id)), HttpStatus.FOUND);
+        return new ResponseEntity<>(RepresentativeResponse.toResponse(iRepresentativeService.getById(id)), HttpStatus.OK);
     }
 
     @PostMapping

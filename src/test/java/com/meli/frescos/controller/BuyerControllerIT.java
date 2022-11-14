@@ -99,7 +99,7 @@ class BuyerControllerIT {
                 get("/buyer/{id}", String.valueOf(buyer.getId()))
                         .contentType(MediaType.APPLICATION_JSON));
 
-        response.andExpect(status().isFound());
+        response.andExpect(status().isOk());
     }
 
     @Test
@@ -130,7 +130,7 @@ class BuyerControllerIT {
                         .contentType(MediaType.APPLICATION_JSON)
         );
 
-        response.andExpect(status().isFound());
+        response.andExpect(status().isOk());
     }
 
 //    @Test

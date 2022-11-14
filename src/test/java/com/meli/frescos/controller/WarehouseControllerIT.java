@@ -109,7 +109,7 @@ class WarehouseControllerIT {
                 get("/warehouse/{id}", String.valueOf(warehouse.getId()))
                         .contentType(MediaType.APPLICATION_JSON));
 
-        response.andExpect(status().isFound());
+        response.andExpect(status().isOk());
     }
 
     @Test
@@ -146,7 +146,7 @@ class WarehouseControllerIT {
                         .contentType(MediaType.APPLICATION_JSON)
         );
 
-        response.andExpect(status().isFound());
+        response.andExpect(status().isOk());
     }
 
     @Test
@@ -172,7 +172,7 @@ class WarehouseControllerIT {
                         .contentType(MediaType.APPLICATION_JSON)
         );
 
-        response.andExpect(status().isNoContent());
+        response.andExpect(status().isOk());
     }
 
 
