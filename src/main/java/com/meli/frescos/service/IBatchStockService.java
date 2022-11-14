@@ -16,7 +16,7 @@ public interface IBatchStockService {
 
     BatchStockModel save(BatchStockModel batchStock) throws Exception;
 
-    List<BatchStockModel> getByProductId(Long productId) throws Exception;
+    List<BatchStockModel> getByProductId(Long productId);
 
     List<BatchStockModel> getBySectionId(Long sectionId) throws Exception;
 
@@ -30,5 +30,7 @@ public interface IBatchStockService {
 
     void validateBatches(ProductModel product, List<BatchStockModel> batchStockList) throws Exception;
 
-    List<BatchStockModel> findValidProductsByDueDate(Long productModel, LocalDate minDueDate) throws Exception;
+    List<BatchStockModel> findValidProductsByDueDate(Long productModel, LocalDate minDueDate);
+
+    List<BatchStockModel> getByProductOrder(Long id, String order);
 }

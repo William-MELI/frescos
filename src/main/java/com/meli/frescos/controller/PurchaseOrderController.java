@@ -29,9 +29,9 @@ public class PurchaseOrderController {
         return new ResponseEntity<>(PurchaseOrderResponse.toResponse(insertPurchase), HttpStatus.CREATED);
     }
 
-    @PatchMapping("/{id}/{status}")
-    ResponseEntity<Void> updateStatus(@PathVariable Long id, @PathVariable OrderStatusEnum status) throws Exception {
-        purchaseOrderService.updateStatus(id, status);
+    @PatchMapping("/{id}")
+    ResponseEntity<Void> updateStatus(@PathVariable Long id) throws Exception {
+        purchaseOrderService.updateStatus(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

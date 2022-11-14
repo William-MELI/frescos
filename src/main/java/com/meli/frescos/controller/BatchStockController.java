@@ -1,5 +1,6 @@
 package com.meli.frescos.controller;
 
+import com.meli.frescos.controller.dto.BatchStockOrderResponse;
 import com.meli.frescos.controller.dto.BatchStockRequest;
 import com.meli.frescos.controller.dto.BatchStockResponse;
 import com.meli.frescos.exception.BatchStockByIdNotFoundException;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -97,5 +99,23 @@ public class BatchStockController {
         batchStock.setProduct(iProductService.getById(productId));
         return new ResponseEntity<>(BatchStockResponse.toResponse(iBatchStockService.save(batchStock)),
                 HttpStatus.CREATED);
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<BatchStockOrderResponse>> getBatchStockByProduct(@RequestParam("idProduct") Long id) {
+        List<BatchStockOrderResponse> batchStock = iBatchStockService.findValidProductsByDueDate(id, LocalDate.now().now().plusDays(21)).stream().map(BatchStockOrderResponse::toResponse).toList();
+        if(batchStock.isEmpty())
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        return new ResponseEntity<>(batchStock, HttpStatus.FOUND);
+    }
+
+    @GetMapping("/list/order")
+    public ResponseEntity<List<BatchStockOrderResponse>> getBatchStockByProductOrder(@RequestParam("idProduct") Long id, @RequestParam("order") String order) {
+        List<BatchStockModel> batchStock = iBatchStockService.getByProductOrder(id, order);
+
+        if(batchStock.isEmpty())
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(batchStock.stream().map(BatchStockOrderResponse::toResponse).toList(), HttpStatus.FOUND);
     }
 }
