@@ -19,6 +19,8 @@ public interface IBatchStockService {
 
     List<BatchStockModel> getBySectionId(Long sectionId) throws Exception;
 
+    List<BatchStockModel> getBySectionIdAndDueDate(Long sectionId, Integer numberOfDays) throws Exception;
+
     Integer getTotalBatchStockQuantity(Long productId) throws Exception;
 
     LocalDate getClosestDueDate(Long productId) throws Exception;
