@@ -1,6 +1,7 @@
 package com.meli.frescos.service;
 
 import com.meli.frescos.controller.dto.SectionRequest;
+import com.meli.frescos.model.CategoryEnum;
 import com.meli.frescos.model.SectionModel;
 import com.meli.frescos.model.WarehouseModel;
 import com.meli.frescos.repository.IWarehouseRepository;
@@ -72,5 +73,10 @@ public class SectionService implements ISectionService {
             throw new Exception("Section not found");
         }
         return responseDb.get();
+    }
+
+    @Override
+    public List<SectionModel> getByCategory(CategoryEnum category) {
+        return repo.findByCategory(category);
     }
 }

@@ -4,17 +4,16 @@ import com.meli.frescos.controller.dto.OrderProductsRequest;
 import com.meli.frescos.controller.dto.PurchaseOrderRequest;
 import com.meli.frescos.exception.OrderProductIsInvalidException;
 import com.meli.frescos.exception.PurchaseOrderByIdNotFoundException;
-import com.meli.frescos.model.BatchStockModel;
-import com.meli.frescos.model.BuyerModel;
-import com.meli.frescos.model.OrderProductsModel;
-import com.meli.frescos.model.PurchaseOrderModel;
+import com.meli.frescos.model.*;
 import com.meli.frescos.repository.PurchaseOrderRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -58,8 +57,8 @@ public class PurchaseOrderService implements IPurchaseOrderService {
         return desiredQuantity <= availableQuantity;
     }
 
-    private boolean verifyOrderIsValid(List<OrderProductsRequest> orderProductsList) throws Exception {
-        List<Long> productIdListException = new ArrayList<>();
+    private boolean verifyOrderIsValid(List<OrderProductsRequest> orderProductsList) throws OrderProductIsInvalidException {
+        Set<Long> productIdListException = new HashSet<>();
         boolean isFailure = false;
         for (OrderProductsRequest orderProduct : orderProductsList) {
             boolean response = stockAvailable(orderProduct.getProductModel(), orderProduct.getQuantity());
@@ -117,7 +116,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
     }
 
     @Override
-    public void updateStatus(Long id, String orderStatus) throws Exception {
+    public void updateStatus(Long id, OrderStatusEnum orderStatus) throws Exception {
         List<OrderProductsModel> orderProductsList = orderProductService.getByPurchaseId(id);
         List<OrderProductsRequest> orderProductsRequestList = new ArrayList<>();
         orderProductsList.forEach(item -> orderProductsRequestList.add(OrderProductsRequest.builder()

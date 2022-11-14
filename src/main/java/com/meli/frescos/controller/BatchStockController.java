@@ -4,6 +4,7 @@ import com.meli.frescos.controller.dto.BatchStockRequest;
 import com.meli.frescos.controller.dto.BatchStockResponse;
 import com.meli.frescos.exception.BatchStockByIdNotFoundException;
 import com.meli.frescos.model.BatchStockModel;
+import com.meli.frescos.model.CategoryEnum;
 import com.meli.frescos.service.IBatchStockService;
 import com.meli.frescos.service.IProductService;
 import com.meli.frescos.service.IRepresentativeService;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -23,7 +25,6 @@ import java.util.List;
 public class BatchStockController {
 
     private final IBatchStockService iBatchStockService;
-
     private final IRepresentativeService iRepresentativeService;
     private final IProductService iProductService;
 
@@ -55,11 +56,29 @@ public class BatchStockController {
      * @throws BatchStockByIdNotFoundException - BatchStock not found
      */
     @GetMapping("/{id}")
-    ResponseEntity<List<BatchStockResponse>> getById(@PathVariable Long id) throws Exception {
-        List<BatchStockResponse> batchStockResponseList = new ArrayList<>();
+    ResponseEntity<BatchStockResponse> getById(@PathVariable Long id) {
+        return new ResponseEntity<>(BatchStockResponse.toResponse((iBatchStockService.getById(id))), HttpStatus.FOUND);
+    }
 
-        iBatchStockService.getByProductId(id).forEach(b -> batchStockResponseList.add(BatchStockResponse.toResponse(b)));
+    @GetMapping("/section")
+    ResponseEntity<List<BatchStockResponse>> getBySectionDueDate(@RequestParam Long sectionId,
+                                                                 @RequestParam Integer numberOfDays) throws Exception {
+        List<BatchStockResponse> batchStockResponseList = iBatchStockService
+                .getBySectionIdAndDueDate(sectionId, numberOfDays)
+                .stream()
+                .sorted(Comparator.comparing(BatchStockModel::getDueDate))
+                .map(BatchStockResponse::toResponse).toList();
+        return new ResponseEntity<>(batchStockResponseList, HttpStatus.FOUND);
+    }
 
+    @GetMapping("/category")
+    ResponseEntity<List<BatchStockResponse>> getByCategoryDueDate(@RequestParam CategoryEnum category,
+                                                                 @RequestParam Integer numberOfDays) throws Exception {
+        List<BatchStockResponse> batchStockResponseList = iBatchStockService
+                .getByCategoryAndDueDate(category, numberOfDays)
+                .stream()
+                .sorted(Comparator.comparing(BatchStockModel::getDueDate))
+                .map(BatchStockResponse::toResponse).toList();
         return new ResponseEntity<>(batchStockResponseList, HttpStatus.FOUND);
     }
 
