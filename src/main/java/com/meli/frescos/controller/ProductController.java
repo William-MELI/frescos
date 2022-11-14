@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @RestController to Product
+ */
 @RestController
 @RequestMapping("/product")
 public class ProductController {
@@ -37,11 +40,24 @@ public class ProductController {
         return new ResponseEntity<>(productResponseList, HttpStatus.FOUND);
     }
 
+    /**
+     * Endpoint to return a Product given id
+     * @param id the Product id
+     * @return a Product related ID
+     */
     @GetMapping("/{id}")
     public ResponseEntity<ProductDetailedResponse> getById(@PathVariable Long id) throws Exception {
         ProductModel product = iProductService.getById(id);
         List<BatchStockModel> batchStockList = iBatchStockService.getByProductId(id);
-        return new ResponseEntity<>(ProductDetailedResponse.toResponse(product, batchStockList), HttpStatus.FOUND);
+        List<SimplifiedBatchStockResponse> stockResponse = new ArrayList<>();
+
+        for (BatchStockModel stock : batchStockList) {
+            SimplifiedBatchStockResponse response = new SimplifiedBatchStockResponse(stock.getSection().getId(), iBatchStockService.getTotalBatchStockQuantity(product.getId()));
+            if (!stockResponse.stream().anyMatch(x -> x.getSectionId() == response.getSectionId() && x.getProductQuantity() == response.getProductQuantity())) {
+                stockResponse.add(response);
+            }
+        }
+        return new ResponseEntity<>(ProductDetailedResponse.toResponse(product, stockResponse) , HttpStatus.FOUND);
     }
 
     @PostMapping

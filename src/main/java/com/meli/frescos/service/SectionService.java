@@ -1,6 +1,8 @@
 package com.meli.frescos.service;
 
 import com.meli.frescos.controller.dto.SectionRequest;
+import com.meli.frescos.exception.SectionByIdNotFoundException;
+import com.meli.frescos.model.CategoryEnum;
 import com.meli.frescos.model.SectionModel;
 import com.meli.frescos.model.WarehouseModel;
 import com.meli.frescos.repository.IWarehouseRepository;
@@ -64,13 +66,12 @@ public class SectionService implements ISectionService {
      * @return SectionModel
      */
     @Override
-    public SectionModel getById(Long id) throws Exception {
+    public SectionModel getById(Long id) {
+        return repo.findById(id).orElseThrow(() -> new SectionByIdNotFoundException(id));
+    }
 
-        Optional<SectionModel> responseDb = repo.findById(id);
-
-        if (responseDb.isEmpty()) {
-            throw new Exception("Section not found");
-        }
-        return responseDb.get();
+    @Override
+    public List<SectionModel> getByCategory(CategoryEnum category) {
+        return repo.findByCategory(category);
     }
 }

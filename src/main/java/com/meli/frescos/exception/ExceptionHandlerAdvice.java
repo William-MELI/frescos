@@ -112,4 +112,72 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
                 HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * This method handles the OneToOneMappingAlreadyDefinedException
+     *
+     * @param ex The original exception
+     * @return A ResponseEntity to represent the HTTP error
+     */
+    @ExceptionHandler(OneToOneMappingAlreadyDefinedException.class)
+    public ResponseEntity<ExceptionDetails> handlerOneToOneMappingAlreadyDefinedException(OneToOneMappingAlreadyDefinedException ex) {
+        return new ResponseEntity<>(
+                ExceptionDetails.builder()
+                        .title("Entidade já possui mapeamento um-para-um já existente.")
+                        .message(ex.getMessage())
+                        .timestamp(LocalDateTime.now())
+                        .build(),
+                HttpStatus.BAD_REQUEST);
+    }
+
+
+    /**
+     * This method handles the BatchStockByIdNotFoundException
+     *
+     * @param ex The original exception
+     * @return A ResponseEntity to represent the HTTP error
+     */
+    @ExceptionHandler(BatchStockByIdNotFoundException.class)
+    public ResponseEntity<ExceptionDetails> handlerBatchStockByIdNotFoundException(BatchStockByIdNotFoundException ex) {
+        return new ResponseEntity<>(
+                ExceptionDetails.builder()
+                        .title("Estoque não encontrado")
+                        .message(ex.getMessage())
+                        .timestamp(LocalDateTime.now())
+                        .build(),
+                HttpStatus.NOT_FOUND);
+    }
+
+    /**
+     * This method handles the ProductByIdNotFoundException
+     *
+     * @param ex The original exception
+     * @return A ResponseEntity to represent the HTTP error
+     */
+    @ExceptionHandler(ProductByIdNotFoundException.class)
+    public ResponseEntity<ExceptionDetails> handlerProductByIdNotFoundException(ProductByIdNotFoundException ex) {
+        return new ResponseEntity<>(
+                ExceptionDetails.builder()
+                        .title("Produto não encontrado")
+                        .message(ex.getMessage())
+                        .timestamp(LocalDateTime.now())
+                        .build(),
+                HttpStatus.NOT_FOUND);
+    }
+
+    /**
+     * This method handles the BatchStockFilterOrderInvalidException
+     *
+     * @param ex The original exception
+     * @return A ResponseEntity to represent the HTTP error
+     */
+    @ExceptionHandler(BatchStockFilterOrderInvalidException.class)
+    public ResponseEntity<ExceptionDetails> handlerBatchStockFilterOrderInvalidException(BatchStockFilterOrderInvalidException ex) {
+        return new ResponseEntity<>(
+                ExceptionDetails.builder()
+                        .title("Ordenação inválida")
+                        .message(ex.getMessage())
+                        .timestamp(LocalDateTime.now())
+                        .build(),
+                HttpStatus.NOT_FOUND);
+    }
 }

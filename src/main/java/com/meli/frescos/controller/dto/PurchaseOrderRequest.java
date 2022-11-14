@@ -1,5 +1,6 @@
 package com.meli.frescos.controller.dto;
 
+import com.meli.frescos.model.OrderStatusEnum;
 import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
@@ -27,7 +28,7 @@ public class PurchaseOrderRequest {
      * PurchaseOrder orderStatus
      */
     @NotNull(message = "O status nao pode estar em branco")
-    private String orderStatus;
+    private OrderStatusEnum orderStatus;
 
     /**
      * Buyer id

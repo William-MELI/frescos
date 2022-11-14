@@ -1,5 +1,6 @@
 package com.meli.frescos.service;
 
+import com.meli.frescos.exception.OneToOneMappingAlreadyDefinedException;
 import com.meli.frescos.exception.WarehouseNotFoundException;
 import com.meli.frescos.model.RepresentativeModel;
 
@@ -10,7 +11,7 @@ public interface IRepresentativeService {
 
     List<RepresentativeModel> getAll() throws Exception;
 
-    RepresentativeModel save(RepresentativeModel representativeModel, Long warehouseCode) throws WarehouseNotFoundException;
+    RepresentativeModel save(RepresentativeModel representativeModel, Long warehouseCode) throws WarehouseNotFoundException, OneToOneMappingAlreadyDefinedException;
 
     void validateRepresentative(Long representativeId, Long warehouseId) throws Exception;
 }

@@ -2,7 +2,7 @@ package com.meli.frescos.controller;
 
 import com.meli.frescos.controller.dto.PurchaseOrderRequest;
 import com.meli.frescos.controller.dto.PurchaseOrderResponse;
-import com.meli.frescos.model.PurchaseOrderModel;
+import com.meli.frescos.model.OrderStatusEnum;
 import com.meli.frescos.service.PurchaseOrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +23,7 @@ public class PurchaseOrderController {
 
     private final PurchaseOrderService purchaseOrderService;
 
-    public PurchaseOrderController (PurchaseOrderService purchaseOrderService) {
+    public PurchaseOrderController(PurchaseOrderService purchaseOrderService) {
         this.purchaseOrderService = purchaseOrderService;
     }
 
@@ -42,6 +42,7 @@ public class PurchaseOrderController {
         return new ResponseEntity<>(PurchaseOrderResponse.toResponse(insertPurchase), HttpStatus.CREATED);
     }
 
+
     /**
      * Endpoint to update Status from purchase order
      * @param id
@@ -49,8 +50,8 @@ public class PurchaseOrderController {
      * @return status 200 OK
      * @throws Exception
      */
-    @PatchMapping( "/{id}/{status}")
-    ResponseEntity<Void> updateStatus(@PathVariable Long id, @PathVariable String status) throws Exception {
+    @PatchMapping("/{id}/{status}")
+    ResponseEntity<Void> updateStatus(@PathVariable Long id, @PathVariable OrderStatusEnum status) throws Exception {
         purchaseOrderService.updateStatus(id, status);
         return new ResponseEntity<>(HttpStatus.OK);
     }

@@ -3,6 +3,7 @@ package com.meli.frescos.model;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Getter
@@ -19,10 +20,11 @@ public class RepresentativeModel {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable=false)
     private Long id;
 
     /**
-     * Representativre name
+     * Representative name
      * Not nullable.
      */
     @Column(nullable = false)

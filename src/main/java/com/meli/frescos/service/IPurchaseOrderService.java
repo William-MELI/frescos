@@ -1,6 +1,7 @@
 package com.meli.frescos.service;
 
 import com.meli.frescos.controller.dto.PurchaseOrderRequest;
+import com.meli.frescos.model.OrderStatusEnum;
 import com.meli.frescos.model.PurchaseOrderModel;
 
 import java.util.List;
@@ -10,5 +11,5 @@ public interface IPurchaseOrderService {
 
     List<PurchaseOrderModel> getAll();
 
-   void updateStatus(Long id, String orderStatus)  throws Exception;
+   void updateStatus(Long id, OrderStatusEnum orderStatus)  throws Exception;
 }
