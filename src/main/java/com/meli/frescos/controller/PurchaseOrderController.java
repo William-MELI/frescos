@@ -3,6 +3,7 @@ package com.meli.frescos.controller;
 import com.meli.frescos.controller.dto.PurchaseOrderRequest;
 import com.meli.frescos.controller.dto.PurchaseOrderResponse;
 import com.meli.frescos.model.OrderStatusEnum;
+import com.meli.frescos.model.PurchaseOrderModel;
 import com.meli.frescos.service.PurchaseOrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,7 +47,6 @@ public class PurchaseOrderController {
     /**
      * Endpoint to update Status from purchase order
      * @param id
-     * @param status from Status Enum
      * @return status 200 OK
      * @throws Exception
      */
