@@ -1,6 +1,7 @@
 package com.meli.frescos.service;
 
 import com.meli.frescos.exception.BatchStockByIdNotFoundException;
+import com.meli.frescos.exception.BatchStockFilterOrderInvalidException;
 import com.meli.frescos.model.*;
 import com.meli.frescos.repository.BatchStockRepository;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * This class contains all BatchStock related functions
@@ -71,7 +73,7 @@ public class BatchStockService implements IBatchStockService {
     }
 
     @Override
-    public List<BatchStockModel> getByProductId(Long productId) throws Exception {
+    public List<BatchStockModel> getByProductId(Long productId) {
         ProductModel product = iProductService.getById(productId);
         return batchStockRepository.findByProduct(product);
     }
@@ -163,6 +165,7 @@ public class BatchStockService implements IBatchStockService {
 
     @Override
     public List<BatchStockModel> findValidProductsByDueDate(Long productModel, LocalDate dateToCompare) {
+        getByProductId(productModel);
         return this.batchStockRepository.findProducts(productModel, dateToCompare);
     }
 
@@ -199,5 +202,38 @@ public class BatchStockService implements IBatchStockService {
         }
 
         save(batchStockList);
+    }
+
+    /**
+     * Return a List BatchStockModel by ProductId and
+     *
+     * @param id the ProductModel id
+     * @param order list sorting
+     * @return BatchStockModel
+     * @throws BatchStockFilterOrderInvalidException - Filter order invalid
+     */
+    @Override
+    public List<BatchStockModel> getByProductOrder(Long id, String order) {
+        List<BatchStockModel> batchStockList = findValidProductsByDueDate(id, LocalDate.now().plusDays(21));
+        switch (order.toUpperCase()){
+            case "L":
+                batchStockList = batchStockList.stream()
+                        .sorted(Comparator.comparing(BatchStockModel::getBatchNumber))
+                        .collect(Collectors.toList());
+                break;
+            case "Q":
+                batchStockList = batchStockList.stream()
+                        .sorted(Comparator.comparing(BatchStockModel::getQuantity))
+                        .collect(Collectors.toList());
+                break;
+            case "V":
+                batchStockList = batchStockList.stream()
+                        .sorted(Comparator.comparing(BatchStockModel::getDueDate))
+                        .collect(Collectors.toList());
+                break;
+            default:
+                throw new BatchStockFilterOrderInvalidException(order);
+        }
+        return batchStockList;
     }
 }
