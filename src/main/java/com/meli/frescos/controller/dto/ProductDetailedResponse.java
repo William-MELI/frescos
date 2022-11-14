@@ -1,5 +1,6 @@
 package com.meli.frescos.controller.dto;
 
+import com.meli.frescos.model.BatchStockModel;
 import com.meli.frescos.model.CategoryEnum;
 import com.meli.frescos.model.ProductModel;
 import com.meli.frescos.model.SellerModel;
@@ -7,6 +8,8 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Response DTO for Product GET
@@ -16,7 +19,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ProductResponse {
+public class ProductDetailedResponse {
 
     /**
      * Product id
@@ -66,21 +69,18 @@ public class ProductResponse {
     /**
      * Product total batch quantity
      */
-    private Integer totalQuantity;
-
-    /**
-     * Product closest due date
-     */
-    private LocalDate closestDueDate;
+    private List<BatchStockResponse> batchStock;
 
     /**
      * Maps ProductModel and Integer total batch quantity to ProductResponse
      * @param product ProductModel
-     * @param totalQuantity Integer total batch quantity
+     * @param batchStockList List BatchStockModel
      * @return ProductResponse
      */
-    public static ProductResponse toResponse(ProductModel product, Integer totalQuantity, LocalDate closestDueDate) {
-        return ProductResponse.builder()
+    public static ProductDetailedResponse toResponse(ProductModel product, List<BatchStockModel> batchStockList) {
+        List<BatchStockResponse> batchStockResponseList = new ArrayList<>();
+        batchStockList.forEach(b -> batchStockResponseList.add(BatchStockResponse.toResponse(b)));
+        return ProductDetailedResponse.builder()
                 .id(product.getId())
                 .productTitle(product.getProductTitle())
                 .description(product.getDescription())
@@ -90,8 +90,7 @@ public class ProductResponse {
                 .unitWeight(product.getUnitWeight())
                 .createDate(LocalDate.now())
                 .seller(product.getSeller())
-                .totalQuantity(totalQuantity)
-                .closestDueDate(closestDueDate)
+                .batchStock(batchStockResponseList)
                 .build();
     }
 

@@ -14,7 +14,7 @@ import java.util.List;
 @Repository
 public interface BatchStockRepository extends JpaRepository<BatchStockModel, Long> {
     List<BatchStockModel> findByProduct(ProductModel product);
-
+    List<BatchStockModel> findByProductAndDueDateGreaterThanEqual(ProductModel product, LocalDate dueDate);
     List<BatchStockModel> findBySection(SectionModel section);
     @Query("FROM BatchStockModel bsm where bsm.product.id = :productId and bsm.dueDate >= :dateToCompare")
     List<BatchStockModel> findProducts(@Param("productId") Long productModel, @Param("dateToCompare") LocalDate dateToCompare);

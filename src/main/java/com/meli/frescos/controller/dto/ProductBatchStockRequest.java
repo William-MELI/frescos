@@ -2,6 +2,8 @@ package com.meli.frescos.controller.dto;
 
 import com.meli.frescos.model.BatchStockModel;
 import com.meli.frescos.model.ProductModel;
+import com.meli.frescos.model.SectionModel;
+import com.meli.frescos.model.SellerModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,6 +33,7 @@ public class ProductBatchStockRequest {
      */
     public ProductModel toProduct() {
         return ProductModel.builder()
+                .seller(SellerModel.builder().id(getInboundOrder().getSellerCode()).build())
                 .productTitle(inboundOrder.getProductTitle())
                 .description(inboundOrder.getProductDescription())
                 .price(inboundOrder.getPrice())
@@ -44,6 +47,7 @@ public class ProductBatchStockRequest {
     public List<BatchStockModel> toBatchStock() {
         List<BatchStockModel> batchStockList = new ArrayList<>();
         this.getInboundOrder().getBatchStock().forEach(b -> batchStockList.add(BatchStockModel.builder()
+                        .section(SectionModel.builder().id(b.getSectionCode()).build())
                         .batchNumber(b.getBatchNumber())
                         .quantity((b.getProductQuantity()))
                         .manufacturingDate(b.getManufacturingDate())

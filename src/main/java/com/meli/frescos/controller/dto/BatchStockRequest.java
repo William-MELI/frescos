@@ -20,6 +20,11 @@ import java.time.LocalDateTime;
 public class BatchStockRequest {
 
     /**
+     * Inbound section code
+     */
+    private Long sectionCode;
+
+    /**
      * Batch number of the inbound product
      */
     @NotBlank(message = "Número de Lote não pode estar em branco.")

@@ -13,15 +13,17 @@ public interface IBatchStockService {
 
     BatchStockModel getById(Long id) throws BatchStockByIdNotFoundException;
 
-    BatchStockModel save(BatchStockModel batchStock, Long productId, Long sectionId, Long representativeId, Long warehouseId) throws Exception;
+    BatchStockModel save(BatchStockModel batchStock) throws Exception;
 
-    List<BatchStockModel> findByProductId(Long productId) throws Exception;
+    List<BatchStockModel> getByProductId(Long productId) throws Exception;
 
-    List<BatchStockModel> findBySectionId(Long sectionId) throws Exception;
+    List<BatchStockModel> getBySectionId(Long sectionId) throws Exception;
 
     Integer getTotalBatchStockQuantity(Long productId) throws Exception;
 
-    boolean isValid(ProductModel product, List<BatchStockModel> batchStockList, Long sectionId) throws Exception;
+    LocalDate getClosestDueDate(Long productId) throws Exception;
 
-    List<BatchStockModel> findValidProductsByDueDate(Long productModel, LocalDate dateToCompare);
+    void validateBatches(ProductModel product, List<BatchStockModel> batchStockList) throws Exception;
+
+    List<BatchStockModel> findValidProductsByDueDate(Long productModel, LocalDate minDueDate) throws Exception;
 }
