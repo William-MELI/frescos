@@ -29,7 +29,7 @@ public class PurchaseOrderController {
     }
 
     @PatchMapping( "/{id}/{status}")
-    ResponseEntity updateStatus(@PathVariable Long id, @PathVariable String status) throws Exception {
+    ResponseEntity<Void> updateStatus(@PathVariable Long id, @PathVariable String status) throws Exception {
         purchaseOrderService.updateStatus(id, status);
         return new ResponseEntity<>(HttpStatus.OK);
     }

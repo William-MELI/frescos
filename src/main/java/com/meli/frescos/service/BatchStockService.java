@@ -6,7 +6,9 @@ import com.meli.frescos.repository.BatchStockRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -22,15 +24,12 @@ public class BatchStockService implements IBatchStockService {
 
     private final ISectionService iSectionService;
 
-    private final IRepresentativeService iRepresentativeService;
-
     private final IOrderProductService iOrderProductService;
 
-    public BatchStockService(BatchStockRepository batchStockRepository, IProductService iProductService, ISectionService iSectionService, IRepresentativeService iRepresentativeService, IOrderProductService iOrderProductService) {
+    public BatchStockService(BatchStockRepository batchStockRepository, IProductService iProductService, ISectionService iSectionService, IOrderProductService iOrderProductService) {
         this.batchStockRepository = batchStockRepository;
         this.iProductService = iProductService;
         this.iSectionService = iSectionService;
-        this.iRepresentativeService = iRepresentativeService;
         this.iOrderProductService = iOrderProductService;
     }
 
@@ -57,21 +56,12 @@ public class BatchStockService implements IBatchStockService {
     }
 
     @Override
-    public BatchStockModel save(BatchStockModel batchStock, Long productId, Long sectionId, Long representativeId, Long warehouseId) throws Exception {
-        if (!iRepresentativeService.permittedRepresentative(iRepresentativeService.getById(representativeId), warehouseId)) {
-            throw new Exception("Representative does not belong to this warehouse!");
-        }
-
-        ProductModel product = iProductService.getById(productId);
-        SectionModel section = iSectionService.getById(sectionId);
-
-        batchStock.setProduct(product);
-        batchStock.setSection(section);
-
+    public BatchStockModel save(BatchStockModel batchStock) throws Exception {
+        batchStock.setSection(iSectionService.getById(batchStock.getSection().getId()));
         return batchStockRepository.save(batchStock);
     }
 
-    public List<BatchStockModel> save(List<BatchStockModel> batchStockList) throws Exception {
+    private List<BatchStockModel> save(List<BatchStockModel> batchStockList) throws Exception {
         for (BatchStockModel batchStock : batchStockList) {
             if (batchStock.getSection() == null || batchStock.getProduct() == null) {
                 throw new Exception("BatchStock inválido!");
@@ -81,43 +71,78 @@ public class BatchStockService implements IBatchStockService {
     }
 
     @Override
-    public List<BatchStockModel> findByProductId(Long productId) throws Exception {
+    public List<BatchStockModel> getByProductId(Long productId) throws Exception {
         ProductModel product = iProductService.getById(productId);
         return batchStockRepository.findByProduct(product);
     }
 
     @Override
-    public List<BatchStockModel> findBySectionId(Long sectionId) throws Exception {
+    public List<BatchStockModel> getBySectionId(Long sectionId) throws Exception {
         SectionModel section = iSectionService.getById(sectionId);
         return batchStockRepository.findBySection(section);
     }
 
     @Override
     public Integer getTotalBatchStockQuantity(Long productId) throws Exception {
-        return findByProductId(productId).stream().mapToInt(BatchStockModel::getQuantity).sum();
-    }
-
-    private boolean isCategoryPermittedInSection(CategoryEnum category, Long sectionId) throws Exception {
-        return category.equals(iSectionService.getById(sectionId).getCategory());
-    }
-
-    private boolean productFitsInSection(ProductModel product, List<BatchStockModel> inboundBtchStockList, Long sectionId) throws Exception {
-        double totalInboundVolume = product.getUnitVolume() * inboundBtchStockList.stream().mapToInt(BatchStockModel::getQuantity).sum();
-        return totalInboundVolume <= iSectionService.getById(sectionId).getTotalSize() - getTotalUsedRoom(sectionId);
-    }
-
-    private Double getTotalUsedRoom(Long sectionId) throws Exception {
-        List<BatchStockModel> batchStockList = findBySectionId(sectionId);
-        double usedRoom = 0D;
-        for (BatchStockModel batchStock : batchStockList) {
-            usedRoom += batchStock.getQuantity() * batchStock.getProduct().getUnitVolume();
-        }
-        return usedRoom;
+        return getByProductId(productId).stream().mapToInt(BatchStockModel::getQuantity).sum();
     }
 
     @Override
-    public boolean isValid(ProductModel product, List<BatchStockModel> batchStockList, Long sectionId) throws Exception {
-        return isCategoryPermittedInSection(product.getCategory(), sectionId) && productFitsInSection(product, batchStockList, sectionId);
+    public LocalDate getClosestDueDate(Long productId) throws Exception {
+        return getByProductId(productId).stream().min(Comparator.comparing(BatchStockModel::getDueDate)).orElseThrow(() -> new Exception("Null DueDate on database!")).getDueDate();
+    }
+
+    private void isCategoryPermittedInSections(CategoryEnum category, List<BatchStockModel> batchStockList) throws Exception {
+        List<Long> notPermitedSections = new ArrayList<>();
+        batchStockList.forEach(b -> {
+            if(!b.getSection().getCategory().equals(category)) {
+                notPermitedSections.add(b.getSection().getId());
+            }
+        });
+
+        if (!notPermitedSections.isEmpty()) {
+            throw new Exception("This product is not permited in these sections: " + notPermitedSections);
+        }
+    }
+
+    private void productFitsInSection(ProductModel product, List<BatchStockModel> inboundBatchStockList) throws Exception {
+        HashMap<Long, Double> sectionFreeRoomMap = new HashMap<>();
+        HashMap<Long, Double> inboundTotalVolumeMap = new HashMap<>();
+        List<SectionModel> sections = inboundBatchStockList.stream().map(b -> b.getSection()).distinct().toList();
+        for (SectionModel section : sections) {
+            sectionFreeRoomMap.put(section.getId(), getTotalFreeRoom(section));
+            inboundTotalVolumeMap.put(section.getId(), 0D);
+        }
+        for (BatchStockModel batchStock : inboundBatchStockList) {
+            inboundTotalVolumeMap.put(batchStock.getSection().getId(), inboundTotalVolumeMap.get(batchStock.getSection().getId()) + product.getUnitVolume() * batchStock.getQuantity());
+        }
+        List<Long> notFittingSections = new ArrayList<>();
+        sections.forEach(s -> {
+            if (sectionFreeRoomMap.get(s.getId()) < (inboundTotalVolumeMap.get(s.getId()))) {
+                notFittingSections.add(s.getId());
+            }
+        });
+        if (!notFittingSections.isEmpty()) {
+            throw new Exception("Section(s) " + notFittingSections + " have not enough space.");
+        }
+    }
+
+    private Double getTotalFreeRoom(SectionModel section) throws Exception {
+        List<BatchStockModel> batchStockList = getBySectionId(section.getId());
+        double freeRoom = section.getTotalSize();
+        for (BatchStockModel batchStock : batchStockList) {
+            freeRoom -= batchStock.getQuantity() * batchStock.getProduct().getUnitVolume();
+        }
+        return freeRoom;
+    }
+
+    @Override
+    public void validateBatches(ProductModel product, List<BatchStockModel> batchStockList) throws Exception {
+        for (BatchStockModel batchStock : batchStockList) {
+            batchStock.setSection(iSectionService.getById(batchStock.getSection().getId()));
+        }
+        isCategoryPermittedInSections(product.getCategory(), batchStockList);
+        productFitsInSection(product, batchStockList);
     }
 
     @Override
@@ -154,7 +179,7 @@ public class BatchStockService implements IBatchStockService {
         }
 
         if (quantity != 0) {
-            throw new Exception("Estoque não suficiente para atender o pedido!");
+            throw new Exception("Estoque insuficiente para atender o pedido!");
         }
 
         save(batchStockList);

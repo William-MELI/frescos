@@ -3,7 +3,10 @@ package com.meli.frescos.controller;
 import com.meli.frescos.controller.dto.BatchStockRequest;
 import com.meli.frescos.controller.dto.BatchStockResponse;
 import com.meli.frescos.exception.BatchStockByIdNotFoundException;
+import com.meli.frescos.model.BatchStockModel;
 import com.meli.frescos.service.IBatchStockService;
+import com.meli.frescos.service.IProductService;
+import com.meli.frescos.service.IRepresentativeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +24,13 @@ public class BatchStockController {
 
     private final IBatchStockService iBatchStockService;
 
-    public BatchStockController(IBatchStockService iBatchStockService) {
+    private final IRepresentativeService iRepresentativeService;
+    private final IProductService iProductService;
+
+    public BatchStockController(IBatchStockService iBatchStockService, IRepresentativeService iRepresentativeService, IProductService iProductService) {
         this.iBatchStockService = iBatchStockService;
+        this.iRepresentativeService = iRepresentativeService;
+        this.iProductService = iProductService;
     }
 
     /**
@@ -50,7 +58,7 @@ public class BatchStockController {
     ResponseEntity<List<BatchStockResponse>> getById(@PathVariable Long id) throws Exception {
         List<BatchStockResponse> batchStockResponseList = new ArrayList<>();
 
-        iBatchStockService.findByProductId(id).forEach(b -> batchStockResponseList.add(BatchStockResponse.toResponse(b)));
+        iBatchStockService.getByProductId(id).forEach(b -> batchStockResponseList.add(BatchStockResponse.toResponse(b)));
 
         return new ResponseEntity<>(batchStockResponseList, HttpStatus.FOUND);
     }
@@ -63,15 +71,12 @@ public class BatchStockController {
     @PostMapping("/product-id")
     ResponseEntity<BatchStockResponse> save(@RequestBody BatchStockRequest batchStockRequest,
                                             @RequestParam Long productId,
-                                            @RequestParam Long sectionId,
                                             @RequestParam Long representativeId,
                                             @RequestParam Long warehouseId) throws Exception {
-
-        return new ResponseEntity<>(BatchStockResponse.toResponse(iBatchStockService.save(batchStockRequest.toModel(),
-                productId,
-                sectionId,
-                representativeId,
-                warehouseId)),
+        iRepresentativeService.validateRepresentative(representativeId, warehouseId);
+        BatchStockModel batchStock = batchStockRequest.toModel();
+        batchStock.setProduct(iProductService.getById(productId));
+        return new ResponseEntity<>(BatchStockResponse.toResponse(iBatchStockService.save(batchStock)),
                 HttpStatus.CREATED);
     }
 }

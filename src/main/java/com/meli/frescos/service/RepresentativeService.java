@@ -36,7 +36,10 @@ public class RepresentativeService implements IRepresentativeService {
     }
 
     @Override
-    public boolean permittedRepresentative(RepresentativeModel representative, Long warehouseId) {
-        return representative.getId().equals(warehouseId);
+    public void validateRepresentative(Long representativeId, Long warehouseId) throws Exception {
+        RepresentativeModel representative = getById(representativeId);
+        if(!representative.getWarehouse().getId().equals(warehouseId)) {
+            throw new Exception("Representative does not belong to this warehouse!");
+        };
     }
 }

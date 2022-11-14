@@ -12,5 +12,5 @@ public interface IRepresentativeService {
 
     RepresentativeModel save(RepresentativeModel representativeModel, Long warehouseCode) throws WarehouseNotFoundException;
 
-    boolean permittedRepresentative(RepresentativeModel representative, Long warehouseId);
+    void validateRepresentative(Long representativeId, Long warehouseId) throws Exception;
 }
