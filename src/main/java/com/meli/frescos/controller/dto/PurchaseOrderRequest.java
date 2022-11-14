@@ -25,12 +25,6 @@ public class PurchaseOrderRequest {
     private LocalDate date;
 
     /**
-     * PurchaseOrder orderStatus
-     */
-    @NotNull(message = "O status nao pode estar em branco")
-    private OrderStatusEnum orderStatus;
-
-    /**
      * Buyer id
      */
     @NotNull(message = "O comprador nao pode estar em branco")
@@ -49,7 +43,6 @@ public class PurchaseOrderRequest {
     public PurchaseOrderRequest toModel() {
         return PurchaseOrderRequest.builder()
                 .date(this.date)
-                .orderStatus(this.orderStatus)
                 .buyer(this.buyer)
                 .products(this.products)
                 .build();
