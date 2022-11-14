@@ -91,6 +91,16 @@ public class BatchStockService implements IBatchStockService {
     }
 
     @Override
+    public List<BatchStockModel> getByCategoryAndDueDate(CategoryEnum category, Integer numberOfDays) throws Exception {
+        List<SectionModel> sectionList = iSectionService.getByCategory(category);
+        List<BatchStockModel> batchStockList = new ArrayList<>();
+        for (SectionModel section : sectionList) {
+            batchStockList.addAll(batchStockRepository.findBySectionAndDueDateBetween(section, LocalDate.now(), LocalDate.now().plusDays(numberOfDays)));
+        }
+        return batchStockList;
+    }
+
+    @Override
     public Integer getTotalBatchStockQuantity(Long productId) throws Exception {
         return getByProductId(productId).stream().mapToInt(BatchStockModel::getQuantity).sum();
     }

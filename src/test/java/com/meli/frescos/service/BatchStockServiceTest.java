@@ -155,27 +155,6 @@ public class BatchStockServiceTest {
         assertThat(batchStockTest.get(0)).isEqualTo(batchStock2);
     }
 
-    /*@Test
-    @DisplayName("Return empty list when due date less than 3 weeks ")
-    void getByProductOrder_returnEmptyList_whenNotFound() {
-        createAttributesBatchStock();
-        LocalDate dueDate = LocalDate.now().plusDays(15);
-        BatchStockModel batchStock1 = new BatchStockModel(1L, "456DEF", 20, LocalDate.of(2022,10,10), LocalDateTime.of(2022,10,10,15,00), dueDate, product, section);
-
-        List<BatchStockModel> batchStockList = new ArrayList<>();
-        batchStockList.add(batchStock1);
-
-        BDDMockito.when(productService.getById(ArgumentMatchers.anyLong()))
-                .thenReturn(product);
-
-        BDDMockito.when(batchStockRepository.findProducts(ArgumentMatchers.anyLong(), ArgumentMatchers.any()))
-                .thenReturn(batchStockList);
-
-        List<BatchStockModel> batchStockTest = batchStockService.getByProductOrder(1L, "V");
-
-        assertThat(batchStockTest).isEmpty();
-    }*/
-
     @Test
     @DisplayName("Return exception BatchStockFilterOrderInvalidException when invalid order")
     void getByProductOrder_returnBatchStockFilterOrderInvalidException_whenInvalidOrder() {

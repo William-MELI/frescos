@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -33,7 +34,7 @@ public class RepresentativeController {
     }
 
     @PostMapping
-    ResponseEntity<RepresentativeResponse> save(@RequestBody RepresentativeRequest representativeRequest) throws WarehouseNotFoundException {
+    ResponseEntity<RepresentativeResponse> save(@Valid @RequestBody RepresentativeRequest representativeRequest) throws WarehouseNotFoundException {
         RepresentativeModel representative = representativeRequest.toRepresentative();
         RepresentativeResponse representativeResponse = RepresentativeResponse.toResponse(iRepresentativeService.save(representative, representativeRequest.getWarehouseCode()));
         return new ResponseEntity<>(representativeResponse, HttpStatus.CREATED);

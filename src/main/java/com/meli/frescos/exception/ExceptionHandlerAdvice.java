@@ -113,6 +113,24 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
     }
 
     /**
+     * This method handles the OneToOneMappingAlreadyDefinedException
+     *
+     * @param ex The original exception
+     * @return A ResponseEntity to represent the HTTP error
+     */
+    @ExceptionHandler(OneToOneMappingAlreadyDefinedException.class)
+    public ResponseEntity<ExceptionDetails> handlerOneToOneMappingAlreadyDefinedException(OneToOneMappingAlreadyDefinedException ex) {
+        return new ResponseEntity<>(
+                ExceptionDetails.builder()
+                        .title("Entidade já possui mapeamento um-para-um já existente.")
+                        .message(ex.getMessage())
+                        .timestamp(LocalDateTime.now())
+                        .build(),
+                HttpStatus.BAD_REQUEST);
+    }
+
+
+    /**
      * This method handles the BatchStockByIdNotFoundException
      *
      * @param ex The original exception

@@ -17,6 +17,7 @@ import java.time.LocalDate;
 @Table(name = "purchase_order")
 public class PurchaseOrderModel {
 
+
     /**
      * PurchaseOrder ID.
      * Auto-generated
@@ -37,7 +38,8 @@ public class PurchaseOrderModel {
      * Not nullable.
      */
     @Column(nullable = false)
-    private String orderStatus;
+    @Enumerated(EnumType.STRING)
+    private OrderStatusEnum orderStatus;
 
     /**
      * BuyerModel reference.
