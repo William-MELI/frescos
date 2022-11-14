@@ -25,6 +25,7 @@ public class OrderProductService implements IOrderProductService {
 
     private final PurchaseOrderRepository purchaseOrderRepo;
 
+
     public OrderProductService(OrderProductsRepository repo, ProductRepository productRepo, PurchaseOrderRepository purchaseOrderRepo) {
         this.repo = repo;
         this.productRepo = productRepo;
@@ -62,9 +63,9 @@ public class OrderProductService implements IOrderProductService {
         return repo.save(model);
     }
 
-    public List<OrderProductsModel> getByPurchaseId(Long purchaseId) {
-        PurchaseOrderModel purchaseOrderModel = purchaseOrderRepo.getById(purchaseId);
-        List<OrderProductsModel> orderProductsModels = repo.findByPurchaseOrderModel(purchaseOrderModel);
+    public List<OrderProductsModel> getByPurchaseId(Long purchaseId) throws Exception {
+        PurchaseOrderModel purchaseOrderModel = purchaseOrderRepo.findById(purchaseId).orElseThrow(() -> new Exception("Purchase order not found"));
+        List<OrderProductsModel> orderProductsModels = repo.findByPurchaseOrderModel_Id(purchaseOrderModel.getId());
 
         return orderProductsModels;
     }
