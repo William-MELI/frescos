@@ -21,7 +21,7 @@ public class PurchaseOrderController {
     }
 
     @PostMapping
-    ResponseEntity<PurchaseOrderResponse> save(@RequestBody @Valid PurchaseOrderRequest purchaseOrderRequest) {
+    ResponseEntity<PurchaseOrderResponse> save(@RequestBody @Valid PurchaseOrderRequest purchaseOrderRequest) throws Exception {
 
         BigDecimal insertPurchase = purchaseOrderService.savePurchaseGetPrice(purchaseOrderRequest.toModel());
 
@@ -29,7 +29,7 @@ public class PurchaseOrderController {
     }
 
     @PatchMapping( "/{id}/{status}")
-    ResponseEntity updateStatus(@PathVariable Long id, @PathVariable String status) throws Exception {
+    ResponseEntity<Void> updateStatus(@PathVariable Long id, @PathVariable String status) throws Exception {
         purchaseOrderService.updateStatus(id, status);
         return new ResponseEntity<>(HttpStatus.OK);
     }

@@ -19,11 +19,6 @@ import java.util.List;
 public class InboundOrderRequest {
 
     /**
-     * Inbound section code
-     */
-    private Long sectionCode;
-
-    /**
      * Inbound warehouse code
      */
     private Long warehouseCode;

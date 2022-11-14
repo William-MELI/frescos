@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 /**
  * Request DTO for Representative related endpoints
  */
@@ -18,11 +21,13 @@ public class RepresentativeRequest {
     /**
      * Representative name
      */
+    @NotBlank(message = "O nome do representante não deve estar em branco")
     private String name;
 
     /**
      * Representative warehouse id
      */
+    @NotNull(message = "O id do warehouse não pode estar em branco")
     private Long warehouseCode;
 
     /**

@@ -1,7 +1,6 @@
 package com.meli.frescos.controller.dto;
 
 import com.meli.frescos.model.BuyerModel;
-import com.meli.frescos.model.SellerModel;
 import lombok.*;
 
 /**

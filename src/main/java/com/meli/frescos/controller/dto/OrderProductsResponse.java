@@ -16,16 +16,30 @@ import lombok.*;
 public class OrderProductsResponse {
 
     /**
-     * Order id
+     * OrderProduct id
      */
     private Long id;
 
+    /**
+     * Product id
+     */
     private ProductModel productModel;
 
+    /**
+     * OrderProduct quantity
+     */
     private int quantity;
 
+    /**
+     * PurchaseOrder id
+     */
     private PurchaseOrderModel purchaseOrderModel;
 
+    /**
+     * Maps OrderProductsModel to OrderProductsResponse
+     * @param order OrderProductModel
+     * @return OrderProductsResponse
+     */
     public static OrderProductsResponse toResponse(OrderProductsModel order) {
         return OrderProductsResponse.builder()
                 .id(order.getId())
