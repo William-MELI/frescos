@@ -40,7 +40,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
         BuyerModel finBuyer = buyerService.getById(purchaseOrderRequest.getBuyer());
         PurchaseOrderModel purchase = new PurchaseOrderModel();
         purchase.setBuyer(finBuyer);
-        purchase.setOrderStatus(purchaseOrderRequest.getOrderStatus());
+        purchase.setOrderStatus(OrderStatusEnum.valueOf(purchaseOrderRequest.getOrderStatus()));
         purchase.setDate(purchaseOrderRequest.getDate());
 
         return purchaseOrderRepository.save(purchase);

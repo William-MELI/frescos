@@ -1,6 +1,7 @@
 package com.meli.frescos.controller.dto;
 
 import com.meli.frescos.model.OrderStatusEnum;
+import com.meli.frescos.validator.EnumValidator;
 import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
@@ -28,7 +29,12 @@ public class PurchaseOrderRequest {
      * PurchaseOrder orderStatus
      */
     @NotNull(message = "O status nao pode estar em branco")
-    private OrderStatusEnum orderStatus;
+    @EnumValidator(
+            message="Valor de orderStatus deve ser OPEN ou CLOSED.",
+            enumClazz= OrderStatusEnum.class
+
+    )
+    private String orderStatus;
 
     /**
      * Buyer id
