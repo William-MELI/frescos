@@ -10,7 +10,6 @@ import org.hibernate.validator.constraints.br.CPF;
 
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 
 /**
  * DTO request to endpoints related to Seller
@@ -41,6 +40,10 @@ public class SellerRequest {
     @Range(min = 0, max = 5, message = "A avaliação do vendedor deve ser de 0 à 5")
     private Double rating;
 
+    /**
+     * Maps SellerRequest to SellerModel
+     * @return SellerModel
+     */
     public SellerModel toModel() {
 
         return SellerModel.builder()

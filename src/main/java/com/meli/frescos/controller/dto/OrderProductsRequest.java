@@ -20,15 +20,19 @@ public class OrderProductsRequest {
     /**
      * Product id
      */
-    @NotNull
+    @NotNull(message = "O id do produto não pode estar vazio")
     private Long productModel;
 
     /**
-     * Order Product quantity
+     * OrderProduct quantity
      */
     @Positive(message = "O valor da quantidade deve ser um número positivo")
     private int quantity;
 
+    /**
+     * PurchaseOrder id
+     */
+    @NotNull(message = "O id Purchase não pode estar vazio")
     private Long purchaseOrderModel;
 
 }

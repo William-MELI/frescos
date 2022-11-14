@@ -1,7 +1,5 @@
 package com.meli.frescos.controller.dto;
 
-import com.meli.frescos.model.OrderProductsModel;
-import com.meli.frescos.model.PurchaseOrderModel;
 import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
@@ -20,23 +18,33 @@ import java.util.List;
 public class PurchaseOrderRequest {
 
     /**
-     * Purchase order creation date
+     * PurchaseOrder creation date
      */
     @NotNull(message = "A data nao pode estar em branco")
     private LocalDate date;
 
     /**
-     *
+     * PurchaseOrder orderStatus
      */
     @NotNull(message = "O status nao pode estar em branco")
     private String orderStatus;
 
+    /**
+     * Buyer id
+     */
     @NotNull(message = "O comprador nao pode estar em branco")
     private Long buyer;
 
+    /**
+     * List of OrderProducts
+     */
     @NotEmpty(message = "A lista de produtos nao pode estar vazia")
     private List<OrderProductsRequest> products;
 
+    /**
+     * Maps PurchaseOrderRequest to PurchaseOrderModel
+     * @return PurchaseOrderModel
+     */
     public PurchaseOrderRequest toModel() {
         return PurchaseOrderRequest.builder()
                 .date(this.date)

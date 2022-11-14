@@ -28,6 +28,11 @@ public class SellerResponse {
      */
     private Double rating;
 
+    /**
+     * Maps SellerModel to SellerResponse
+     * @param seller SellerModel
+     * @return SellerResponse
+     */
     public static SellerResponse toResponse(SellerModel seller) {
         return SellerResponse.builder()
                 .id(seller.getId())

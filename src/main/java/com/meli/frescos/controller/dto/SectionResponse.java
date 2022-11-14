@@ -5,7 +5,7 @@ import com.meli.frescos.model.SectionModel;
 import lombok.*;
 
 /**
- *
+ * Response DTO for Section endpoints
  */
 @Getter
 @Setter
@@ -14,18 +14,41 @@ import lombok.*;
 @Builder
 public class SectionResponse {
 
+    /**
+     * Section id
+     */
     private Long id;
 
+    /**
+     * Section description
+     */
     private String description;
 
+    /**
+     * Section Enum category
+     */
     private CategoryEnum category;
 
+    /**
+     * Section totalSize
+     */
     private Double totalSize;
 
+    /**
+     * Section temperature
+     */
     private Double temperature;
 
+    /**
+     * Warehouse id
+     */
     private WarehouseResponse warehouse;
 
+    /**
+     * Maps SectionModel to SectionResponse
+     * @param section SectionModel
+     * @return SectionResponse
+     */
     public static SectionResponse toResponse(SectionModel section) {
         return SectionResponse.builder()
                 .id(section.getId())

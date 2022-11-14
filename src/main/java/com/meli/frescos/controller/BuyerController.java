@@ -75,17 +75,4 @@ public class BuyerController {
     public ResponseEntity<BuyerResponse> update(@Valid @RequestBody BuyerRequest buyerRequest, @PathVariable Long id) throws BuyerNotFoundException {
         return new ResponseEntity<>(BuyerResponse.toResponse(service.update(buyerRequest.toModel(), id)), HttpStatus.OK);
     }
-
-//    /**
-//     * Delete a Buyer by id
-//     * Return 204 NO CONTENT when success
-//     *
-//     * @param id the Buyer id
-//     * @return a ResponseEntity<Void> instance
-//     */
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
-//        service.deleteById(id);
-//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//    }
 }
