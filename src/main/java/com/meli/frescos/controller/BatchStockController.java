@@ -115,7 +115,7 @@ public class BatchStockController {
         List<BatchStockModel> batchStock = iBatchStockService.getByProductOrder(id, order);
 
         if(batchStock.isEmpty())
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(batchStock.stream().map(BatchStockOrderResponse::toResponse).toList(), HttpStatus.OK);
     }
 }
