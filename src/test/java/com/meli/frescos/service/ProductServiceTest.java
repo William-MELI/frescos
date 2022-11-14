@@ -83,11 +83,11 @@ class ProductServiceTest {
         BDDMockito.when(repository.save(ArgumentMatchers.any(ProductModel.class)))
                 .thenReturn(product);
 
-        /*ProductModel productTest = service.save(new ProductModel(1L, "Manga", "Manga Tommy", new BigDecimal(2.99), CategoryEnum.FRESH, 5.0, 5.0, LocalDate.now(), seller), 1L);
+        ProductModel productTest = service.save(new ProductModel(1L, "Manga", "Manga Tommy", new BigDecimal(2.99), CategoryEnum.FRESH, 5.0, 5.0, LocalDate.now(), seller));
 
         assertThat(productTest).isNotNull();
         assertThat(productTest.getId()).isPositive();
-        assertEquals(product.getProductTitle(), productTest.getProductTitle());*/
+        assertEquals(product.getProductTitle(), productTest.getProductTitle());
     }
 
     @Test
@@ -149,4 +149,5 @@ class ProductServiceTest {
 
         assertThat(productTest).isNull();
     }
+
 }
