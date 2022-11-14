@@ -12,6 +12,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ *  This class contains all OrderProducts related functions
+ *  Using @Service from spring
+ */
 @Service
 public class OrderProductService implements IOrderProductService {
 
@@ -27,11 +31,21 @@ public class OrderProductService implements IOrderProductService {
         this.purchaseOrderRepo = purchaseOrderRepo;
     }
 
+    /**
+     * Return all OrderProducts
+     * @return List of OrderProductsModel
+     */
     @Override
     public List<OrderProductsModel> getAll() {
         return repo.findAll();
     }
 
+    /**
+     * Save a new OrderProducts at storage
+     *
+     * @param orderProductsRequest the new OrderProducts to store
+     * @return the new created OrderProducts
+     */
     @Override
     public OrderProductsModel save(OrderProductsRequest orderProductsRequest) {
         Optional<ProductModel> product = productRepo.findById(orderProductsRequest.getProductModel());
@@ -55,6 +69,11 @@ public class OrderProductService implements IOrderProductService {
         return orderProductsModels;
     }
 
+    /**
+     * Return OrderProductsModel given id
+     * @param id the OrderProductsModel id
+     * @return OrderProductsModel
+     */
     @Override
     public OrderProductsModel getById(Long id) throws Exception {
         return repo.findById(id).orElseThrow(() -> new Exception("OrderProduct not found"));
