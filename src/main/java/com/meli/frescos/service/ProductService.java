@@ -56,9 +56,4 @@ public class ProductService implements IProductService {
         };
     }
 
-    @Override
-    public ProductModel save(ProductModel product, List<BatchStockModel> batchStockList) throws Exception {
-        return save(product);
-    }
-
 }
