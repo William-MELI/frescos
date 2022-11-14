@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @RestController to Product
+ */
 @RestController
 @RequestMapping("/product")
 public class ProductController {
@@ -37,6 +40,11 @@ public class ProductController {
         return new ResponseEntity<>(productResponseList, HttpStatus.FOUND);
     }
 
+    /**
+     * Endpoint to return a Product given id
+     * @param id the Product id
+     * @return a Product related ID
+     */
     @GetMapping("/{id}")
     public ResponseEntity<ProductDetailedResponse> getById(@PathVariable Long id) throws Exception {
         ProductModel product = iProductService.getById(id);
