@@ -41,7 +41,15 @@ public class ProductController {
     public ResponseEntity<ProductDetailedResponse> getById(@PathVariable Long id) throws Exception {
         ProductModel product = iProductService.getById(id);
         List<BatchStockModel> batchStockList = iBatchStockService.getByProductId(id);
-        return new ResponseEntity<>(ProductDetailedResponse.toResponse(product, batchStockList), HttpStatus.FOUND);
+        List<SimplifiedBatchStockResponse> stockResponse = new ArrayList<>();
+
+        for (BatchStockModel stock : batchStockList) {
+            SimplifiedBatchStockResponse response = new SimplifiedBatchStockResponse(stock.getSection().getId(), iBatchStockService.getTotalBatchStockQuantity(product.getId()));
+            if (!stockResponse.stream().anyMatch(x -> x.getSectionId() == response.getSectionId() && x.getProductQuantity() == response.getProductQuantity())) {
+                stockResponse.add(response);
+            }
+        }
+        return new ResponseEntity<>(ProductDetailedResponse.toResponse(product, stockResponse) , HttpStatus.FOUND);
     }
 
     @PostMapping
