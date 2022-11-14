@@ -12,7 +12,7 @@ public interface ISectionService {
 
     SectionModel save(SectionRequest sectionRequest);
 
-    SectionModel getById(Long id) throws Exception;
+    SectionModel getById(Long id);
 
     List<SectionModel> getByCategory(CategoryEnum category);
 }
