@@ -9,6 +9,10 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *  This class contains all Product related functions
+ *  Using @Service from spring
+ */
 @Service
 public class ProductService implements IProductService {
 
@@ -20,12 +24,17 @@ public class ProductService implements IProductService {
         this.productRepository = productRepository;
         this.iSellerService = iSellerService;
     }
-
     @Override
     public List<ProductModel> getAll() {
         return productRepository.findAll();
     }
 
+    /**
+     * Return ProductsModel given id
+     * @param id theProductModel id
+     * @return ProductModel
+     * @throws ProductByIdNotFoundException Throws in case Ptroduct does not exists
+     */
     @Override
     public ProductModel getById(Long id) {
         return productRepository.findById(id).orElseThrow(() -> new ProductByIdNotFoundException(id));
