@@ -148,7 +148,6 @@ public class PurchaseOrderService implements IPurchaseOrderService {
     /**
      * This method update status from PurchaseOrder related
      * @param id Long related an purchaseOrder
-     * @param orderStatus enum from Status entity
      * @throws Exception
      */
     @Override
