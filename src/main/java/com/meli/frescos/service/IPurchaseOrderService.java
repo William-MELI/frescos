@@ -11,5 +11,5 @@ public interface IPurchaseOrderService {
 
     List<PurchaseOrderModel> getAll();
 
-   void updateStatus(Long id, OrderStatusEnum orderStatus)  throws Exception;
+   void updateStatus(Long id)  throws Exception;
 }
