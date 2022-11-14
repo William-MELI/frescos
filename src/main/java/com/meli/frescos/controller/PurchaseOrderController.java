@@ -50,9 +50,9 @@ public class PurchaseOrderController {
      * @return status 200 OK
      * @throws Exception
      */
-    @PatchMapping("/{id}/{status}")
-    ResponseEntity<Void> updateStatus(@PathVariable Long id, @PathVariable OrderStatusEnum status) throws Exception {
-        purchaseOrderService.updateStatus(id, status);
+    @PatchMapping("/{id}")
+    ResponseEntity<Void> updateStatus(@PathVariable Long id) throws Exception {
+        purchaseOrderService.updateStatus(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

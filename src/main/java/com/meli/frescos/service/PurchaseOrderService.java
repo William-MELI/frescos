@@ -49,7 +49,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
         BuyerModel finBuyer = buyerService.getById(purchaseOrderRequest.getBuyer());
         PurchaseOrderModel purchase = new PurchaseOrderModel();
         purchase.setBuyer(finBuyer);
-        purchase.setOrderStatus(purchaseOrderRequest.getOrderStatus());
+        purchase.setOrderStatus(OrderStatusEnum.OPEN);
         purchase.setDate(purchaseOrderRequest.getDate());
 
         return purchaseOrderRepository.save(purchase);
@@ -105,10 +105,9 @@ public class PurchaseOrderService implements IPurchaseOrderService {
      * @return BigDecimal with sum of price the all products listed
      * @throws Exception
      */
-    public BigDecimal savePurchaseGetPrice(PurchaseOrderRequest purchaseOrderRequest) throws Exception {
+    public BigDecimal savePurchaseGetPrice(PurchaseOrderRequest purchaseOrderRequest) {
         boolean isOrderValid = (verifyOrderIsValid(purchaseOrderRequest.getProducts()));
         if (isOrderValid) {
-
 
             PurchaseOrderModel purchaseOrderModel = save(purchaseOrderRequest);
 
@@ -153,7 +152,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
      * @throws Exception
      */
     @Override
-    public void updateStatus(Long id, OrderStatusEnum orderStatus) throws Exception {
+    public void updateStatus(Long id) throws Exception {
         List<OrderProductsModel> orderProductsList = orderProductService.getByPurchaseId(id);
         List<OrderProductsRequest> orderProductsRequestList = new ArrayList<>();
         orderProductsList.forEach(item -> orderProductsRequestList.add(OrderProductsRequest.builder()
@@ -165,7 +164,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
         verifyOrderIsValid(orderProductsRequestList);
 
         PurchaseOrderModel findbyIdPurchaseOrder = getById(id);
-        findbyIdPurchaseOrder.setOrderStatus(orderStatus);
+        findbyIdPurchaseOrder.setOrderStatus(OrderStatusEnum.CLOSED);
         findbyIdPurchaseOrder = purchaseOrderRepository.save(findbyIdPurchaseOrder);
 
         batchStockService.consumeBatchStockOnPurchase(findbyIdPurchaseOrder);
