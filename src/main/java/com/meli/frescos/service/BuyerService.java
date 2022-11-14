@@ -65,12 +65,6 @@ public class BuyerService implements IBuyerService {
         return repo.save(buyerModel);
     }
 
-//    @Override
-//    public void deleteById(Long id) {
-//
-//        repo.deleteById(id);
-//    }
-
     /**
      * Queries and return a BuyerModel based in its CPF
      *

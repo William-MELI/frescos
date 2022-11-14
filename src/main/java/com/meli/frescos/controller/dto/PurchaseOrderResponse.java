@@ -1,14 +1,8 @@
 package com.meli.frescos.controller.dto;
 
-import com.meli.frescos.model.BuyerModel;
-import com.meli.frescos.model.PurchaseOrderModel;
-import com.meli.frescos.model.RepresentativeModel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
 /**
  * Response DTO for PurchaseOrder POST
@@ -18,10 +12,16 @@ import java.time.LocalDate;
 @Builder
 public class PurchaseOrderResponse {
 
-
+    /**
+     * PurchaseOrder totalprice;
+     */
     private BigDecimal totalprice;
 
-
+    /**
+     * Maps PurchaseOrderModel to PurchaseOrderResponse
+     * @param totalprice BigDecimal
+     * @return PurchaseOrderResponse
+     */
     public static PurchaseOrderResponse toResponse(BigDecimal totalprice) {
         return PurchaseOrderResponse.builder()
                 .totalprice(totalprice)
