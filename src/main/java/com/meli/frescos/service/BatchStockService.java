@@ -1,13 +1,13 @@
 package com.meli.frescos.service;
 
 import com.meli.frescos.exception.BatchStockByIdNotFoundException;
+import com.meli.frescos.exception.BatchStockFilterOrderInvalidException;
 import com.meli.frescos.model.BatchStockModel;
 import com.meli.frescos.model.CategoryEnum;
 import com.meli.frescos.model.ProductModel;
 import com.meli.frescos.model.SectionModel;
 import com.meli.frescos.repository.BatchStockRepository;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
@@ -114,12 +114,21 @@ public class BatchStockService implements IBatchStockService {
 
     @Override
     public List<BatchStockModel> findValidProductsByDueDate(Long productModel, LocalDate dateToCompare) {
+        findByProductId(productModel);
         return this.batchStockRepository.findProducts(productModel, dateToCompare);
     }
 
+    /**
+     * Return a List BatchStockModel by ProductId and
+     *
+     * @param id the ProductModel id
+     * @param order list sorting
+     * @return BatchStockModel
+     * @throws BatchStockFilterOrderInvalidException - Filter order invalid
+     */
     @Override
     public List<BatchStockModel> findByProductOrder(Long id, String order) {
-        List<BatchStockModel> batchStockList = findByProductId(id);
+        List<BatchStockModel> batchStockList = findValidProductsByDueDate(id, LocalDate.now().plusDays(21));
         switch (order.toUpperCase()){
             case "L":
                 batchStockList = batchStockList.stream()
@@ -136,6 +145,8 @@ public class BatchStockService implements IBatchStockService {
                         .sorted(Comparator.comparing(BatchStockModel::getDueDate))
                         .collect(Collectors.toList());
                 break;
+            default:
+                throw new BatchStockFilterOrderInvalidException(order);
         }
         return batchStockList;
     }

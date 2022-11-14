@@ -145,4 +145,21 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
                         .build(),
                 HttpStatus.NOT_FOUND);
     }
+
+    /**
+     * This method handles the BatchStockFilterOrderInvalidException
+     *
+     * @param ex The original exception
+     * @return A ResponseEntity to represent the HTTP error
+     */
+    @ExceptionHandler(BatchStockFilterOrderInvalidException.class)
+    public ResponseEntity<ExceptionDetails> handlerBatchStockFilterOrderInvalidException(BatchStockFilterOrderInvalidException ex) {
+        return new ResponseEntity<>(
+                ExceptionDetails.builder()
+                        .title("Ordenação inválida")
+                        .message(ex.getMessage())
+                        .timestamp(LocalDateTime.now())
+                        .build(),
+                HttpStatus.NOT_FOUND);
+    }
 }

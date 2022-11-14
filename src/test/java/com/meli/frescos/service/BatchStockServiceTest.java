@@ -1,5 +1,6 @@
 package com.meli.frescos.service;
 
+import com.meli.frescos.exception.BatchStockFilterOrderInvalidException;
 import com.meli.frescos.model.*;
 import com.meli.frescos.repository.BatchStockRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
 public class BatchStockServiceTest {
@@ -150,5 +152,34 @@ public class BatchStockServiceTest {
 
         assertThat(batchStockTest).isNotNull();
         assertThat(batchStockTest.get(0)).isEqualTo(batchStock2);
+    }
+
+    @Test
+    @DisplayName("Return empty list when due date less than 3 weeks ")
+    void findByProductOrder_returnEmptyList_whenNotFound() {
+        createAttributesBatchStock();
+        LocalDate dueDate = LocalDate.now().plusDays(14);
+        BatchStockModel batchStock1 = new BatchStockModel(1L, "456DEF", 20, LocalDate.of(2022,10,10), LocalDateTime.of(2022,10,10,15,00), dueDate, product, section);
+
+        List<BatchStockModel> batchStockList = new ArrayList<>();
+        batchStockList.add(batchStock1);
+
+        BDDMockito.when(productService.getById(ArgumentMatchers.anyLong()))
+                .thenReturn(product);
+
+        BDDMockito.when(batchStockRepository.findByProduct(ArgumentMatchers.any(ProductModel.class)))
+                .thenReturn(batchStockList);
+
+        List<BatchStockModel> batchStockTest = batchStockService.findByProductOrder(1L, "V");
+
+        assertThat(batchStockTest).isEmpty();
+    }
+
+    @Test
+    @DisplayName("Return exception BatchStockFilterOrderInvalidException when invalid order")
+    void findByProductOrder_returnBatchStockFilterOrderInvalidException_whenInvalidOrder() {
+        assertThrows(BatchStockFilterOrderInvalidException.class, () -> {
+            List<BatchStockModel> batchStockModelList = batchStockService.findByProductOrder(1L, "F");
+        });
     }
 }
