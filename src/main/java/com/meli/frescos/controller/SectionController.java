@@ -43,7 +43,7 @@ public class SectionController {
      * @return ResponseEntity<SectionModel> to the requester
      */
     @PostMapping
-    ResponseEntity<SectionResponse> save(@RequestBody @Valid SectionRequest sectionRequest) {
+    ResponseEntity<SectionResponse> save(@RequestBody @Valid SectionRequest sectionRequest) throws Exception {
         SectionModel insertSection = service.save(sectionRequest);
         return new ResponseEntity<>(SectionResponse.toResponse(insertSection), HttpStatus.CREATED);
     }
