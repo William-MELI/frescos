@@ -25,18 +25,18 @@ public class PurchaseOrderService implements IPurchaseOrderService {
 
     private final PurchaseOrderRepository purchaseOrderRepository;
 
-    private final BuyerService buyerService;
+    private final IBuyerService iBuyerService;
 
-    private final OrderProductService orderProductService;
+    private final IOrderProductService iOrderProductService;
 
-    private final BatchStockService batchStockService;
+    private final IBatchStockService iBatchStockService;
 
-    public PurchaseOrderService(PurchaseOrderRepository purchaseOrderRepository, BuyerService buyerService, OrderProductService orderProductService,
-                                BatchStockService batchStockService) {
+    public PurchaseOrderService(PurchaseOrderRepository purchaseOrderRepository, IBuyerService iBuyerService, IOrderProductService iOrderProductService,
+                                IBatchStockService iBatchStockService) {
         this.purchaseOrderRepository = purchaseOrderRepository;
-        this.buyerService = buyerService;
-        this.orderProductService = orderProductService;
-        this.batchStockService = batchStockService;
+        this.iBuyerService = iBuyerService;
+        this.iOrderProductService = iOrderProductService;
+        this.iBatchStockService = iBatchStockService;
     }
 
     /**
@@ -46,7 +46,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
      */
     @Override
     public PurchaseOrderModel save(PurchaseOrderRequest purchaseOrderRequest) {
-        BuyerModel finBuyer = buyerService.getById(purchaseOrderRequest.getBuyer());
+        BuyerModel finBuyer = iBuyerService.getById(purchaseOrderRequest.getBuyer());
         PurchaseOrderModel purchase = new PurchaseOrderModel();
         purchase.setBuyer(finBuyer);
         purchase.setOrderStatus(OrderStatusEnum.OPEN);
@@ -65,7 +65,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
 
         LocalDate dateRequirement = LocalDate.now().plusWeeks(3);
 
-        List<BatchStockModel> batchStockList = this.batchStockService.findValidProductsByDueDate(productId, dateRequirement);
+        List<BatchStockModel> batchStockList = this.iBatchStockService.findValidProductsByDueDate(productId, dateRequirement);
 
         int availableQuantity = batchStockList.stream().mapToInt(BatchStockModel::getQuantity).sum();
 
@@ -115,7 +115,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
 
             BigDecimal totalPrice = new BigDecimal(0);
 
-            purchaseOrderRequest.getProducts().forEach(p -> orderProductsModels.add(orderProductService.save(
+            purchaseOrderRequest.getProducts().forEach(p -> orderProductsModels.add(iOrderProductService.save(
                     new OrderProductsRequest(
                             p.getProductModel(),
                             p.getQuantity(),
@@ -152,7 +152,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
      */
     @Override
     public void updateStatus(Long id) throws Exception {
-        List<OrderProductsModel> orderProductsList = orderProductService.getByPurchaseId(id);
+        List<OrderProductsModel> orderProductsList = iOrderProductService.getByPurchaseId(id);
         List<OrderProductsRequest> orderProductsRequestList = new ArrayList<>();
         orderProductsList.forEach(item -> orderProductsRequestList.add(OrderProductsRequest.builder()
                         .productModel(item.getProductModel().getId())
@@ -166,6 +166,6 @@ public class PurchaseOrderService implements IPurchaseOrderService {
         findbyIdPurchaseOrder.setOrderStatus(OrderStatusEnum.CLOSED);
         findbyIdPurchaseOrder = purchaseOrderRepository.save(findbyIdPurchaseOrder);
 
-        batchStockService.consumeBatchStockOnPurchase(findbyIdPurchaseOrder);
+        iBatchStockService.consumeBatchStockOnPurchase(findbyIdPurchaseOrder);
     }
 }

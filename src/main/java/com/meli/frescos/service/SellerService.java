@@ -15,10 +15,10 @@ import java.util.Optional;
 @Service
 public class SellerService implements ISellerService {
 
-    private final SellerRepository repo;
+    private final SellerRepository sellerRepository;
 
-    public SellerService(SellerRepository repo) {
-        this.repo = repo;
+    public SellerService(SellerRepository sellerRepository) {
+        this.sellerRepository = sellerRepository;
     }
 
     /**
@@ -30,7 +30,7 @@ public class SellerService implements ISellerService {
     public SellerModel save(SellerModel sellerModel) {
         if(cpfDuplicate(sellerModel.getCpf()))
             throw new CpfDuplicateException(sellerModel.getCpf());
-        return repo.save(sellerModel);
+        return sellerRepository.save(sellerModel);
     }
 
     /**
@@ -39,7 +39,7 @@ public class SellerService implements ISellerService {
      */
     @Override
     public List<SellerModel> getAll() {
-        return repo.findAll();
+        return sellerRepository.findAll();
     }
 
     /**
@@ -50,7 +50,7 @@ public class SellerService implements ISellerService {
      */
     @Override
     public SellerModel getById(Long id) {
-        return repo.findById(id).orElseThrow(() -> new SellerByIdNotFoundException(id));
+        return sellerRepository.findById(id).orElseThrow(() -> new SellerByIdNotFoundException(id));
     }
 
     /**
@@ -62,7 +62,7 @@ public class SellerService implements ISellerService {
     public SellerModel update(SellerModel sellerModel, Long id) {
         SellerModel seller = getById(id);
         sellerModel.setId(seller.getId());
-        return repo.save(sellerModel);
+        return sellerRepository.save(sellerModel);
     }
 
     /**
@@ -71,7 +71,7 @@ public class SellerService implements ISellerService {
      */
     @Override
     public void deleteById(Long id) {
-        repo.deleteById(id);
+        sellerRepository.deleteById(id);
     }
 
     /**
@@ -81,7 +81,7 @@ public class SellerService implements ISellerService {
      */
     @Override
     public Optional<SellerModel> findByCpf(String cpf) {
-        return repo.findByCpf(cpf);
+        return sellerRepository.findByCpf(cpf);
     }
 
     /**
