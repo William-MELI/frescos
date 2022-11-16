@@ -4,6 +4,7 @@ import com.meli.frescos.exception.BatchStockByIdNotFoundException;
 import com.meli.frescos.model.BatchStockModel;
 import com.meli.frescos.model.CategoryEnum;
 import com.meli.frescos.model.ProductModel;
+import com.meli.frescos.model.PurchaseOrderModel;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -33,4 +34,6 @@ public interface IBatchStockService {
     List<BatchStockModel> findValidProductsByDueDate(Long productModel, LocalDate minDueDate);
 
     List<BatchStockModel> getByProductOrder(Long id, String order);
+
+    void consumeBatchStockOnPurchase(PurchaseOrderModel purchaseOrderModel) throws Exception;
 }

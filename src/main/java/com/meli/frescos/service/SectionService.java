@@ -19,13 +19,13 @@ import java.util.Optional;
 @Service
 public class SectionService implements ISectionService {
 
-    private final SectionRepository repo;
+    private final SectionRepository sectionRepository;
 
-    private final IWarehouseRepository warehouseRepo;
+    private final IWarehouseRepository warehouseRepository;
 
-    public SectionService(SectionRepository repo, IWarehouseRepository warehouseRepo) {
-        this.repo = repo;
-        this.warehouseRepo = warehouseRepo;
+    public SectionService(SectionRepository sectionRepository, IWarehouseRepository warehouseRepository) {
+        this.sectionRepository = sectionRepository;
+        this.warehouseRepository = warehouseRepository;
     }
 
     /**
@@ -34,7 +34,7 @@ public class SectionService implements ISectionService {
      */
     @Override
     public List<SectionModel> getAll() {
-        return repo.findAll();
+        return sectionRepository.findAll();
     }
 
     /**
@@ -45,7 +45,7 @@ public class SectionService implements ISectionService {
      */
     @Override
     public SectionModel save(SectionRequest sectionRequest) {
-        Optional<WarehouseModel> warehouse = warehouseRepo.findById(sectionRequest.getWarehouse());
+        Optional<WarehouseModel> warehouse = warehouseRepository.findById(sectionRequest.getWarehouse());
 
         if (warehouse.isEmpty()) {
             throw new NullPointerException("Warehouse not found");
@@ -57,7 +57,7 @@ public class SectionService implements ISectionService {
                 sectionRequest.getTemperature(),
                 warehouse.get()
         );
-        return repo.save(model);
+        return sectionRepository.save(model);
     }
 
     /**
@@ -67,11 +67,11 @@ public class SectionService implements ISectionService {
      */
     @Override
     public SectionModel getById(Long id) {
-        return repo.findById(id).orElseThrow(() -> new SectionByIdNotFoundException(id));
+        return sectionRepository.findById(id).orElseThrow(() -> new SectionByIdNotFoundException(id));
     }
 
     @Override
     public List<SectionModel> getByCategory(CategoryEnum category) {
-        return repo.findByCategory(category);
+        return sectionRepository.findByCategory(category);
     }
 }
