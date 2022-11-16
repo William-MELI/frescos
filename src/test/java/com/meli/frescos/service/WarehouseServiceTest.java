@@ -128,10 +128,12 @@ class WarehouseServiceTest {
     @Test
     @DisplayName("Throw exception when ID is not found.")
     void getById_throwsException_WhenIdIsInvalid() {
-        BDDMockito.given(warehouseRepository.findById(ArgumentMatchers.anyLong()))
-                        .willThrow(new WarehouseNotFoundException(("")));
+
+        Mockito.when(warehouseRepository.findById(ArgumentMatchers.anyLong()))
+                .thenReturn(Optional.empty());
 
         assertThrows(WarehouseNotFoundException.class, () -> warehouseService.getById(ArgumentMatchers.anyLong()));
+
     }
 
     @Test

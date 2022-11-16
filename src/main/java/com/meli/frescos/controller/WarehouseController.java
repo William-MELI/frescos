@@ -32,18 +32,18 @@ public class WarehouseController {
         WarehouseModel warehouseEntity = this.warehouseService.getById(id);
         WarehouseResponse warehouseResponse = WarehouseResponse.toResponse(warehouseEntity);
 
-        return new ResponseEntity<>(warehouseResponse, HttpStatus.FOUND);
+        return new ResponseEntity<>(warehouseResponse, HttpStatus.OK);
     }
 
     @GetMapping
     public ResponseEntity<List<WarehouseResponse>> getAll() {
         List<WarehouseResponse> warehouseResponseList = this.warehouseService.getAll().stream().map(WarehouseResponse::toResponse).toList();
-        return new ResponseEntity<>(warehouseResponseList, HttpStatus.FOUND);
+        return new ResponseEntity<>(warehouseResponseList, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) throws UsedPrimaryKeyConstraintException {
         this.warehouseService.delete(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

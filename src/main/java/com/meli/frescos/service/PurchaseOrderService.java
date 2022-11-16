@@ -16,6 +16,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * This class contains all PurchaseOrder related function
+ * Using Spring Service
+ */
 @Service
 public class PurchaseOrderService implements IPurchaseOrderService {
 
@@ -35,6 +39,11 @@ public class PurchaseOrderService implements IPurchaseOrderService {
         this.batchStockService = batchStockService;
     }
 
+    /**
+     * This method save a purchaseOrder and orderProducts
+     * @param purchaseOrderRequest from PurchaseOrderModel instance
+     * @return BigDecimal sum from all products
+     */
     @Override
     public PurchaseOrderModel save(PurchaseOrderRequest purchaseOrderRequest) {
         BuyerModel finBuyer = buyerService.getById(purchaseOrderRequest.getBuyer());
@@ -46,6 +55,12 @@ public class PurchaseOrderService implements IPurchaseOrderService {
         return purchaseOrderRepository.save(purchase);
     }
 
+    /**
+     *  This method check if the product is expired
+     * @param productId from product Entity
+     * @param desiredQuantity int required due date
+     * @return Boolean checking due date
+     */
     private boolean stockAvailable(Long productId, int desiredQuantity) {
 
         LocalDate dateRequirement = LocalDate.now().plusWeeks(3);
@@ -57,6 +72,12 @@ public class PurchaseOrderService implements IPurchaseOrderService {
         return desiredQuantity <= availableQuantity;
     }
 
+    /**
+     *  This method check if the quantity of  products is available
+     * @param orderProductsList List of OrderProduct Entity
+     * @return Bollean checking availability
+     * @throws Exception
+     */
     private boolean verifyOrderIsValid(List<OrderProductsRequest> orderProductsList) throws OrderProductIsInvalidException {
         Set<Long> productIdListException = new HashSet<>();
         boolean isFailure = false;
@@ -78,6 +99,12 @@ public class PurchaseOrderService implements IPurchaseOrderService {
         return true;
     }
 
+    /**
+     *This method save the products in orderProducts Entity
+     * @param purchaseOrderRequest from purchaseOrder instance
+     * @return BigDecimal with sum of price the all products listed
+     * @throws Exception
+     */
     public BigDecimal savePurchaseGetPrice(PurchaseOrderRequest purchaseOrderRequest) {
         boolean isOrderValid = (verifyOrderIsValid(purchaseOrderRequest.getProducts()));
         if (isOrderValid) {
@@ -105,15 +132,24 @@ public class PurchaseOrderService implements IPurchaseOrderService {
         }
     }
 
-    public PurchaseOrderModel getById(Long purchaseId) {
+    public PurchaseOrderModel getById(Long purchaseId) throws PurchaseOrderByIdNotFoundException {
         return purchaseOrderRepository.findById(purchaseId).orElseThrow(() -> new PurchaseOrderByIdNotFoundException(purchaseId));
     }
 
+    /**
+     * This method get all Purchase Order
+     * @return List of PurchaseOrder entity
+     */
     @Override
     public List<PurchaseOrderModel> getAll() {
-        return null;
+        return purchaseOrderRepository.findAll();
     }
 
+    /**
+     * This method update status from PurchaseOrder related
+     * @param id Long related an purchaseOrder
+     * @throws Exception
+     */
     @Override
     public void updateStatus(Long id) throws Exception {
         List<OrderProductsModel> orderProductsList = orderProductService.getByPurchaseId(id);
