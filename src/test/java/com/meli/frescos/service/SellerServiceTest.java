@@ -1,5 +1,6 @@
 package com.meli.frescos.service;
 
+import com.meli.frescos.exception.CpfDuplicateException;
 import com.meli.frescos.exception.SellerByIdNotFoundException;
 import com.meli.frescos.model.SellerModel;
 import com.meli.frescos.repository.SellerRepository;
@@ -11,11 +12,14 @@ import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
 class SellerServiceTest {
@@ -44,6 +48,19 @@ class SellerServiceTest {
         assertEquals(cpf, newSeller.getCpf());
         assertEquals(rating, newSeller.getRating());
 
+    }
+
+    @Test
+    @DisplayName("Throw exception when CPF already exists.")
+    void save_throwsCpfDuplicateException_whenCreatingANewSeller() {
+        SellerModel dumbSeller = new SellerModel(1L, "", "", Double.valueOf(0.0));
+
+        BDDMockito.when(repository.findByCpf(ArgumentMatchers.anyString()))
+                .thenReturn(Optional.of(dumbSeller));
+
+        assertThrows(CpfDuplicateException.class, () -> {
+            service.save(dumbSeller);
+        });
     }
 
     @Test
@@ -86,6 +103,7 @@ class SellerServiceTest {
             SellerModel sellerModel = service.getById(ArgumentMatchers.anyLong());
         });
     }
+
 
     @Test
     @DisplayName("Return updated Seller")
