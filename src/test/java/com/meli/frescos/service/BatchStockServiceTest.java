@@ -4,6 +4,7 @@ import com.meli.frescos.exception.BatchStockByIdNotFoundException;
 import com.meli.frescos.exception.BatchStockFilterOrderInvalidException;
 import com.meli.frescos.model.*;
 import com.meli.frescos.repository.BatchStockRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,22 +41,31 @@ public class BatchStockServiceTest {
     private ProductModel product;
     private WarehouseModel warehouse;
     private SectionModel section;
+    private List<BatchStockModel> batchStockList = new ArrayList<>();
+    private BatchStockModel batchStock;
 
-    void createAttributesBatchStock(){
+    @BeforeEach
+    void setup() {
+        batchStockList.clear();
+        createBatchStock();
+    }
+
+    void createAttributesBatchStock() {
         seller = new SellerModel(1L, "Tadeu", "123456789-00", 5.0);
         product = new ProductModel(1L, "Melão", "Melão", new BigDecimal(4.5), CategoryEnum.FRESH, 10.0, 10.0, LocalDate.now(), seller);
         warehouse = new WarehouseModel(1L, "São Paulo", "SP", "São Paulo", "Rua A", "11111-111");
         section = new SectionModel(1L, "Sessão Frutas", CategoryEnum.FRESH, 200.0, 25.0, warehouse);
     }
 
+    void createBatchStock() {
+        createAttributesBatchStock();
+        batchStock = new BatchStockModel(1L, "ABC123", 50, LocalDate.of(2022,10,10), LocalDateTime.of(2022,10,10,15,00), LocalDate.of(2023,01,15), product, section);
+        batchStockList.add(batchStock);
+    }
+
     @Test
     @DisplayName("Return all storage BatchStock")
     void getAll_returnAllBatchStock_whenSuccess() {
-        createAttributesBatchStock();
-        BatchStockModel batchStock = new BatchStockModel(1L, "ABC123", 50, LocalDate.of(2022,10,10), LocalDateTime.of(2022,10,10,15,00), LocalDate.of(2023,01,15), product, section);
-        List<BatchStockModel> batchStockList = new ArrayList<>();
-        batchStockList.add(batchStock);
-
         BDDMockito.when(batchStockRepository.findAll())
                 .thenReturn(batchStockList);
 
@@ -68,9 +78,6 @@ public class BatchStockServiceTest {
     @Test
     @DisplayName("Return a BatchStock by id")
     void getById_returnBatchStock_whenSucess() {
-        createAttributesBatchStock();
-        BatchStockModel batchStock = new BatchStockModel(1L, "ABC123", 50, LocalDate.of(2022,10,10), LocalDateTime.of(2022,10,10,15,00), LocalDate.of(2023,01,15), product, section);
-
         BDDMockito.when(batchStockRepository.findById(ArgumentMatchers.anyLong()))
                 .thenReturn(Optional.of(batchStock));
 
@@ -91,9 +98,6 @@ public class BatchStockServiceTest {
     @Test
     @DisplayName("Create a new BatchStock successfully")
     void saveBatchStock_returnsCreatedBatchStock_whenSuccess() throws Exception {
-        createAttributesBatchStock();
-        BatchStockModel batchStock = new BatchStockModel(1L, "ABC123", 50, LocalDate.of(2022,10,10), LocalDateTime.of(2022,10,10,15,00), LocalDate.of(2023,01,15), product, section);
-
         BDDMockito.when(sectionService.getById(ArgumentMatchers.anyLong()))
                 .thenReturn(section);
         BDDMockito.when(batchStockRepository.save(ArgumentMatchers.any(BatchStockModel.class)))
@@ -107,11 +111,6 @@ public class BatchStockServiceTest {
     @Test
     @DisplayName("Return a list batch stock by product ID")
     void getByProductId_returnListBatchStock_whenSucess() {
-        createAttributesBatchStock();
-        BatchStockModel batchStock = new BatchStockModel(1L, "ABC123", 50, LocalDate.of(2022,10,10), LocalDateTime.of(2022,10,10,15,00), LocalDate.of(2023,01,15), product, section);
-        List<BatchStockModel> batchStockList = new ArrayList<>();
-        batchStockList.add(batchStock);
-
         BDDMockito.when(productService.getById(ArgumentMatchers.anyLong()))
                 .thenReturn(product);
         BDDMockito.when(batchStockRepository.findByProduct(ArgumentMatchers.any(ProductModel.class)))
@@ -126,11 +125,6 @@ public class BatchStockServiceTest {
     @Test
     @DisplayName("Return a list batch stock by section ID")
     void getBySectionId_returnListBatchStock_whenSuccess() throws Exception {
-        createAttributesBatchStock();
-        BatchStockModel batchStock = new BatchStockModel(1L, "ABC123", 50, LocalDate.of(2022,10,10), LocalDateTime.of(2022,10,10,15,00), LocalDate.of(2023,01,15), product, section);
-        List<BatchStockModel> batchStockList = new ArrayList<>();
-        batchStockList.add(batchStock);
-
         BDDMockito.when(sectionService.getById(ArgumentMatchers.anyLong()))
                 .thenReturn(section);
         BDDMockito.when(batchStockRepository.findBySection(ArgumentMatchers.any(SectionModel.class)))
@@ -166,8 +160,6 @@ public class BatchStockServiceTest {
     @Test
     @DisplayName("Return a list batch stock empty by section ID and due date expired")
     void getBySectionIdAndDueDate_returnListEmpty_whenDueDateIsExpired() throws Exception {
-        createAttributesBatchStock();
-
         BDDMockito.when(sectionService.getById(ArgumentMatchers.anyLong()))
                 .thenReturn(section);
         BDDMockito.when(batchStockRepository.findBySectionAndDueDateBetween(ArgumentMatchers.any(SectionModel.class), ArgumentMatchers.any(), ArgumentMatchers.any()))
