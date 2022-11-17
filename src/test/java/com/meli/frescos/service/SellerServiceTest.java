@@ -149,7 +149,7 @@ class SellerServiceTest {
         BDDMockito.when(repository.findByCpf(ArgumentMatchers.anyString()))
                 .thenReturn(Optional.of(seller));
 
-        Optional<SellerModel> sellerTest = service.findByCpf(cpf);
+        Optional<SellerModel> sellerTest = service.getByCpf(cpf);
 
         assertThat(sellerTest).isNotNull();
         assertThat(sellerTest.get()).isEqualTo(seller);
