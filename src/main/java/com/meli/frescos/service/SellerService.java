@@ -5,12 +5,13 @@ import com.meli.frescos.exception.SellerByIdNotFoundException;
 import com.meli.frescos.model.SellerModel;
 import com.meli.frescos.repository.SellerRepository;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
 /**
- *  This class contains all Seller related functions
- *  Using @Service from spring
+ * This class contains all Seller related functions
+ * Using @Service from spring
  */
 @Service
 public class SellerService implements ISellerService {
@@ -23,18 +24,18 @@ public class SellerService implements ISellerService {
 
     /**
      * Create a new Seller given model
+     *
      * @param sellerModel New Seller to create
      * @return The created Seller
      */
     @Override
     public SellerModel save(SellerModel sellerModel) {
-        if(cpfDuplicate(sellerModel.getCpf()))
-            throw new CpfDuplicateException(sellerModel.getCpf());
-        return sellerRepository.save(sellerModel);
+        return !cpfAlreadyExists(sellerModel.getCpf()) ? sellerRepository.save(sellerModel) : null;
     }
 
     /**
      * Returns all stored Seller
+     *
      * @return List of all Seller
      */
     @Override
@@ -44,6 +45,7 @@ public class SellerService implements ISellerService {
 
     /**
      * Returns a stored Seller given ID
+     *
      * @param id
      * @return The stored Seller
      * @throws SellerByIdNotFoundException Throws in case Seller does not exists
@@ -55,6 +57,7 @@ public class SellerService implements ISellerService {
 
     /**
      * Updates a stored Seller
+     *
      * @param sellerModel Used as reference to update stored Seller. Must contains ID with existent Seller
      * @throws SellerByIdNotFoundException Throws in case Seller does not exists
      */
@@ -67,6 +70,7 @@ public class SellerService implements ISellerService {
 
     /**
      * Deletes a Seller given ID
+     *
      * @param id Existent Seller ID
      */
     @Override
@@ -76,21 +80,25 @@ public class SellerService implements ISellerService {
 
     /**
      * Returns a stored Seller given cpf
+     *
      * @param cpf
      * @return The stored Seller
      */
     @Override
-    public Optional<SellerModel> findByCpf(String cpf) {
+    public Optional<SellerModel> getByCpf(String cpf) {
         return sellerRepository.findByCpf(cpf);
     }
 
     /**
-     * Return true when cpf already exists
+     * Return false when cpf does not exist
+     *
      * @param cpf
      * @return boolean
      */
-    public boolean cpfDuplicate(String cpf){
-        Optional<SellerModel> seller = findByCpf(cpf);
-        return seller.isPresent();
+    private boolean cpfAlreadyExists(String cpf) {
+        getByCpf(cpf).ifPresent(n -> {
+            throw new CpfDuplicateException(cpf);
+        });
+        return false;
     }
 }

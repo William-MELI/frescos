@@ -1,9 +1,11 @@
 package com.meli.frescos.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.meli.frescos.controller.dto.SectionRequest;
 import com.meli.frescos.controller.dto.WarehouseRequest;
+import com.meli.frescos.model.CategoryEnum;
 import com.meli.frescos.model.WarehouseModel;
-import com.meli.frescos.repository.IWarehouseRepository;
+import com.meli.frescos.service.ISectionService;
 import com.meli.frescos.service.IWarehouseService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,12 +29,11 @@ class WarehouseControllerIT {
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
-
-    @Autowired
-    private IWarehouseRepository warehouseRepository;
-
     @Autowired
     private IWarehouseService warehouseService;
+
+    @Autowired
+    private ISectionService sectionService;
 
 
     @Test
@@ -62,7 +63,7 @@ class WarehouseControllerIT {
     }
 
     @Test
-    @DisplayName("Test Warehouse creation - POST Endpoint")
+    @DisplayName("Test Warehouse creation with wrong parameters - POST Endpoint")
     void create_throwException_whenPassWrongParameters() throws Exception {
         String city = "";
         String district = "";
@@ -87,7 +88,7 @@ class WarehouseControllerIT {
     }
 
     @Test
-    @DisplayName("Test Get Warehouse by ID - GET Endpoint")
+    @DisplayName("Test Get Warehouse by ID successfully - GET Endpoint")
     void getById_returnsWarehouse_whenIdIsAvailable() throws Exception {
         String city = "Tramandaí";
         String district = "Zona Nova";
@@ -124,6 +125,7 @@ class WarehouseControllerIT {
     }
 
     @Test
+    @DisplayName("Test return list of Warehouse successfully - GET Endpoint")
     void getAll_returnListOfWarehouse_whenSuccess() throws Exception {
         String city = "Tramandaí";
         String district = "Zona Nova";
@@ -150,6 +152,7 @@ class WarehouseControllerIT {
     }
 
     @Test
+    @DisplayName("Test Delete Warehouse successfully - DELETE Endpoint")
     void delete_returnOkStatus_whenSuccess() throws Exception {
         String city = "Tramandaí";
         String district = "Zona Nova";
@@ -175,5 +178,51 @@ class WarehouseControllerIT {
         response.andExpect(status().isOk());
     }
 
+    @Test
+    @DisplayName("Test Delete Warehouse associated with Section - DELETE Endpoint")
+    void delete_throwUsedPrimaryKeyConstraintException_whenWarehouseIdIsUsedBySection() throws Exception {
+        CategoryEnum sectionCategory = CategoryEnum.FRESH;
+        String sectionDescription = "Test";
+        double sectionTemp = 10.0;
+        double sectionTotalSize = 10000;
+        Long sectionWarehouseId;
+
+        String city = "Tramandaí";
+        String district = "Zona Nova";
+        String state = "Rio Grande do Sul";
+        String postalCode = "99999999";
+        String street = "Avenida Emancipacao";
+
+        WarehouseRequest newWarehouseRequest = WarehouseRequest
+                .builder()
+                .city(city)
+                .street(street)
+                .state(state)
+                .postalCode(postalCode)
+                .district(district)
+                .build();
+
+        WarehouseModel warehouse = warehouseService.save(newWarehouseRequest.toModel());
+
+        sectionWarehouseId = warehouse.getId();
+
+        SectionRequest newSectionRequest = SectionRequest
+                .builder()
+                .description(sectionDescription)
+                .temperature(sectionTemp)
+                .totalSize(sectionTotalSize)
+                .warehouse(sectionWarehouseId)
+                .category(sectionCategory)
+                .build();
+
+        sectionService.save(newSectionRequest);
+
+        ResultActions response = mockMvc.perform(
+                delete("/warehouse/{id}", (warehouse.getId()))
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        response.andExpect(status().isBadRequest());
+    }
 
 }

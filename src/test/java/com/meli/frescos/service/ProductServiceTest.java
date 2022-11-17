@@ -141,13 +141,9 @@ class ProductServiceTest {
     @Test
     @DisplayName("Return list null when category is not found")
     void getByCategory_returnEmpty_whenNotFound() {
+        List<ProductModel> productTest = service.getByCategory("XX");
 
-        BDDMockito.when(repository.findByCategory(ArgumentMatchers.any()))
-                .thenReturn(null);
-
-        List<ProductModel> productTest = service.getByCategory("RF");
-
-        assertThat(productTest).isNull();
+        assertThat(productTest).isEqualTo(new ArrayList<ProductModel>());
     }
 
 }

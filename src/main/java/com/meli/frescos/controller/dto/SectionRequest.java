@@ -1,6 +1,8 @@
 package com.meli.frescos.controller.dto;
 
 import com.meli.frescos.model.CategoryEnum;
+import com.meli.frescos.model.SectionModel;
+import com.meli.frescos.model.WarehouseModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -51,4 +53,5 @@ public class SectionRequest {
     @NotNull(message = "O id do Armazém não pode estar branco")
     @Positive(message = "O id do Armazém deve ser um valor positivo")
     private Long warehouse;
+
 }

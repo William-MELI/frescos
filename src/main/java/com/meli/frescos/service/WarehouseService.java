@@ -4,7 +4,7 @@ import com.meli.frescos.exception.UsedPrimaryKeyConstraintException;
 import com.meli.frescos.exception.WarehouseNotFoundException;
 import com.meli.frescos.model.SectionModel;
 import com.meli.frescos.model.WarehouseModel;
-import com.meli.frescos.repository.IWarehouseRepository;
+import com.meli.frescos.repository.WarehouseRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,9 +13,9 @@ import java.util.Optional;
 @Service
 public class WarehouseService implements IWarehouseService {
 
-    private final IWarehouseRepository warehouseRepository;
+    private final WarehouseRepository warehouseRepository;
 
-    public WarehouseService(IWarehouseRepository warehouseRepository) {
+    public WarehouseService(WarehouseRepository warehouseRepository) {
         this.warehouseRepository = warehouseRepository;
     }
 
@@ -54,24 +54,6 @@ public class WarehouseService implements IWarehouseService {
      */
     public List<WarehouseModel> getAll() {
         return this.warehouseRepository.findAll();
-    }
-
-    /**
-     * Updates a stored Warehouse
-     *
-     * @param warehouseUpdate Used as reference to update stored Warehouse. Must contain ID with existent Warehouse
-     * @throws WarehouseNotFoundException Throws in case Warehouse does not exist
-     */
-    public void update(WarehouseModel warehouseUpdate) throws WarehouseNotFoundException {
-        Long id = warehouseUpdate.getId();
-        Optional<WarehouseModel> warehouseOpt = this.warehouseRepository.findById(id);
-        if (warehouseOpt.isEmpty()) {
-            String msg = String.format("Warehouse com ID %d não encontrado", id);
-            throw new WarehouseNotFoundException(msg);
-        }
-
-        this.warehouseRepository.save(warehouseUpdate);
-
     }
 
     /**

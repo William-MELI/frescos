@@ -3,7 +3,7 @@ package com.meli.frescos.service;
 import com.meli.frescos.controller.dto.WarehouseRequest;
 import com.meli.frescos.exception.WarehouseNotFoundException;
 import com.meli.frescos.model.WarehouseModel;
-import com.meli.frescos.repository.IWarehouseRepository;
+import com.meli.frescos.repository.WarehouseRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,7 +29,7 @@ class WarehouseServiceTest {
     WarehouseService warehouseService;
 
     @Mock
-    IWarehouseRepository warehouseRepository;
+    WarehouseRepository warehouseRepository;
 
     private Validator validator;
 
@@ -171,7 +171,6 @@ class WarehouseServiceTest {
 
         WarehouseModel newWarehouseEntity2 = newWarehouseRequest2.toModel();
 
-
         warehouseService.save(newWarehouseEntity1);
         warehouseService.save(newWarehouseEntity2);
 
@@ -187,5 +186,6 @@ class WarehouseServiceTest {
 
         assertEquals(2, responseGetAll.size());
     }
+
 
 }

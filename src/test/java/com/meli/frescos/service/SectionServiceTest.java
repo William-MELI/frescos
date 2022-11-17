@@ -4,7 +4,7 @@ import com.meli.frescos.controller.dto.SectionRequest;
 import com.meli.frescos.model.CategoryEnum;
 import com.meli.frescos.model.SectionModel;
 import com.meli.frescos.model.WarehouseModel;
-import com.meli.frescos.repository.IWarehouseRepository;
+import com.meli.frescos.repository.WarehouseRepository;
 import com.meli.frescos.repository.SectionRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -38,7 +38,7 @@ public class SectionServiceTest {
     SectionRepository sectionRepository;
 
     @Mock
-    IWarehouseRepository warehouseRepository;
+    WarehouseRepository warehouseRepository;
 
     private Validator validator;
 
@@ -141,6 +141,26 @@ public class SectionServiceTest {
         assertEquals(totalSize, responseSection.getTotalSize());
         assertEquals(temperature, responseSection.getTemperature());
         assertEquals(warehouse_id, responseSection.getWarehouse().getId());
+    }
+
+    @Test
+    @DisplayName("Returns a Section by Category ")
+    void getByCategory_returnSection_WhenSuccess() {
+        List<SectionModel> sectionModelList = new ArrayList<>();
+
+        WarehouseModel warehouse =  new WarehouseModel("blumenau", "Santa Catarina", "15 de Maio", "5662sdww", "aaaaa");
+
+        sectionModelList.add(new SectionModel("Banana",CategoryEnum.FROZEN, 6.8, 5.5, warehouse ));
+        sectionModelList.add(new SectionModel("peixe", CategoryEnum.FROZEN, 10.5, 0.0, warehouse));
+
+        Mockito.when(sectionRepository.findByCategory(CategoryEnum.FROZEN))
+                .thenReturn(sectionModelList);
+
+        List<SectionModel> responseSection = sectionService.getByCategory(CategoryEnum.FROZEN);
+
+        assertEquals(sectionModelList, responseSection);
+        assertEquals(2, responseSection.size());
+
     }
 
     @Test
