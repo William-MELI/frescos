@@ -47,9 +47,9 @@ public class SectionControllerIT {
     @Autowired
     private SectionRepository sectionRepo;
 
-    private void newWarehouseRecord() {
+    private WarehouseModel newWarehouseRecord() {
         WarehouseModel newWarehouse = new WarehouseModel("Tramandaí", "Rio Grande do Sul", "Avenida Emancipacao", "99999999", "Zona Sul");
-        warehouseService.save(newWarehouse);
+        return warehouseService.save(newWarehouse);
     }
 
     @BeforeEach
@@ -59,21 +59,45 @@ public class SectionControllerIT {
     }
 
     @Test
-    @DisplayName("Test Get Section by ID - GET Endpoint")
-    void getById_returnsSection_whenIdIsAvailable() throws Exception {
-        newWarehouseRecord();
+    @DisplayName("Test Section Successfull Creation - POST Endpoint")
+    void create_returnsCreatedStatus_whenSuccess()  throws Exception {
+        WarehouseModel warehouse = newWarehouseRecord();
         String description = "marca";
         CategoryEnum category = CategoryEnum.FRESH;
         Double totalSize = 40.0;
         Double temperature = 4.8;
-        Long warehouse = 1L;
 
         SectionRequest sectionRequest = SectionRequest.builder()
                 .description(description)
                 .category(category)
                 .totalSize(totalSize)
                 .temperature(temperature)
-                .warehouse(warehouse)
+                .warehouse(warehouse.getId())
+                .build();
+
+        ResultActions response = mockMvc.perform(
+                post("/section")
+                        .content(objectMapper.writeValueAsString(sectionRequest))
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+        response.andExpect(status().isCreated());
+    }
+
+    @Test
+    @DisplayName("Test Get Section by ID - GET Endpoint")
+    void getById_returnsSection_whenIdIsAvailable() throws Exception {
+        WarehouseModel warehouse = newWarehouseRecord();
+        String description = "marca";
+        CategoryEnum category = CategoryEnum.FRESH;
+        Double totalSize = 40.0;
+        Double temperature = 4.8;
+
+        SectionRequest sectionRequest = SectionRequest.builder()
+                .description(description)
+                .category(category)
+                .totalSize(totalSize)
+                .temperature(temperature)
+                .warehouse(warehouse.getId())
                 .build();
 
         SectionModel section = sectionService.save(sectionRequest);
@@ -82,6 +106,36 @@ public class SectionControllerIT {
                 get("/section/{id}", String.valueOf(section.getId()))
                         .contentType(MediaType.APPLICATION_JSON)
         );
+        response.andExpect(status().isOk());
+    }
+
+    @Test
+    void getAll_returnListOfSection_whenSuccess() throws Exception {
+        WarehouseModel warehouse = newWarehouseRecord();
+        SectionRequest newSectionRequestUm  = SectionRequest.builder()
+                .description("marca")
+                .category(CategoryEnum.FROZEN)
+                .totalSize(40.0)
+                .temperature(4.8)
+                .warehouse(warehouse.getId())
+                .build();
+
+        SectionRequest newSectionRequestDois  = SectionRequest.builder()
+                .description("Produtos frescos")
+                .category(CategoryEnum.FRESH)
+                .totalSize(50.2)
+                .temperature(12.5)
+                .warehouse(warehouse.getId())
+                .build();
+
+        sectionService.save(newSectionRequestUm);
+        sectionService.save(newSectionRequestDois);
+
+        ResultActions response = mockMvc.perform(
+                get("/section")
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+
         response.andExpect(status().isOk());
     }
 
@@ -96,62 +150,5 @@ public class SectionControllerIT {
                         result -> assertTrue(
                                 result.getResolvedException() instanceof SectionByIdNotFoundException)
                 );
-    }
-
-    @Test
-    void getAll_returnListOfSection_whenSuccess() throws Exception {
-        newWarehouseRecord();
-        SectionRequest newSectionRequestUm  = SectionRequest.builder()
-                .description("marca")
-                .category(CategoryEnum.FROZEN)
-                .totalSize(40.0)
-                .temperature(4.8)
-                .warehouse(1L)
-                .build();
-
-        SectionRequest newSectionRequestDois  = SectionRequest.builder()
-                .description("Produtos frescos")
-                .category(CategoryEnum.FRESH)
-                .totalSize(50.2)
-                .temperature(12.5)
-                .warehouse(1L)
-                .build();
-
-        sectionService.save(newSectionRequestUm);
-        sectionService.save(newSectionRequestDois);
-
-        ResultActions response = mockMvc.perform(
-                get("/section")
-                        .contentType(MediaType.APPLICATION_JSON)
-        );
-
-        response.andExpect(status().isOk());
-    }
-
-
-    @Test
-    @DisplayName("Test Section Successfull Creation - POST Endpoint")
-    void create_returnsCreatedStatus_whenSuccess()  throws Exception {
-        newWarehouseRecord();
-        String description = "marca";
-        CategoryEnum category = CategoryEnum.FRESH;
-        Double totalSize = 40.0;
-        Double temperature = 4.8;
-        Long warehouse = 1L;
-
-        SectionRequest sectionRequest = SectionRequest.builder()
-                .description(description)
-                .category(category)
-                .totalSize(totalSize)
-                .temperature(temperature)
-                .warehouse(warehouse)
-                .build();
-
-        ResultActions response = mockMvc.perform(
-                post("/section")
-                        .content(objectMapper.writeValueAsString(sectionRequest))
-                        .contentType(MediaType.APPLICATION_JSON)
-        );
-        response.andExpect(status().isCreated());
     }
 }
