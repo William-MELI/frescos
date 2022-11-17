@@ -4,7 +4,7 @@ import com.meli.frescos.controller.dto.SectionRequest;
 import com.meli.frescos.model.CategoryEnum;
 import com.meli.frescos.model.SectionModel;
 import com.meli.frescos.model.WarehouseModel;
-import com.meli.frescos.repository.IWarehouseRepository;
+import com.meli.frescos.repository.WarehouseRepository;
 import com.meli.frescos.repository.SectionRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -38,7 +38,7 @@ public class SectionServiceTest {
     SectionRepository sectionRepository;
 
     @Mock
-    IWarehouseRepository warehouseRepository;
+    WarehouseRepository warehouseRepository;
 
     private Validator validator;
 

@@ -6,7 +6,7 @@ import com.meli.frescos.exception.SectionByIdNotFoundException;
 import com.meli.frescos.model.CategoryEnum;
 import com.meli.frescos.model.SectionModel;
 import com.meli.frescos.model.WarehouseModel;
-import com.meli.frescos.repository.IWarehouseRepository;
+import com.meli.frescos.repository.WarehouseRepository;
 import com.meli.frescos.repository.SectionRepository;
 import com.meli.frescos.service.ISectionService;
 import com.meli.frescos.service.IWarehouseService;
@@ -39,7 +39,7 @@ public class SectionControllerIT {
     private IWarehouseService warehouseService;
 
     @Autowired
-    private IWarehouseRepository warehouseRepo;
+    private WarehouseRepository warehouseRepo;
 
     @Autowired
     private ISectionService sectionService;

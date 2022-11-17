@@ -5,7 +5,7 @@ import com.meli.frescos.exception.SectionByIdNotFoundException;
 import com.meli.frescos.model.CategoryEnum;
 import com.meli.frescos.model.SectionModel;
 import com.meli.frescos.model.WarehouseModel;
-import com.meli.frescos.repository.IWarehouseRepository;
+import com.meli.frescos.repository.WarehouseRepository;
 import com.meli.frescos.repository.SectionRepository;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +21,9 @@ public class SectionService implements ISectionService {
 
     private final SectionRepository sectionRepository;
 
-    private final IWarehouseRepository warehouseRepository;
+    private final WarehouseRepository warehouseRepository;
 
-    public SectionService(SectionRepository sectionRepository, IWarehouseRepository warehouseRepository) {
+    public SectionService(SectionRepository sectionRepository, WarehouseRepository warehouseRepository) {
         this.sectionRepository = sectionRepository;
         this.warehouseRepository = warehouseRepository;
     }

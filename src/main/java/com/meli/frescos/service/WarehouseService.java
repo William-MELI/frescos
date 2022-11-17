@@ -4,7 +4,7 @@ import com.meli.frescos.exception.UsedPrimaryKeyConstraintException;
 import com.meli.frescos.exception.WarehouseNotFoundException;
 import com.meli.frescos.model.SectionModel;
 import com.meli.frescos.model.WarehouseModel;
-import com.meli.frescos.repository.IWarehouseRepository;
+import com.meli.frescos.repository.WarehouseRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,9 +13,9 @@ import java.util.Optional;
 @Service
 public class WarehouseService implements IWarehouseService {
 
-    private final IWarehouseRepository warehouseRepository;
+    private final WarehouseRepository warehouseRepository;
 
-    public WarehouseService(IWarehouseRepository warehouseRepository) {
+    public WarehouseService(WarehouseRepository warehouseRepository) {
         this.warehouseRepository = warehouseRepository;
     }
 
