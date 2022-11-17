@@ -17,6 +17,5 @@ public interface ISellerService {
 
     void deleteById(Long id);
 
-
     Optional<SellerModel> getByCpf(String cpf);
 }
