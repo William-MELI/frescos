@@ -171,7 +171,6 @@ class WarehouseServiceTest {
 
         WarehouseModel newWarehouseEntity2 = newWarehouseRequest2.toModel();
 
-
         warehouseService.save(newWarehouseEntity1);
         warehouseService.save(newWarehouseEntity2);
 
@@ -187,5 +186,6 @@ class WarehouseServiceTest {
 
         assertEquals(2, responseGetAll.size());
     }
+
 
 }
