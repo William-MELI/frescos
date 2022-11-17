@@ -5,7 +5,6 @@ import com.meli.frescos.controller.dto.SectionRequest;
 import com.meli.frescos.controller.dto.WarehouseRequest;
 import com.meli.frescos.model.CategoryEnum;
 import com.meli.frescos.model.WarehouseModel;
-import com.meli.frescos.repository.IWarehouseRepository;
 import com.meli.frescos.service.ISectionService;
 import com.meli.frescos.service.IWarehouseService;
 import org.junit.jupiter.api.DisplayName;
