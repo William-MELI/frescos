@@ -180,4 +180,15 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
                         .build(),
                 HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(SectionByIdNotFoundException.class)
+    public ResponseEntity<ExceptionDetails> handlerSectionByIdNotFoundException(SectionByIdNotFoundException ex) {
+        return new ResponseEntity<>(
+                ExceptionDetails.builder()
+                        .title("Section não encontrada")
+                        .message(ex.getMessage())
+                        .timestamp(LocalDateTime.now())
+                        .build(),
+                HttpStatus.NOT_FOUND);
+    }
 }

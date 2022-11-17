@@ -10,7 +10,7 @@ public interface ISectionService {
 
     List<SectionModel> getAll();
 
-    SectionModel save(SectionRequest sectionRequest);
+    SectionModel save(SectionRequest sectionRequest) throws Exception;
 
     SectionModel getById(Long id);
 
