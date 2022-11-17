@@ -57,24 +57,6 @@ public class WarehouseService implements IWarehouseService {
     }
 
     /**
-     * Updates a stored Warehouse
-     *
-     * @param warehouseUpdate Used as reference to update stored Warehouse. Must contain ID with existent Warehouse
-     * @throws WarehouseNotFoundException Throws in case Warehouse does not exist
-     */
-    public void update(WarehouseModel warehouseUpdate) throws WarehouseNotFoundException {
-        Long id = warehouseUpdate.getId();
-        Optional<WarehouseModel> warehouseOpt = this.warehouseRepository.findById(id);
-        if (warehouseOpt.isEmpty()) {
-            String msg = String.format("Warehouse com ID %d não encontrado", id);
-            throw new WarehouseNotFoundException(msg);
-        }
-
-        this.warehouseRepository.save(warehouseUpdate);
-
-    }
-
-    /**
      * Deletes a Warehouse given ID
      *
      * @param id Existent Warehouse ID

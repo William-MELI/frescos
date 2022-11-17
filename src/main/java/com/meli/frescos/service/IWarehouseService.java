@@ -14,7 +14,5 @@ public interface IWarehouseService {
 
     List<WarehouseModel> getAll();
 
-    void update(WarehouseModel warehouse) throws WarehouseNotFoundException;
-
     void delete(Long id) throws UsedPrimaryKeyConstraintException;
 }

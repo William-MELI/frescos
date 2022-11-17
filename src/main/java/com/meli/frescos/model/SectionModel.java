@@ -50,7 +50,7 @@ public class SectionModel {
     private Double temperature;
     /**
      * Warehouse reference.
-            * It is an N-1 relationship
+     * It is an N-1 relationship
      */
     @ManyToOne
     @JoinColumn(name = "warehouse_id")
