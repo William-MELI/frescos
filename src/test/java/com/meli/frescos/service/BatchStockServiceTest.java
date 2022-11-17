@@ -1,5 +1,6 @@
 package com.meli.frescos.service;
 
+import com.meli.frescos.exception.BatchStockByIdNotFoundException;
 import com.meli.frescos.exception.BatchStockFilterOrderInvalidException;
 import com.meli.frescos.model.*;
 import com.meli.frescos.repository.BatchStockRepository;
@@ -16,6 +17,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -31,6 +33,9 @@ public class BatchStockServiceTest {
     @Mock
     IProductService productService;
 
+    @Mock
+    ISectionService sectionService;
+
     private SellerModel seller;
     private ProductModel product;
     private WarehouseModel warehouse;
@@ -44,20 +49,64 @@ public class BatchStockServiceTest {
     }
 
     @Test
-    void getAll() {
+    @DisplayName("Return all storage BatchStock")
+    void getAll_returnAllBatchStock_whenSuccess() {
+        createAttributesBatchStock();
+        BatchStockModel batchStock = new BatchStockModel(1L, "ABC123", 50, LocalDate.of(2022,10,10), LocalDateTime.of(2022,10,10,15,00), LocalDate.of(2023,01,15), product, section);
+        List<BatchStockModel> batchStockList = new ArrayList<>();
+        batchStockList.add(batchStock);
+
+        BDDMockito.when(batchStockRepository.findAll())
+                .thenReturn(batchStockList);
+
+        List<BatchStockModel> batchStockTest = batchStockService.getAll();
+
+        assertThat(batchStockTest).isNotNull();
+        assertThat(batchStockTest).isEqualTo(batchStockList);
     }
 
     @Test
-    void getById() {
+    @DisplayName("Return a BatchStock by id")
+    void getById_returnBatchStock_whenSucess() {
+        createAttributesBatchStock();
+        BatchStockModel batchStock = new BatchStockModel(1L, "ABC123", 50, LocalDate.of(2022,10,10), LocalDateTime.of(2022,10,10,15,00), LocalDate.of(2023,01,15), product, section);
+
+        BDDMockito.when(batchStockRepository.findById(ArgumentMatchers.anyLong()))
+                .thenReturn(Optional.of(batchStock));
+
+        BatchStockModel batchStockTest = batchStockService.getById(1L);
+
+        assertThat(batchStockTest).isNotNull();
+        assertThat(batchStockTest.getId()).isEqualTo(batchStock.getId());
     }
 
     @Test
-    void save() {
+    @DisplayName("Throw exception when ID is not found.")
+    void getById_returnBatchStockByIdNotFoundException_whenInvalidId() {
+        assertThrows(BatchStockByIdNotFoundException.class, () -> {
+            BatchStockModel batchStock = batchStockService.getById(ArgumentMatchers.anyLong());
+        });
     }
 
     @Test
-    @DisplayName("Return a list batch stock by productId")
-    void getByProductId_returnProduct_whenSucess() {
+    @DisplayName("Create a new BatchStock successfully")
+    void saveBatchStock_returnsCreatedBatchStock_whenSuccess() throws Exception {
+        createAttributesBatchStock();
+        BatchStockModel batchStock = new BatchStockModel(1L, "ABC123", 50, LocalDate.of(2022,10,10), LocalDateTime.of(2022,10,10,15,00), LocalDate.of(2023,01,15), product, section);
+
+        BDDMockito.when(sectionService.getById(ArgumentMatchers.anyLong()))
+                .thenReturn(section);
+        BDDMockito.when(batchStockRepository.save(ArgumentMatchers.any(BatchStockModel.class)))
+                .thenReturn(batchStock);
+
+        BatchStockModel batchStockTest = batchStockService.save(batchStock);
+
+        assertThat(batchStockTest.getId()).isEqualTo(batchStock.getId());
+    }
+
+    @Test
+    @DisplayName("Return a list batch stock by product ID")
+    void getByProductId_returnListBatchStock_whenSucess() {
         createAttributesBatchStock();
         BatchStockModel batchStock = new BatchStockModel(1L, "ABC123", 50, LocalDate.of(2022,10,10), LocalDateTime.of(2022,10,10,15,00), LocalDate.of(2023,01,15), product, section);
         List<BatchStockModel> batchStockList = new ArrayList<>();
@@ -75,15 +124,191 @@ public class BatchStockServiceTest {
     }
 
     @Test
-    void findBySectionId() {
+    @DisplayName("Return a list batch stock by section ID")
+    void getBySectionId_returnListBatchStock_whenSuccess() throws Exception {
+        createAttributesBatchStock();
+        BatchStockModel batchStock = new BatchStockModel(1L, "ABC123", 50, LocalDate.of(2022,10,10), LocalDateTime.of(2022,10,10,15,00), LocalDate.of(2023,01,15), product, section);
+        List<BatchStockModel> batchStockList = new ArrayList<>();
+        batchStockList.add(batchStock);
+
+        BDDMockito.when(sectionService.getById(ArgumentMatchers.anyLong()))
+                .thenReturn(section);
+        BDDMockito.when(batchStockRepository.findBySection(ArgumentMatchers.any(SectionModel.class)))
+                .thenReturn(batchStockList);
+
+        List<BatchStockModel> batchStockTest = batchStockService.getBySectionId(1L);
+
+        assertThat(batchStockTest).isNotNull();
+        assertThat(batchStockTest).isEqualTo(batchStockList);
     }
 
     @Test
-    void getTotalBatchStockQuantity() {
+    @DisplayName("Return a list batch stock by section ID and due date")
+    void getBySectionIdAndDueDate_returnListBatchStock_whenDueDateNotExpired() throws Exception {
+        createAttributesBatchStock();
+        int plusDays = 10;
+        LocalDate dueDate = LocalDate.now().plusDays(plusDays);
+        BatchStockModel batchStock = new BatchStockModel(1L, "ABC123", 50, LocalDate.of(2022,10,10), LocalDateTime.of(2022,10,10,15,00), dueDate, product, section);
+        List<BatchStockModel> batchStockList = new ArrayList<>();
+        batchStockList.add(batchStock);
+
+        BDDMockito.when(sectionService.getById(ArgumentMatchers.anyLong()))
+                .thenReturn(section);
+        BDDMockito.when(batchStockRepository.findBySectionAndDueDateBetween(ArgumentMatchers.any(SectionModel.class), ArgumentMatchers.any(), ArgumentMatchers.any()))
+                .thenReturn(batchStockList);
+
+        List<BatchStockModel> batchStockTest = batchStockService.getBySectionIdAndDueDate(1L, plusDays);
+
+        assertThat(batchStockTest).isNotNull();
+        assertThat(batchStockTest).isEqualTo(batchStockList);
     }
 
     @Test
-    void isValid() {
+    @DisplayName("Return a list batch stock empty by section ID and due date expired")
+    void getBySectionIdAndDueDate_returnListEmpty_whenDueDateIsExpired() throws Exception {
+        createAttributesBatchStock();
+
+        BDDMockito.when(sectionService.getById(ArgumentMatchers.anyLong()))
+                .thenReturn(section);
+        BDDMockito.when(batchStockRepository.findBySectionAndDueDateBetween(ArgumentMatchers.any(SectionModel.class), ArgumentMatchers.any(), ArgumentMatchers.any()))
+                .thenReturn(new ArrayList<>());
+
+        List<BatchStockModel> batchStockTest = batchStockService.getBySectionIdAndDueDate(1L, 15);
+
+        assertThat(batchStockTest).isEmpty();
+    }
+
+    @Test
+    @DisplayName("Return a list batch stock by Category and due date")
+    void getByCategoryAndDueDate_returnListBatchStock_whenCategoryExistsAndDueDateNotExpired() throws Exception {
+        createAttributesBatchStock();
+
+        List<SectionModel> sectionList = new ArrayList<>();
+        sectionList.add(section);
+
+        int plusDays = 10;
+        LocalDate dueDate = LocalDate.now().plusDays(plusDays);
+        BatchStockModel batchStock = new BatchStockModel(1L, "ABC123", 50, LocalDate.of(2022,10,10), LocalDateTime.of(2022,10,10,15,00), dueDate, product, section);
+        List<BatchStockModel> batchStockList = new ArrayList<>();
+        batchStockList.add(batchStock);
+
+        BDDMockito.when(sectionService.getByCategory(ArgumentMatchers.any()))
+                .thenReturn(sectionList);
+
+        BDDMockito.when(batchStockRepository.findBySectionAndDueDateBetween(ArgumentMatchers.any(SectionModel.class), ArgumentMatchers.any(), ArgumentMatchers.any()))
+                .thenReturn(batchStockList);
+
+        List<BatchStockModel> batchStockTest = batchStockService.getByCategoryAndDueDate(CategoryEnum.FRESH, 5);
+
+        assertThat(batchStockTest).isNotNull();
+        assertThat(batchStockTest).isEqualTo(batchStockList);
+    }
+
+    @Test
+    @DisplayName("Return a list batch stock empty when Category not exists or due date expired")
+    void getByCategoryAndDueDate_returnListBatchStock_whenCategoryNotExistsOrDueDateExpired() throws Exception {
+        createAttributesBatchStock();
+
+        List<SectionModel> sectionList = new ArrayList<>();
+        sectionList.add(section);
+
+        BDDMockito.when(sectionService.getByCategory(ArgumentMatchers.any()))
+                .thenReturn(sectionList);
+
+        BDDMockito.when(batchStockRepository.findBySectionAndDueDateBetween(ArgumentMatchers.any(SectionModel.class), ArgumentMatchers.any(), ArgumentMatchers.any()))
+                .thenReturn(new ArrayList<>());
+
+        List<BatchStockModel> batchStockTest = batchStockService.getByCategoryAndDueDate(CategoryEnum.FRESH, 10);
+
+        assertThat(batchStockTest).isEmpty();
+    }
+
+    @Test
+    @DisplayName("Return the sum quantity of products by product ID")
+    void getTotalBatchStockQuantity_returnCorrectQuantity_whenSuccess() throws Exception {
+        createAttributesBatchStock();
+        BatchStockModel batchStock = new BatchStockModel(1L, "ABC123", 50, LocalDate.of(2022,10,10), LocalDateTime.of(2022,10,10,15,00), LocalDate.of(2023,01,15), product, section);
+        BatchStockModel batchStock2 = new BatchStockModel(1L, "ABC123", 100, LocalDate.of(2022,10,10), LocalDateTime.of(2022,10,10,15,00), LocalDate.of(2023,01,15), product, section);
+        List<BatchStockModel> batchStockList = new ArrayList<>();
+        batchStockList.add(batchStock);
+        batchStockList.add(batchStock2);
+        int totalQuantity = 150;
+
+        BDDMockito.when(productService.getById(ArgumentMatchers.anyLong()))
+                .thenReturn(product);
+        BDDMockito.when(batchStockService.getByProductId(ArgumentMatchers.anyLong()))
+                .thenReturn(batchStockList);
+
+        int totalQuantityTest = batchStockService.getTotalBatchStockQuantity(1L);
+
+        assertThat(totalQuantityTest).isPositive();
+        assertThat(totalQuantityTest).isEqualTo(totalQuantity);
+    }
+
+    @Test
+    @DisplayName("Return the closest due date of product by product ID")
+    void getClosestDueDate_returnClosestDueDate_whenSuccess() throws Exception {
+        createAttributesBatchStock();
+        LocalDate dueDate1 = LocalDate.now().plusDays(30);
+        LocalDate dueDate2 = LocalDate.now().plusDays(20);
+
+        BatchStockModel batchStock = new BatchStockModel(1L, "ABC123", 50, LocalDate.of(2022,10,10), LocalDateTime.of(2022,10,10,15,00), dueDate1, product, section);
+        BatchStockModel batchStock2 = new BatchStockModel(1L, "ABC123", 100, LocalDate.of(2022,10,10), LocalDateTime.of(2022,10,10,15,00), dueDate2, product, section);
+        List<BatchStockModel> batchStockList = new ArrayList<>();
+        batchStockList.add(batchStock);
+        batchStockList.add(batchStock2);
+
+        BDDMockito.when(productService.getById(ArgumentMatchers.anyLong()))
+                .thenReturn(product);
+        BDDMockito.when(batchStockService.getByProductId(ArgumentMatchers.anyLong()))
+                .thenReturn(batchStockList);
+
+        LocalDate dueDateTest = batchStockService.getClosestDueDate(1L);
+
+        assertThat(dueDateTest).isNotNull();
+        assertThat(dueDateTest).isEqualTo(dueDate2);
+    }
+
+    /* Para terminar os testes desse método é necessário fazer mock de métodos que estão privados
+    @Test
+    @DisplayName("Not return exceptions when success")
+    void validateBatches_notReturnException_whenSuccess() throws Exception {
+        createAttributesBatchStock();
+        BatchStockModel batchStock = new BatchStockModel(1L, "ABC123", 50, LocalDate.of(2022,10,10), LocalDateTime.of(2022,10,10,15,00), LocalDate.of(2023,01,15), product, section);
+        BatchStockModel batchStock2 = new BatchStockModel(1L, "ABC123", 100, LocalDate.of(2022,10,10), LocalDateTime.of(2022,10,10,15,00), LocalDate.of(2023,01,15), product, section);
+        List<BatchStockModel> batchStockList = new ArrayList<>();
+        batchStockList.add(batchStock);
+        batchStockList.add(batchStock2);
+
+        BDDMockito.when(sectionService.getById(ArgumentMatchers.anyLong()))
+                .thenReturn(section);
+
+        Assertions.assertThatCode(() -> batchStockService.validateBatches(product, batchStockList))
+                .doesNotThrowAnyException();
+    }*/
+
+    @Test
+    @DisplayName("Return a list BatchStock by due date valid of products")
+    void findValidProductsByDueDate_returnListBatchStock_whenSuccess() {
+        createAttributesBatchStock();
+        LocalDate dueDate = LocalDate.now();
+        BatchStockModel batchStock1 = new BatchStockModel(1L, "456DEF", 20, LocalDate.of(2022,10,10), LocalDateTime.of(2022,10,10,15,00), dueDate, product, section);
+        BatchStockModel batchStock2 = new BatchStockModel(1L, "123ABC", 50, LocalDate.of(2022,10,10), LocalDateTime.of(2022,10,10,15,00), dueDate, product, section);
+
+        List<BatchStockModel> batchStockList = new ArrayList<>();
+        batchStockList.add(batchStock1);
+        batchStockList.add(batchStock2);
+
+        BDDMockito.when(productService.getById(ArgumentMatchers.anyLong()))
+                .thenReturn(product);
+
+        BDDMockito.when(batchStockRepository.findProducts(ArgumentMatchers.anyLong(), ArgumentMatchers.any()))
+                .thenReturn(batchStockList);
+
+        List<BatchStockModel> batchStockTest = batchStockService.findValidProductsByDueDate(1L, dueDate);
+
+        assertThat(batchStockTest).isNotNull();
+        assertThat(batchStockTest).isEqualTo(batchStockList);
     }
 
     @Test
@@ -162,4 +387,5 @@ public class BatchStockServiceTest {
             List<BatchStockModel> batchStockModelList = batchStockService.getByProductOrder(1L, "F");
         });
     }
+
 }
