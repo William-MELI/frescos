@@ -90,7 +90,7 @@ public class SellerService implements ISellerService {
     }
 
     /**
-     * Return true when cpf already exists
+     * Return false when cpf does not exist
      *
      * @param cpf
      * @return boolean
