@@ -173,6 +173,7 @@ public class BatchStockService implements IBatchStockService {
         return batchStockRepository.findByProductAndDueDateGreaterThanEqual(productModel, LocalDate.now().plusWeeks(3));
     }
 
+    @Override
     public void consumeBatchStockOnPurchase(PurchaseOrderModel purchaseOrderModel) throws Exception {
         List<OrderProductsModel> orderProductsList = iOrderProductService.getByPurchaseId(purchaseOrderModel.getId());
 
