@@ -144,6 +144,26 @@ public class SectionServiceTest {
     }
 
     @Test
+    @DisplayName("Returns a Section by Category ")
+    void getByCategory_returnSection_WhenSuccess() {
+        List<SectionModel> sectionModelList = new ArrayList<>();
+
+        WarehouseModel warehouse =  new WarehouseModel("blumenau", "Santa Catarina", "15 de Maio", "5662sdww", "aaaaa");
+
+        sectionModelList.add(new SectionModel("Banana",CategoryEnum.FROZEN, 6.8, 5.5, warehouse ));
+        sectionModelList.add(new SectionModel("peixe", CategoryEnum.FROZEN, 10.5, 0.0, warehouse));
+
+        Mockito.when(sectionRepository.findByCategory(CategoryEnum.FROZEN))
+                .thenReturn(sectionModelList);
+
+        List<SectionModel> responseSection = sectionService.getByCategory(CategoryEnum.FROZEN);
+
+        assertEquals(sectionModelList, responseSection);
+        assertEquals(2, responseSection.size());
+
+    }
+
+    @Test
     @DisplayName("Returns a All Section")
     void getAll_returnsAllSection_WhenSuccess() {
         List<SectionModel> sectionList = new ArrayList<>();

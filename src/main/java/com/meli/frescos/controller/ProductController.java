@@ -37,7 +37,7 @@ public class ProductController {
         for (ProductModel product : iProductService.getAll()) {
             productResponseList.add(ProductResponse.toResponse(product, iBatchStockService.getTotalBatchStockQuantity(product.getId()), iBatchStockService.getClosestDueDate(product.getId())));
         }
-        return new ResponseEntity<>(productResponseList, HttpStatus.FOUND);
+        return new ResponseEntity<>(productResponseList, HttpStatus.OK);
     }
 
     /**
@@ -57,7 +57,7 @@ public class ProductController {
                 stockResponse.add(response);
             }
         }
-        return new ResponseEntity<>(ProductDetailedResponse.toResponse(product, stockResponse) , HttpStatus.FOUND);
+        return new ResponseEntity<>(ProductDetailedResponse.toResponse(product, stockResponse) , HttpStatus.OK);
     }
 
     @PostMapping
@@ -87,7 +87,7 @@ public class ProductController {
             productResponse.add(ProductResponse.toResponse(product, iBatchStockService.getTotalBatchStockQuantity(product.getId()), iBatchStockService.getClosestDueDate(product.getId())));
         }
 
-        return new ResponseEntity<>(productResponse, HttpStatus.FOUND);
+        return new ResponseEntity<>(productResponse, HttpStatus.OK);
     }
 
 }

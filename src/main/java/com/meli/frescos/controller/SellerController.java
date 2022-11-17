@@ -43,7 +43,7 @@ public class SellerController {
     @GetMapping
     public ResponseEntity<List<SellerResponse>> getAll() {
         List<SellerResponse> sellerResponseList = service.getAll().stream().map(SellerResponse::toResponse).toList();
-        return new ResponseEntity<>(sellerResponseList, HttpStatus.FOUND);
+        return new ResponseEntity<>(sellerResponseList, HttpStatus.OK);
     }
 
     /**
@@ -54,7 +54,7 @@ public class SellerController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<SellerResponse> getById(@PathVariable Long id) {
-        return new ResponseEntity<>(SellerResponse.toResponse(service.getById(id)), HttpStatus.FOUND);
+        return new ResponseEntity<>(SellerResponse.toResponse(service.getById(id)), HttpStatus.OK);
     }
 
     /**
@@ -78,6 +78,6 @@ public class SellerController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         service.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
