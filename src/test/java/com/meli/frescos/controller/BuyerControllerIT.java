@@ -123,7 +123,7 @@ class BuyerControllerIT {
                 .name(name)
                 .build();
 
-        BuyerModel buyer = buyerService.save(buyerRequest.toModel());
+        buyerService.save(buyerRequest.toModel());
 
         ResultActions response = mockMvc.perform(
                 get("/buyer")
@@ -132,32 +132,4 @@ class BuyerControllerIT {
 
         response.andExpect(status().isOk());
     }
-
-//    @Test
-//    void delete_returnOkStatus_whenSuccess() throws Exception {
-//        String city = "Tramandaí";
-//        String district = "Zona Nova";
-//        String state = "Rio Grande do Sul";
-//        String postalCode = "99999999";
-//        String street = "Avenida Emancipacao";
-//
-//        WarehouseRequest newWarehouseRequest = WarehouseRequest
-//                .builder()
-//                .city(city)
-//                .street(street)
-//                .state(state)
-//                .postalCode(postalCode)
-//                .district(district).build();
-//
-//        WarehouseModel warehouse = warehouseService.save(newWarehouseRequest.toModel());
-//
-//        ResultActions response = mockMvc.perform(
-//                delete("/warehouse/{id}", (warehouse.getId()))
-//                        .contentType(MediaType.APPLICATION_JSON)
-//        );
-//
-//        response.andExpect(status().isNoContent());
-//    }
-
-
 }
