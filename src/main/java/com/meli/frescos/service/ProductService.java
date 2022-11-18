@@ -1,7 +1,6 @@
 package com.meli.frescos.service;
 
 import com.meli.frescos.exception.ProductByIdNotFoundException;
-import com.meli.frescos.model.BatchStockModel;
 import com.meli.frescos.model.CategoryEnum;
 import com.meli.frescos.model.ProductModel;
 import com.meli.frescos.repository.ProductRepository;
@@ -24,6 +23,12 @@ public class ProductService implements IProductService {
         this.productRepository = productRepository;
         this.iSellerService = iSellerService;
     }
+
+    /**
+     * Return all ProductModel
+     *
+     * @return list of ProductModel
+     */
     @Override
     public List<ProductModel> getAll() {
         return productRepository.findAll();
@@ -31,6 +36,7 @@ public class ProductService implements IProductService {
 
     /**
      * Return ProductsModel given id
+     *
      * @param id theProductModel id
      * @return ProductModel
      * @throws ProductByIdNotFoundException Throws in case Ptroduct does not exists
@@ -40,12 +46,24 @@ public class ProductService implements IProductService {
         return productRepository.findById(id).orElseThrow(() -> new ProductByIdNotFoundException(id));
     }
 
+    /**
+     * Save a new Product at storage
+     *
+     * @param product the new Product to store
+     * @return the new created Product
+     */
     @Override
     public ProductModel save(ProductModel product) {
         product.setSeller(iSellerService.getById(product.getSeller().getId()));
         return productRepository.save(product);
     }
 
+    /**
+     * Returns a list of ProductModel given a category
+     *
+     * @param filter category to search
+     * @return list of ProductModel
+     */
     @Override
     public List<ProductModel> getByCategory(String filter) {
         return switch (filter.toUpperCase()) {

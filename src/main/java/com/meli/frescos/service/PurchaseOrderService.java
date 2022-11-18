@@ -7,7 +7,6 @@ import com.meli.frescos.exception.PurchaseOrderByIdNotFoundException;
 import com.meli.frescos.model.*;
 import com.meli.frescos.repository.PurchaseOrderRepository;
 import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -41,6 +40,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
 
     /**
      * This method save a purchaseOrder and orderProducts
+     *
      * @param purchaseOrderRequest from PurchaseOrderModel instance
      * @return BigDecimal sum from all products
      */
@@ -56,7 +56,8 @@ public class PurchaseOrderService implements IPurchaseOrderService {
     }
 
     /**
-     *  This method check if the product is expired
+     * This method check if the product is expired
+     *
      * @param productId from product Entity
      * @param desiredQuantity int required due date
      * @return Boolean checking due date
@@ -73,10 +74,11 @@ public class PurchaseOrderService implements IPurchaseOrderService {
     }
 
     /**
-     *  This method check if the quantity of  products is available
+     * This method check if the quantity of  products is available
+     *
      * @param orderProductsList List of OrderProduct Entity
      * @return Bollean checking availability
-     * @throws Exception
+     * @throws OrderProductIsInvalidException when order product is invalid
      */
     private boolean verifyOrderIsValid(List<OrderProductsRequest> orderProductsList) throws OrderProductIsInvalidException {
         Set<Long> productIdListException = new HashSet<>();
@@ -100,10 +102,11 @@ public class PurchaseOrderService implements IPurchaseOrderService {
     }
 
     /**
-     *This method save the products in orderProducts Entity
+     * This method save the products in orderProducts Entity
+     *
      * @param purchaseOrderRequest from purchaseOrder instance
      * @return BigDecimal with sum of price the all products listed
-     * @throws Exception
+     * @throws OrderProductIsInvalidException when order product is invalid
      */
     public BigDecimal savePurchaseGetPrice(PurchaseOrderRequest purchaseOrderRequest) {
         boolean isOrderValid = (verifyOrderIsValid(purchaseOrderRequest.getProducts()));
@@ -132,12 +135,20 @@ public class PurchaseOrderService implements IPurchaseOrderService {
         }
     }
 
+    /**
+     * Return PurchaseOrderModel given id
+     *
+     * @param purchaseId the PurchaseOrderModel id
+     * @return a PurchaseOrderModel
+     * @throws PurchaseOrderByIdNotFoundException when purchase order not found
+     */
     public PurchaseOrderModel getById(Long purchaseId) throws PurchaseOrderByIdNotFoundException {
         return purchaseOrderRepository.findById(purchaseId).orElseThrow(() -> new PurchaseOrderByIdNotFoundException(purchaseId));
     }
 
     /**
      * This method get all Purchase Order
+     *
      * @return List of PurchaseOrder entity
      */
     @Override
@@ -147,6 +158,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
 
     /**
      * This method update status from PurchaseOrder related
+     *
      * @param id Long related an purchaseOrder
      * @throws Exception
      */

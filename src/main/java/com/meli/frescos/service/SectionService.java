@@ -8,7 +8,6 @@ import com.meli.frescos.model.WarehouseModel;
 import com.meli.frescos.repository.WarehouseRepository;
 import com.meli.frescos.repository.SectionRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +29,7 @@ public class SectionService implements ISectionService {
 
     /**
      * Return all Sections
+     *
      * @return List of SectionModel
      */
     @Override
@@ -62,6 +62,7 @@ public class SectionService implements ISectionService {
 
     /**
      * Return SectionModel given id
+     *
      * @param id the SectionModel id
      * @return SectionModel
      */
@@ -70,6 +71,12 @@ public class SectionService implements ISectionService {
         return sectionRepository.findById(id).orElseThrow(() -> new SectionByIdNotFoundException(id));
     }
 
+    /**
+     * Return of a Section list given a category
+     *
+     * @param category the SectionModel
+     * @return list of SectionModel
+     */
     @Override
     public List<SectionModel> getByCategory(CategoryEnum category) {
         return sectionRepository.findByCategory(category);

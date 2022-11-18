@@ -5,7 +5,6 @@ import com.meli.frescos.exception.SellerByIdNotFoundException;
 import com.meli.frescos.model.SellerModel;
 import com.meli.frescos.repository.SellerRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -46,7 +45,7 @@ public class SellerService implements ISellerService {
     /**
      * Returns a stored Seller given ID
      *
-     * @param id
+     * @param id the seller id
      * @return The stored Seller
      * @throws SellerByIdNotFoundException Throws in case Seller does not exists
      */
@@ -81,7 +80,7 @@ public class SellerService implements ISellerService {
     /**
      * Returns a stored Seller given cpf
      *
-     * @param cpf
+     * @param cpf the seller cpf
      * @return The stored Seller
      */
     @Override
@@ -92,8 +91,8 @@ public class SellerService implements ISellerService {
     /**
      * Return false when cpf does not exist
      *
-     * @param cpf
-     * @return boolean
+     * @param cpf the seller cpf
+     * @return returns false when the cpf does not exist stored
      */
     private boolean cpfAlreadyExists(String cpf) {
         getByCpf(cpf).ifPresent(n -> {
