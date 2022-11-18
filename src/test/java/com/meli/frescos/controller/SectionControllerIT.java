@@ -110,6 +110,7 @@ public class SectionControllerIT {
     }
 
     @Test
+    @DisplayName("Test Get all Section - GET Endpoint")
     void getAll_returnListOfSection_whenSuccess() throws Exception {
         WarehouseModel warehouse = newWarehouseRecord();
         SectionRequest newSectionRequestUm  = SectionRequest.builder()
@@ -140,6 +141,7 @@ public class SectionControllerIT {
     }
 
     @Test
+    @DisplayName("Test invalid Section by ID - GET Endpoint")
     void getById_throwSectionByIdNotFoundException_whenInexistentSection() throws Exception {
         ResultActions response = mockMvc.perform(
                 get("/section/{id}", Long.MAX_VALUE)

@@ -114,6 +114,7 @@ class BuyerControllerIT {
     }
 
     @Test
+    @DisplayName("Test Get all Warehouse - GET Endpoint")
     void getAll_returnListOfWarehouse_whenSuccess() throws Exception {
         String name = "Buyer";
         String cpf = "12345678900";
