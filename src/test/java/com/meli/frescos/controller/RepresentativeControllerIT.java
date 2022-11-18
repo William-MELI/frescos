@@ -72,6 +72,7 @@ public class RepresentativeControllerIT {
     }
 
     @Test
+    @DisplayName("Test invalid Representative creation - POST Endpoint")
     void create_returnsThrowWarehouseNotFoundException_whenInexistenceWareehouse() throws Exception {
         String name = "Representante 1";
 
@@ -93,6 +94,7 @@ public class RepresentativeControllerIT {
     }
 
     @Test
+    @DisplayName("Test Get Representative by ID - GET Endpoint")
     void getById_returnsRepresentative_whenIdIsAvailable() throws Exception {
         WarehouseModel warehouse = newWarehouseRecord();
         String name = "Representante 1";
@@ -112,6 +114,7 @@ public class RepresentativeControllerIT {
     }
 
     @Test
+    @DisplayName("Test Get all Representative - GET Endpoint")
     void getAll_returnListOfRepresentative_whenSuccess() throws Exception {
         WarehouseModel warehouseUm = newWarehouseRecord();
         WarehouseModel warehouseDois = newWarehouseRecord();
