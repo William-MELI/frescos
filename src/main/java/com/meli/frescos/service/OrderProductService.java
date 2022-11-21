@@ -75,7 +75,7 @@ public class OrderProductService implements IOrderProductService {
         PurchaseOrderModel purchaseOrderModel = purchaseOrderRepository.findById(purchaseId)
                 .orElseThrow(() -> new PurchaseOrderByIdNotFoundException(purchaseId));
 
-        List<OrderProductsModel> orderProductsModels = orderProductsRepository.findByPurchaseOrderModel_Id(purchaseOrderModel.getId());
+        List<OrderProductsModel> orderProductsModels = orderProductsRepository.findByPurchaseOrderModel(purchaseOrderModel);
 
         return orderProductsModels;
     }

@@ -6,9 +6,12 @@ import com.meli.frescos.model.ProductModel;
 import com.meli.frescos.service.IBatchStockService;
 import com.meli.frescos.service.IProductService;
 import com.meli.frescos.service.IRepresentativeService;
+import com.meli.frescos.service.IWarehouseService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,10 +28,13 @@ public class ProductController {
 
     private final IBatchStockService iBatchStockService;
 
-    public ProductController(IProductService iProductService, IRepresentativeService iRepresentativeService, IBatchStockService iBatchStockService) {
+    private final IWarehouseService iWarehouseService;
+
+    public ProductController(IProductService iProductService, IRepresentativeService iRepresentativeService, IBatchStockService iBatchStockService, IWarehouseService iWarehouseService) {
         this.iProductService = iProductService;
         this.iRepresentativeService = iRepresentativeService;
         this.iBatchStockService = iBatchStockService;
+        this.iWarehouseService = iWarehouseService;
     }
     /**
      * Return all Product
@@ -36,7 +42,7 @@ public class ProductController {
      * @return a list with all ProductResponse instance
      */
     @GetMapping
-    public ResponseEntity<List<ProductResponse>> getAll() throws Exception {
+    public ResponseEntity<List<ProductResponse>> getAll() throws NullDueDateException {
         List<ProductResponse> productResponseList = new ArrayList<>();
         for (ProductModel product : iProductService.getAll()) {
             productResponseList.add(ProductResponse.toResponse(product, iBatchStockService.getTotalBatchStockQuantity(product.getId()), iBatchStockService.getClosestDueDate(product.getId())));
@@ -50,7 +56,7 @@ public class ProductController {
      * @return a Product related ID
      */
     @GetMapping("/{id}")
-    public ResponseEntity<ProductDetailedResponse> getById(@PathVariable Long id) throws Exception {
+    public ResponseEntity<ProductDetailedResponse> getById(@PathVariable Long id) {
         ProductModel product = iProductService.getById(id);
         List<BatchStockModel> batchStockList = iBatchStockService.getByProductId(id);
         List<SimplifiedBatchStockResponse> stockResponse = new ArrayList<>();
@@ -69,8 +75,9 @@ public class ProductController {
      * @param productBatchStockRequest ProductBatchStockRequest instance
      * @return a ProductBatchStockResponse instance
      */
-    @PostMapping
-    public ResponseEntity<ProductBatchStockResponse> save(@RequestBody ProductBatchStockRequest productBatchStockRequest) throws Exception {
+    @PostMapping("/inboundorder")
+    public ResponseEntity<ProductBatchStockResponse> save(@Valid @RequestBody ProductBatchStockRequest productBatchStockRequest) throws Exception {
+        iWarehouseService.getById(productBatchStockRequest.getInboundOrder().getWarehouseCode());
         iRepresentativeService.validateRepresentative(productBatchStockRequest.getInboundOrder().getRepresentativeCode(), productBatchStockRequest.getInboundOrder().getWarehouseCode());
         ProductModel requestProduct = productBatchStockRequest.toProduct();
         List<BatchStockModel> requestBatchStockList = productBatchStockRequest.toBatchStock();
@@ -80,7 +87,7 @@ public class ProductController {
             requestBatchStock.setProduct(requestProduct);
             requestBatchStock = iBatchStockService.save(requestBatchStock);
         }
-        return new ResponseEntity<>(ProductBatchStockResponse.toResponse(requestProduct, requestBatchStockList), HttpStatus.OK);
+        return new ResponseEntity<>(ProductBatchStockResponse.toResponse(requestProduct, requestBatchStockList), HttpStatus.CREATED);
     }
 
     /**
@@ -89,7 +96,7 @@ public class ProductController {
      * @return a list with all ProductResponse instance
      */
     @GetMapping("/list")
-    public ResponseEntity<List<ProductResponse>> getByCategory(@RequestParam("querytype") String filter) throws Exception {
+    public ResponseEntity<List<ProductResponse>> getByCategory(@RequestParam("querytype") String filter) throws NullDueDateException {
         List<ProductModel> products = iProductService.getByCategory(filter);
 
         if (products.isEmpty())

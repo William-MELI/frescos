@@ -4,11 +4,9 @@ import com.meli.frescos.model.BatchStockModel;
 import com.meli.frescos.model.ProductModel;
 import com.meli.frescos.model.SectionModel;
 import com.meli.frescos.model.SellerModel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +16,7 @@ import java.util.List;
  */
 @Builder
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductBatchStockRequest {
@@ -25,6 +24,7 @@ public class ProductBatchStockRequest {
     /**
      * InboundOrder data
      */
+    @Valid
     private InboundOrderRequest inboundOrder;
 
     /**

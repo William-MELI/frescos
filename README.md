@@ -18,7 +18,7 @@ Projeto proposto pelo curso da [Digital House](https://www.digitalhouse.com/br) 
 > **Backend**: Desenvolvido usando: Java 17, Spring Boot, Mysql
 
 ### Exemplo das requisições
-- 🔗 Importar via link no Postman: [aqui]()
+- 🔗 Importar via link no Postman: [aqui](https://grupo-10.postman.co/workspace/5659a876-edb4-4277-8f9f-5472b5ced065/collection/23755358-df036664-b7f8-4f9f-9f5c-2ec43feb0bb1?action=share&creator=23755358)
 
 
 > **Grupo 10:**  
