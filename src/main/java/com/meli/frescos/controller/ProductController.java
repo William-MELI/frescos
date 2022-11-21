@@ -1,6 +1,7 @@
 package com.meli.frescos.controller;
 
 import com.meli.frescos.controller.dto.*;
+import com.meli.frescos.exception.*;
 import com.meli.frescos.model.BatchStockModel;
 import com.meli.frescos.model.ProductModel;
 import com.meli.frescos.service.IBatchStockService;
@@ -32,7 +33,7 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProductResponse>> getAll() throws Exception {
+    public ResponseEntity<List<ProductResponse>> getAll() throws NullDueDateException {
         List<ProductResponse> productResponseList = new ArrayList<>();
         for (ProductModel product : iProductService.getAll()) {
             productResponseList.add(ProductResponse.toResponse(product, iBatchStockService.getTotalBatchStockQuantity(product.getId()), iBatchStockService.getClosestDueDate(product.getId())));
@@ -46,7 +47,7 @@ public class ProductController {
      * @return a Product related ID
      */
     @GetMapping("/{id}")
-    public ResponseEntity<ProductDetailedResponse> getById(@PathVariable Long id) throws Exception {
+    public ResponseEntity<ProductDetailedResponse> getById(@PathVariable Long id) {
         ProductModel product = iProductService.getById(id);
         List<BatchStockModel> batchStockList = iBatchStockService.getByProductId(id);
         List<SimplifiedBatchStockResponse> stockResponse = new ArrayList<>();
@@ -61,7 +62,7 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductBatchStockResponse> save(@RequestBody ProductBatchStockRequest productBatchStockRequest) throws Exception {
+    public ResponseEntity<ProductBatchStockResponse> save(@RequestBody ProductBatchStockRequest productBatchStockRequest) throws RepresentativeWarehouseNotAssociatedException, RepresentativeNotFoundException, ProductNotPermittedInSectionException, NotEnoughSpaceInSectionException {
         iRepresentativeService.validateRepresentative(productBatchStockRequest.getInboundOrder().getRepresentativeCode(), productBatchStockRequest.getInboundOrder().getWarehouseCode());
         ProductModel requestProduct = productBatchStockRequest.toProduct();
         List<BatchStockModel> requestBatchStockList = productBatchStockRequest.toBatchStock();
@@ -75,7 +76,7 @@ public class ProductController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<List<ProductResponse>> getByCategory(@RequestParam("querytype") String filter) throws Exception {
+    public ResponseEntity<List<ProductResponse>> getByCategory(@RequestParam("querytype") String filter) throws NullDueDateException {
         List<ProductModel> products = iProductService.getByCategory(filter);
 
         if (products.isEmpty())
