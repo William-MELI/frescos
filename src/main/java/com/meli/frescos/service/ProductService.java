@@ -39,7 +39,7 @@ public class ProductService implements IProductService {
      *
      * @param id theProductModel id
      * @return ProductModel
-     * @throws ProductByIdNotFoundException Throws in case Ptroduct does not exists
+     * @throws ProductByIdNotFoundException Throws in case Product does not exist
      */
     @Override
     public ProductModel getById(Long id) {
