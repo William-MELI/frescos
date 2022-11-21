@@ -1,10 +1,8 @@
 package com.meli.frescos.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.meli.frescos.controller.dto.OrderProductsRequest;
 import com.meli.frescos.model.*;
-import com.meli.frescos.repository.*;
 import com.meli.frescos.service.IOrderProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
