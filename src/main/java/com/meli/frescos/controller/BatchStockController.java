@@ -1,5 +1,6 @@
 package com.meli.frescos.controller;
 
+import com.meli.frescos.controller.dto.BatchStockFiltersResponse;
 import com.meli.frescos.controller.dto.BatchStockOrderResponse;
 import com.meli.frescos.controller.dto.BatchStockRequest;
 import com.meli.frescos.controller.dto.BatchStockResponse;
@@ -63,24 +64,26 @@ public class BatchStockController {
     }
 
     @GetMapping("/section")
-    ResponseEntity<List<BatchStockResponse>> getBySectionDueDate(@RequestParam Long sectionId,
-                                                                 @RequestParam Integer numberOfDays) throws Exception {
-        List<BatchStockResponse> batchStockResponseList = iBatchStockService
+    ResponseEntity<List<BatchStockFiltersResponse>> getBySectionDueDate(@RequestParam Long sectionId,
+                                                                        @RequestParam Integer numberOfDays) throws Exception {
+        List<BatchStockFiltersResponse> batchStockResponseList = iBatchStockService
                 .getBySectionIdAndDueDate(sectionId, numberOfDays)
                 .stream()
                 .sorted(Comparator.comparing(BatchStockModel::getDueDate))
-                .map(BatchStockResponse::toResponse).toList();
+                .map(BatchStockFiltersResponse::toResponse).toList();
         return new ResponseEntity<>(batchStockResponseList, HttpStatus.OK);
     }
 
     @GetMapping("/category")
-    ResponseEntity<List<BatchStockResponse>> getByCategoryDueDate(@RequestParam CategoryEnum category,
-                                                                 @RequestParam Integer numberOfDays) throws Exception {
-        List<BatchStockResponse> batchStockResponseList = iBatchStockService
-                .getByCategoryAndDueDate(category, numberOfDays)
+    ResponseEntity<List<BatchStockFiltersResponse>> getByCategoryDueDate(@RequestParam String category,
+                                                                         @RequestParam Integer numberOfDays,
+                                                                         @RequestParam String order) throws Exception {
+
+        List<BatchStockFiltersResponse> batchStockResponseList = iBatchStockService
+                .getByCategoryAndDueDate(CategoryEnum.getEnum(category), numberOfDays)
                 .stream()
-                .sorted(Comparator.comparing(BatchStockModel::getDueDate))
-                .map(BatchStockResponse::toResponse).toList();
+                .sorted(order.equalsIgnoreCase("ASC") ? Comparator.comparing(BatchStockModel::getDueDate) : Comparator.comparing(BatchStockModel::getDueDate).reversed())
+                .map(BatchStockFiltersResponse::toResponse).toList();
         return new ResponseEntity<>(batchStockResponseList, HttpStatus.OK);
     }
 

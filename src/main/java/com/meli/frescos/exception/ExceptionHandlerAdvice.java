@@ -225,4 +225,22 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
                         .build(),
                 HttpStatus.BAD_REQUEST);
     }
+
+    /**
+     * This method handles the BatchStockFilterCategoryInvalidException
+     *
+     * @param ex The original exception
+     * @return A ResponseEntity to represent the HTTP error
+     */
+    @ExceptionHandler(BatchStockFilterCategoryInvalidException.class)
+    public ResponseEntity<ExceptionDetails> handlerBatchStockFilterCategoryInvalidException(BatchStockFilterCategoryInvalidException ex) {
+        return new ResponseEntity<>(
+                ExceptionDetails.builder()
+                        .title("Filtro inválido")
+                        .message(ex.getMessage())
+                        .timestamp(LocalDateTime.now())
+                        .build(),
+                HttpStatus.NOT_FOUND);
+    }
+
 }
