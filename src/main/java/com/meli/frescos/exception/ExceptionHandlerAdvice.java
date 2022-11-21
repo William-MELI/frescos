@@ -225,4 +225,16 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
                         .build(),
                 HttpStatus.BAD_REQUEST);
     }
+
+
+    @ExceptionHandler(SellerByIdNotFoundException.class)
+    public ResponseEntity<ExceptionDetails> handlerSellerByIdNotFoundException(SellerByIdNotFoundException ex) {
+        return new ResponseEntity<>(
+                ExceptionDetails.builder()
+                        .title("Vendedor não encontrado")
+                        .message(ex.getMessage())
+                        .timestamp(LocalDateTime.now())
+                        .build(),
+                HttpStatus.BAD_REQUEST);
+    }
 }
