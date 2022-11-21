@@ -1,6 +1,8 @@
 package com.meli.frescos.service;
 
 import com.meli.frescos.exception.OneToOneMappingAlreadyDefinedException;
+import com.meli.frescos.exception.RepresentativeNotFoundException;
+import com.meli.frescos.exception.RepresentativeWarehouseNotAssociatedException;
 import com.meli.frescos.exception.WarehouseNotFoundException;
 import com.meli.frescos.model.RepresentativeModel;
 import com.meli.frescos.repository.RepresentativeRepository;
@@ -21,12 +23,12 @@ public class RepresentativeService implements IRepresentativeService {
     }
 
     @Override
-    public RepresentativeModel getById(Long representativeId) throws Exception {
-        return representativeRepository.findById(representativeId).orElseThrow(() -> new Exception("Representative not found."));
+    public RepresentativeModel getById(Long representativeId) throws RepresentativeNotFoundException {
+        return representativeRepository.findById(representativeId).orElseThrow(() -> new RepresentativeNotFoundException("Representative not found."));
     }
 
     @Override
-    public List<RepresentativeModel> getAll() throws Exception {
+    public List<RepresentativeModel> getAll(){
         return representativeRepository.findAll();
     }
 
@@ -40,10 +42,10 @@ public class RepresentativeService implements IRepresentativeService {
     }
 
     @Override
-    public void validateRepresentative(Long representativeId, Long warehouseId) throws Exception {
+    public void validateRepresentative(Long representativeId, Long warehouseId) throws RepresentativeWarehouseNotAssociatedException, RepresentativeNotFoundException {
         RepresentativeModel representative = getById(representativeId);
         if(!representative.getWarehouse().getId().equals(warehouseId)) {
-            throw new Exception("Representative does not belong to this warehouse!");
+            throw new RepresentativeWarehouseNotAssociatedException("Representante não pertence a este armazém!");
         };
     }
 
