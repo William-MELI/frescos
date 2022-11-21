@@ -17,8 +17,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -39,7 +39,7 @@ class BuyerControllerIT {
 
     @BeforeEach
     void setup() {
-        this.buyerRepository.deleteAll();
+        this.buyerRepository.deleteAllInBatch();
     }
 
 
@@ -133,5 +133,41 @@ class BuyerControllerIT {
         );
 
         response.andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("Test Update Buyer info - PUT Endpoint")
+    void update_returnsUpdatedBuyer_whenSuccess() throws Exception {
+        String cpf = "12345678900";
+        String name = "Buyer";
+        Long id;
+
+        BuyerRequest buyerRequest = BuyerRequest.builder()
+                .cpf(cpf)
+                .name(name)
+                .build();
+
+        id = buyerService.save(buyerRequest.toModel()).getId();
+
+        String newCpf = "95925955005";
+        String newName = "NewBuyer";
+
+        BuyerModel newBuyer =
+                BuyerRequest.builder()
+                        .cpf(newCpf)
+                        .name(newName)
+                        .build().toModel();
+
+        ResultActions response = mockMvc.perform(
+                put("/buyer/{id}", id)
+                        .content(objectMapper.writeValueAsString(newBuyer))
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        String expectedJson = String.format("{'name': '%s'}", newBuyer.getName());
+
+        response.andExpect(status().isOk())
+                .andExpect(content().json(expectedJson));
+
     }
 }

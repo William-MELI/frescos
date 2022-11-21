@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ExceptionDetails> handlerDataIntegrityViolationException() {
+    public ResponseEntity<ExceptionDetails> handlerDataIntegrityViolationException(DataIntegrityViolationException ex) {
         return new ResponseEntity<>(
                 ExceptionDetails.builder()
                         .title("Dados inválidos")
@@ -178,7 +178,7 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
                         .message(ex.getMessage())
                         .timestamp(LocalDateTime.now())
                         .build(),
-                HttpStatus.BAD_REQUEST);
+                HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(SectionByIdNotFoundException.class)
@@ -220,6 +220,18 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(
                 ExceptionDetails.builder()
                         .title("Representante não associado com Armazém")
+                        .message(ex.getMessage())
+                        .timestamp(LocalDateTime.now())
+                        .build(),
+                HttpStatus.BAD_REQUEST);
+    }
+
+
+    @ExceptionHandler(SellerByIdNotFoundException.class)
+    public ResponseEntity<ExceptionDetails> handlerSellerByIdNotFoundException(SellerByIdNotFoundException ex) {
+        return new ResponseEntity<>(
+                ExceptionDetails.builder()
+                        .title("Vendedor não encontrado")
                         .message(ex.getMessage())
                         .timestamp(LocalDateTime.now())
                         .build(),
