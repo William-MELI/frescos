@@ -1,6 +1,7 @@
 package com.meli.frescos.service;
 
 import com.meli.frescos.exception.OneToOneMappingAlreadyDefinedException;
+import com.meli.frescos.exception.RepresentativeWarehouseNotAssociatedException;
 import com.meli.frescos.exception.WarehouseNotFoundException;
 import com.meli.frescos.model.RepresentativeModel;
 import com.meli.frescos.model.WarehouseModel;
@@ -164,7 +165,7 @@ class RepresentativeServiceTest {
 
         Mockito.when(representativeRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(representativeModel));
 
-        assertThrows(Exception.class, () -> {
+        assertThrows(RepresentativeWarehouseNotAssociatedException.class, () -> {
             representativeService.validateRepresentative(representative_id, 2L);
         });
     }
