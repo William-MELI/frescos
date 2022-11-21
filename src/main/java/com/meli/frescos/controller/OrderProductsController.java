@@ -32,7 +32,7 @@ public class OrderProductsController {
      * @return a list with all OrderProducts instance
      */
     @GetMapping
-    public ResponseEntity<List<OrderProductsResponse>> getAll() throws Exception {
+    public ResponseEntity<List<OrderProductsResponse>> getAll() {
         List<OrderProductsResponse> orderProductResponseList = new ArrayList<>();
         for (OrderProductsModel order : iOrderProductService.getAll()) {
             orderProductResponseList.add(OrderProductsResponse.toResponse(order));
@@ -61,13 +61,19 @@ public class OrderProductsController {
      * @return the OrderProducts instance related id
      */
     @GetMapping("/{id}")
-    public ResponseEntity<OrderProductsResponse> getById(@PathVariable Long id) throws Exception {
+    public ResponseEntity<OrderProductsResponse> getById(@PathVariable Long id) {
         OrderProductsModel order = iOrderProductService.getById(id);
         return new ResponseEntity<>(OrderProductsResponse.toResponse(order), HttpStatus.OK);
     }
 
+    /**
+     * Return a OrderProducts given idOrder
+     * Return 200 OK when operation is success
+     * @param idOrder the OrderProducts ID
+     * @return the OrderProducts instance related id
+     */
     @GetMapping("/idOrder/{idOrder}")
-    public ResponseEntity<List<OrderProductsResponse>> getByPurchaseId(@PathVariable Long idOrder) throws Exception {
+    public ResponseEntity<List<OrderProductsResponse>> getByPurchaseId(@PathVariable Long idOrder) {
         List<OrderProductsModel> orderByPurchase = iOrderProductService.getByPurchaseId(idOrder);
         List<OrderProductsResponse> orderProductsResponses = new ArrayList<>();
         orderByPurchase.forEach(o -> orderProductsResponses.add(OrderProductsResponse.toResponse(o)));

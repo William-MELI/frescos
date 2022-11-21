@@ -1,6 +1,6 @@
 package com.meli.frescos.service;
 
-import com.meli.frescos.exception.BatchStockByIdNotFoundException;
+import com.meli.frescos.exception.*;
 import com.meli.frescos.model.BatchStockModel;
 import com.meli.frescos.model.CategoryEnum;
 import com.meli.frescos.model.ProductModel;
@@ -15,25 +15,25 @@ public interface IBatchStockService {
 
     BatchStockModel getById(Long id) throws BatchStockByIdNotFoundException;
 
-    BatchStockModel save(BatchStockModel batchStock) throws Exception;
+    BatchStockModel save(BatchStockModel batchStock) ;
 
     List<BatchStockModel> getByProductId(Long productId);
 
-    List<BatchStockModel> getBySectionId(Long sectionId) throws Exception;
+    List<BatchStockModel> getBySectionId(Long sectionId) ;
 
-    List<BatchStockModel> getBySectionIdAndDueDate(Long sectionId, Integer numberOfDays) throws Exception;
+    List<BatchStockModel> getBySectionIdAndDueDate(Long sectionId, Integer numberOfDays) ;
 
-    List<BatchStockModel> getByCategoryAndDueDate(CategoryEnum category, Integer numberOfDays) throws Exception;
+    List<BatchStockModel> getByCategoryAndDueDate(CategoryEnum category, Integer numberOfDays) ;
 
-    Integer getTotalBatchStockQuantity(Long productId) throws Exception;
+    Integer getTotalBatchStockQuantity(Long productId) ;
 
-    LocalDate getClosestDueDate(Long productId) throws Exception;
+    LocalDate getClosestDueDate(Long productId) throws NullDueDateException;
 
-    void validateBatches(ProductModel product, List<BatchStockModel> batchStockList) throws Exception;
+    void validateBatches(ProductModel product, List<BatchStockModel> batchStockList) throws ProductNotPermittedInSectionException, NotEnoughSpaceInSectionException;
 
     List<BatchStockModel> findValidProductsByDueDate(Long productModel, LocalDate minDueDate);
 
     List<BatchStockModel> getByProductOrder(Long id, String order);
 
-    void consumeBatchStockOnPurchase(PurchaseOrderModel purchaseOrderModel) throws Exception;
+    void consumeBatchStockOnPurchase(PurchaseOrderModel purchaseOrderModel) throws NotEnoughStockException;
 }

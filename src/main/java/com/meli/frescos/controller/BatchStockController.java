@@ -5,6 +5,8 @@ import com.meli.frescos.controller.dto.BatchStockOrderResponse;
 import com.meli.frescos.controller.dto.BatchStockRequest;
 import com.meli.frescos.controller.dto.BatchStockResponse;
 import com.meli.frescos.exception.BatchStockByIdNotFoundException;
+import com.meli.frescos.exception.RepresentativeNotFoundException;
+import com.meli.frescos.exception.RepresentativeWarehouseNotAssociatedException;
 import com.meli.frescos.model.BatchStockModel;
 import com.meli.frescos.model.CategoryEnum;
 import com.meli.frescos.service.IBatchStockService;
@@ -39,6 +41,7 @@ public class BatchStockController {
 
     /**
      * Endpoint to return all BatchStocks
+     * Return 200 OK when operation is success
      *
      * @return a List with all BatchStockResponse with status 200 ok
      */
@@ -53,6 +56,7 @@ public class BatchStockController {
 
     /**
      * Endpoint to return a backStockModel given id
+     * Return 200 OK when operation is success
      *
      * @param id the backStockModel id
      * @return a BatchStockModel  related ID
@@ -63,6 +67,14 @@ public class BatchStockController {
         return new ResponseEntity<>(BatchStockResponse.toResponse((iBatchStockService.getById(id))), HttpStatus.OK);
     }
 
+    /**
+     * Return a list of BatchStock given section id and number of days to a BatchStock due date
+     * Return 200 OK when operation is success
+     *
+     * @param sectionId the section id
+     * @param numberOfDays number of days to be added to the current day to arrive at the due date to be sought
+     * @return a list of BatchStock
+     */
     @GetMapping("/section")
     ResponseEntity<List<BatchStockFiltersResponse>> getBySectionDueDate(@RequestParam Long sectionId,
                                                                         @RequestParam Integer numberOfDays) throws Exception {
@@ -74,6 +86,15 @@ public class BatchStockController {
         return new ResponseEntity<>(batchStockResponseList, HttpStatus.OK);
     }
 
+    /**
+     * Return a list of BatchStock given category and number of days to a BatchStock due date
+     * Return 200 OK when operation is success
+     *
+     * @param category the category
+     * @param numberOfDays number of days to be added to the current day to arrive at the due date to be sought
+     * @param order order due date
+     * @return a list of BatchStock
+     */
     @GetMapping("/category")
     ResponseEntity<List<BatchStockFiltersResponse>> getByCategoryDueDate(@RequestParam String category,
                                                                          @RequestParam Integer numberOfDays,
@@ -87,16 +108,34 @@ public class BatchStockController {
         return new ResponseEntity<>(batchStockResponseList, HttpStatus.OK);
     }
 
+    /**
+     * Return BatchStock given id
+     * Return 200 OK when operation is success
+     *
+     * @param productId the batchStockModel id
+     * @return BatchStockModel
+     * @throws BatchStockByIdNotFoundException when BatchStock not found
+     */
     @GetMapping("/product-id/{productId}")
     ResponseEntity<BatchStockResponse> getByProductId(@PathVariable Long productId) throws BatchStockByIdNotFoundException {
         return new ResponseEntity<>(BatchStockResponse.toResponse((iBatchStockService.getById(productId))), HttpStatus.OK);
     }
 
+    /**
+     * Create a new BatchStock given model
+     * Return 201 CREATED when operation is success
+     *
+     * @param batchStockRequest new BatchStock to create
+     * @param productId the Prosuct id
+     * @param representativeId the Representative id
+     * @param warehouseId Warehousde id
+     * @return the BatchStock created
+     */
     @PostMapping("/product-id")
     ResponseEntity<BatchStockResponse> save(@RequestBody BatchStockRequest batchStockRequest,
                                             @RequestParam Long productId,
                                             @RequestParam Long representativeId,
-                                            @RequestParam Long warehouseId) throws Exception {
+                                            @RequestParam Long warehouseId) throws RepresentativeWarehouseNotAssociatedException, RepresentativeNotFoundException {
         iRepresentativeService.validateRepresentative(representativeId, warehouseId);
         BatchStockModel batchStock = batchStockRequest.toModel();
         batchStock.setProduct(iProductService.getById(productId));
@@ -104,6 +143,13 @@ public class BatchStockController {
                 HttpStatus.CREATED);
     }
 
+    /**
+     * Returns a Batch Stock list with due date between the current day and three weeks ahead given a product
+     * Return 200 OK when operation is success
+     *
+     * @param id the product
+     * @return list of BatchStock
+     */
     @GetMapping("/list")
     public ResponseEntity<List<BatchStockOrderResponse>> getBatchStockByProduct(@RequestParam("idProduct") Long id) {
         List<BatchStockOrderResponse> batchStock = iBatchStockService.findValidProductsByDueDate(id, LocalDate.now().now().plusDays(21)).stream().map(BatchStockOrderResponse::toResponse).toList();
@@ -113,6 +159,14 @@ public class BatchStockController {
         return new ResponseEntity<>(batchStock, HttpStatus.OK);
     }
 
+    /**
+     * Return a List BatchStockModel by ProductId and
+     * Return 200 OK when operation is success
+     *
+     * @param id the ProductModel id
+     * @param order list sorting
+     * @return a list with all BatchStockOrderResponse instance
+     */
     @GetMapping("/list/order")
     public ResponseEntity<List<BatchStockOrderResponse>> getBatchStockByProductOrder(@RequestParam("idProduct") Long id, @RequestParam("order") String order) {
         List<BatchStockModel> batchStock = iBatchStockService.getByProductOrder(id, order);

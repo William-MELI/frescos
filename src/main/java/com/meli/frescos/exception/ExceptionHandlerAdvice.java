@@ -17,6 +17,12 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
 
+    /**
+     * This method handles the DataIntegrityViolationException
+     *
+     * @param ex The original exception
+     * @return A ResponseEntity to represent the HTTP error
+     */
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ExceptionDetails> handlerDataIntegrityViolationException(DataIntegrityViolationException ex) {
         return new ResponseEntity<>(
@@ -28,6 +34,12 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
                 HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * This method handles the WarehouseNotFoundException
+     *
+     * @param ex The original exception
+     * @return A ResponseEntity to represent the HTTP error
+     */
     @ExceptionHandler(WarehouseNotFoundException.class)
     public ResponseEntity<ExceptionDetails> handlerWarehouseNotFoundException(WarehouseNotFoundException ex) {
         return new ResponseEntity<>(
@@ -39,6 +51,12 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
                 HttpStatus.NOT_FOUND);
     }
 
+    /**
+     * This method handles the UsedPrimaryKeyConstraintException
+     *
+     * @param ex The original exception
+     * @return A ResponseEntity to represent the HTTP error
+     */
     @ExceptionHandler(UsedPrimaryKeyConstraintException.class)
     public ResponseEntity<ExceptionDetails> handlerWarehouseNotFoundException(UsedPrimaryKeyConstraintException ex) {
         return new ResponseEntity<>(
@@ -50,6 +68,15 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
                 HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * This method handles the MethodArgumentNotValid
+     *
+     * @param ex The original exception
+     * @param headers The headers from exception
+     * @param status The status from exception
+     * @param request The request from exception
+     * @return A ResponseEntity to represent the HTTP error
+     */
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                   HttpHeaders headers,
@@ -90,6 +117,12 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
                 HttpStatus.NOT_FOUND);
     }
 
+    /**
+     * This method handles the CpfDuplicateException
+     *
+     * @param ex The original exception
+     * @return A ResponseEntity to represent the HTTP error
+     */
     @ExceptionHandler(CpfDuplicateException.class)
     public ResponseEntity<ExceptionDetails> handlerCpfDuplicateException(CpfDuplicateException ex) {
             return new ResponseEntity<>(
@@ -101,6 +134,12 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
                     HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * This method handles the OrderProductIsInvalidException
+     *
+     * @param ex The original exception
+     * @return A ResponseEntity to represent the HTTP error
+     */
     @ExceptionHandler(OrderProductIsInvalidException.class)
     public ResponseEntity<ExceptionDetails> handlerOrderProductIsInvalidException(OrderProductIsInvalidException ex) {
         return new ResponseEntity<>(
@@ -178,9 +217,15 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
                         .message(ex.getMessage())
                         .timestamp(LocalDateTime.now())
                         .build(),
-                HttpStatus.NOT_FOUND);
+                HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * This method handles the SectionByIdNotFoundException
+     *
+     * @param ex The original exception
+     * @return A ResponseEntity to represent the HTTP error
+     */
     @ExceptionHandler(SectionByIdNotFoundException.class)
     public ResponseEntity<ExceptionDetails> handlerSectionByIdNotFoundException(SectionByIdNotFoundException ex) {
         return new ResponseEntity<>(
@@ -227,6 +272,91 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
     }
 
     /**
+     * This method handles the SellerByIdNotFoundException
+     *
+     * @param ex The original exception
+     * @return A ResponseEntity to represent the HTTP error
+     */
+    @ExceptionHandler(SellerByIdNotFoundException.class)
+    public ResponseEntity<ExceptionDetails> handlerSellerByIdNotFoundException(SellerByIdNotFoundException ex) {
+        return new ResponseEntity<>(
+                ExceptionDetails.builder()
+                        .title("Vendedor não encontrado")
+                        .message(ex.getMessage())
+                        .timestamp(LocalDateTime.now())
+                        .build(),
+                HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * This method handles the ProductNotPermittedInSectionException
+     *
+     * @param ex The original exception
+     * @return A ResponseEntity to represent the HTTP error
+     */
+    @ExceptionHandler(ProductNotPermittedInSectionException.class)
+    public ResponseEntity<ExceptionDetails> handlerProductNotPermittedInSectionException(ProductNotPermittedInSectionException ex) {
+        return new ResponseEntity<>(
+                ExceptionDetails.builder()
+                        .title("Produto não permitido na seção!")
+                        .message(ex.getMessage())
+                        .timestamp(LocalDateTime.now())
+                        .build(),
+                HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * This method handles the NotEnoughSpaceInSectionException
+     *
+     * @param ex The original exception
+     * @return A ResponseEntity to represent the HTTP error
+     */
+    @ExceptionHandler(NotEnoughSpaceInSectionException.class)
+    public ResponseEntity<ExceptionDetails> handlerNotEnoughSpaceInSectionException(NotEnoughSpaceInSectionException ex) {
+        return new ResponseEntity<>(
+                ExceptionDetails.builder()
+                        .title("Espaço insuficiente na(s) seção(ões)!")
+                        .message(ex.getMessage())
+                        .timestamp(LocalDateTime.now())
+                        .build(),
+                HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * This method handles the NotEnoughSpaceInSectionException
+     *
+     * @param ex The original exception
+     * @return A ResponseEntity to represent the HTTP error
+     */
+    @ExceptionHandler(NotEnoughStockException.class)
+    public ResponseEntity<ExceptionDetails> handlerNotEnoughStockException(NotEnoughStockException ex) {
+        return new ResponseEntity<>(
+                ExceptionDetails.builder()
+                        .title("Estoque insuficiente para atender o pedido!")
+                        .message(ex.getMessage())
+                        .timestamp(LocalDateTime.now())
+                        .build(),
+                HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * This method handles the NullDueDateException
+     *
+     * @param ex The original exception
+     * @return A ResponseEntity to represent the HTTP error
+     */
+    @ExceptionHandler(NullDueDateException.class)
+    public ResponseEntity<ExceptionDetails> handlerNullDueDateException(NullDueDateException ex) {
+        return new ResponseEntity<>(
+                ExceptionDetails.builder()
+                        .title("Não consta data de validade!")
+                        .message(ex.getMessage())
+                        .timestamp(LocalDateTime.now())
+                        .build(),
+                HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    /**
      * This method handles the BatchStockFilterCategoryInvalidException
      *
      * @param ex The original exception
@@ -240,7 +370,7 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
                         .message(ex.getMessage())
                         .timestamp(LocalDateTime.now())
                         .build(),
-                HttpStatus.NOT_FOUND);
+                HttpStatus.BAD_REQUEST);
     }
 
 }

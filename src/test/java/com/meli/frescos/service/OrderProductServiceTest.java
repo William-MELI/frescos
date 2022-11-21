@@ -121,7 +121,7 @@ class OrderProductServiceTest {
         BDDMockito.when(purchaseOrderRepository.findById(1L))
                 .thenReturn(Optional.of(purchaseOrderModel));
 
-        BDDMockito.when(orderProductsRepository.findByPurchaseOrderModel_Id(purchaseOrderModel.getId()))
+        BDDMockito.when(orderProductsRepository.findByPurchaseOrderModel(purchaseOrderModel))
                 .thenReturn(listOrderProduct);
 
         List<OrderProductsModel> returnListOrder = orderProductService.getByPurchaseId(purchaseOrderModel.getId());

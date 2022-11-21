@@ -1,8 +1,10 @@
 package com.meli.frescos.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.meli.frescos.controller.dto.SectionRequest;
 import com.meli.frescos.controller.dto.WarehouseRequest;
+import com.meli.frescos.exception.WarehouseNotFoundException;
 import com.meli.frescos.model.CategoryEnum;
 import com.meli.frescos.model.WarehouseModel;
 import com.meli.frescos.service.ISectionService;

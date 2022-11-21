@@ -54,13 +54,13 @@ public class SectionControllerIT {
 
     @BeforeEach
     void setup() {
-        this.sectionRepo.deleteAll();
-        this.warehouseRepo.deleteAll();
+        this.sectionRepo.deleteAllInBatch();
+        this.warehouseRepo.deleteAllInBatch();
     }
 
     @Test
     @DisplayName("Test Section Successfull Creation - POST Endpoint")
-    void create_returnsCreatedStatus_whenSuccess()  throws Exception {
+    void create_returnsCreatedStatus_whenSuccess() throws Exception {
         WarehouseModel warehouse = newWarehouseRecord();
         String description = "marca";
         CategoryEnum category = CategoryEnum.FRESH;

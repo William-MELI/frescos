@@ -2,6 +2,7 @@ package com.meli.frescos.controller;
 
 import com.meli.frescos.controller.dto.PurchaseOrderRequest;
 import com.meli.frescos.controller.dto.PurchaseOrderResponse;
+import com.meli.frescos.exception.NotEnoughStockException;
 import com.meli.frescos.model.OrderStatusEnum;
 import com.meli.frescos.model.PurchaseOrderModel;
 import com.meli.frescos.service.PurchaseOrderService;
@@ -19,7 +20,7 @@ import java.util.List;
  * Using Spring RestController
  */
 @RestController
-@RequestMapping("purchase-order")
+@RequestMapping("/purchase-order")
 public class PurchaseOrderController {
 
     private final PurchaseOrderService purchaseOrderService;
@@ -36,7 +37,7 @@ public class PurchaseOrderController {
      * @throws Exception
      */
     @PostMapping
-    ResponseEntity<PurchaseOrderResponse> save(@RequestBody @Valid PurchaseOrderRequest purchaseOrderRequest) throws Exception {
+    ResponseEntity<PurchaseOrderResponse> save(@RequestBody @Valid PurchaseOrderRequest purchaseOrderRequest) {
 
         BigDecimal insertPurchase = purchaseOrderService.savePurchaseGetPrice(purchaseOrderRequest.toModel());
 
@@ -51,7 +52,7 @@ public class PurchaseOrderController {
      * @throws Exception
      */
     @PatchMapping("/{id}")
-    ResponseEntity<Void> updateStatus(@PathVariable Long id) throws Exception {
+    ResponseEntity<Void> updateStatus(@PathVariable Long id) throws NotEnoughStockException {
         purchaseOrderService.updateStatus(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
