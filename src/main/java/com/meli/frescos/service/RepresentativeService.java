@@ -5,6 +5,7 @@ import com.meli.frescos.exception.RepresentativeNotFoundException;
 import com.meli.frescos.exception.RepresentativeWarehouseNotAssociatedException;
 import com.meli.frescos.exception.WarehouseNotFoundException;
 import com.meli.frescos.model.RepresentativeModel;
+import com.meli.frescos.model.WarehouseModel;
 import com.meli.frescos.repository.RepresentativeRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -74,7 +75,8 @@ public class RepresentativeService implements IRepresentativeService {
      * @throws Exception when representative does not belong to the warehouse
      */
     @Override
-    public void validateRepresentative(Long representativeId, Long warehouseId) throws RepresentativeWarehouseNotAssociatedException, RepresentativeNotFoundException {
+    public void validateRepresentative(Long representativeId, Long warehouseId) throws RepresentativeWarehouseNotAssociatedException, RepresentativeNotFoundException, WarehouseNotFoundException {
+        iWarehouseService.getById(warehouseId);
         RepresentativeModel representative = getById(representativeId);
         if(!representative.getWarehouse().getId().equals(warehouseId)) {
             throw new RepresentativeWarehouseNotAssociatedException("Representante não pertence a este armazém!");

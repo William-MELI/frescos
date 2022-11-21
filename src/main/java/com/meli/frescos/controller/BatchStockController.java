@@ -3,9 +3,7 @@ package com.meli.frescos.controller;
 import com.meli.frescos.controller.dto.BatchStockOrderResponse;
 import com.meli.frescos.controller.dto.BatchStockRequest;
 import com.meli.frescos.controller.dto.BatchStockResponse;
-import com.meli.frescos.exception.BatchStockByIdNotFoundException;
-import com.meli.frescos.exception.RepresentativeNotFoundException;
-import com.meli.frescos.exception.RepresentativeWarehouseNotAssociatedException;
+import com.meli.frescos.exception.*;
 import com.meli.frescos.model.BatchStockModel;
 import com.meli.frescos.model.CategoryEnum;
 import com.meli.frescos.service.IBatchStockService;
@@ -15,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -128,10 +127,10 @@ public class BatchStockController {
      * @return the BatchStock created
      */
     @PostMapping("/product-id")
-    ResponseEntity<BatchStockResponse> save(@RequestBody BatchStockRequest batchStockRequest,
+    ResponseEntity<BatchStockResponse> save(@RequestBody @Valid BatchStockRequest batchStockRequest,
                                             @RequestParam Long productId,
                                             @RequestParam Long representativeId,
-                                            @RequestParam Long warehouseId) throws RepresentativeWarehouseNotAssociatedException, RepresentativeNotFoundException {
+                                            @RequestParam Long warehouseId) throws RepresentativeWarehouseNotAssociatedException, RepresentativeNotFoundException, WarehouseNotFoundException {
         iRepresentativeService.validateRepresentative(representativeId, warehouseId);
         BatchStockModel batchStock = batchStockRequest.toModel();
         batchStock.setProduct(iProductService.getById(productId));
@@ -170,5 +169,16 @@ public class BatchStockController {
         if(batchStock.isEmpty())
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(batchStock.stream().map(BatchStockOrderResponse::toResponse).toList(), HttpStatus.OK);
+    }
+
+    @PutMapping
+    ResponseEntity<BatchStockResponse> update(@RequestBody BatchStockRequest batchStockRequest,
+                                            @RequestParam Long batchStockId,
+                                            @RequestParam Long representativeId,
+                                            @RequestParam Long warehouseId) throws RepresentativeWarehouseNotAssociatedException, RepresentativeNotFoundException, WarehouseNotFoundException, ProductNotPermittedInSectionException, NotEnoughSpaceInSectionException {
+        iRepresentativeService.validateRepresentative(representativeId, warehouseId);
+        BatchStockModel batchStock = iBatchStockService.updateBatchStock(batchStockRequest.toModel(), batchStockId);
+        return new ResponseEntity<>(BatchStockResponse.toResponse(iBatchStockService.save(batchStock)),
+                HttpStatus.CREATED);
     }
 }

@@ -15,6 +15,11 @@ import lombok.*;
 public class BatchStockOrderResponse {
 
     /**
+     * BatchStock id
+     */
+    private Long id;
+
+    /**
      * BatchStock batchNumber
      */
     private SectionBatchStockOrderResponse section;
@@ -37,6 +42,7 @@ public class BatchStockOrderResponse {
      */
     public static BatchStockOrderResponse toResponse(BatchStockModel batchStock){
         return BatchStockOrderResponse.builder()
+                .id(batchStock.getId())
                 .section(SectionBatchStockOrderResponse.toResponse(batchStock.getSection()))
                 .productId(batchStock.getProduct().getId())
                 .batchStock(BatchStockOrderItemResponse.toResponse(batchStock)).build();

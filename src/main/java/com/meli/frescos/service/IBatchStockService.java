@@ -36,4 +36,6 @@ public interface IBatchStockService {
     List<BatchStockModel> getByProductOrder(Long id, String order);
 
     void consumeBatchStockOnPurchase(PurchaseOrderModel purchaseOrderModel) throws NotEnoughStockException;
+
+    BatchStockModel updateBatchStock(BatchStockModel batchStock, Long batchStockId) throws ProductNotPermittedInSectionException, NotEnoughSpaceInSectionException;
 }
