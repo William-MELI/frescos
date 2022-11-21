@@ -67,7 +67,7 @@ public class ProductController {
         return new ResponseEntity<>(ProductDetailedResponse.toResponse(product, stockResponse) , HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping("/inboundorder")
     public ResponseEntity<ProductBatchStockResponse> save(@Valid @RequestBody ProductBatchStockRequest productBatchStockRequest) throws Exception {
         iWarehouseService.getById(productBatchStockRequest.getInboundOrder().getWarehouseCode());
         iRepresentativeService.validateRepresentative(productBatchStockRequest.getInboundOrder().getRepresentativeCode(), productBatchStockRequest.getInboundOrder().getWarehouseCode());
