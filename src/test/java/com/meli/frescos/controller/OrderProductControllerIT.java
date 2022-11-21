@@ -1,12 +1,9 @@
 package com.meli.frescos.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.meli.frescos.controller.dto.OrderProductsRequest;
 import com.meli.frescos.model.*;
-import com.meli.frescos.repository.*;
 import com.meli.frescos.service.IOrderProductService;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,19 +38,19 @@ class OrderProductControllerIT {
     private IOrderProductService orderProductService;
 
     @Autowired
-    private OrderProductsRepository orderProductsRepository;
+    private com.meli.frescos.repository.OrderProductsRepository orderProductsRepository;
 
     @Autowired
-    private ProductRepository productRepository;
+    private com.meli.frescos.repository.ProductRepository productRepository;
 
     @Autowired
-    PurchaseOrderRepository purchaseOrderRepository;
+    com.meli.frescos.repository.PurchaseOrderRepository purchaseOrderRepository;
 
     @Autowired
-    SellerRepository sellerRepository;
+    com.meli.frescos.repository.SellerRepository sellerRepository;
 
     @Autowired
-    BuyerRepository buyerRepository;
+    com.meli.frescos.repository.BuyerRepository buyerRepository;
 
     @BeforeEach
     void setup() {

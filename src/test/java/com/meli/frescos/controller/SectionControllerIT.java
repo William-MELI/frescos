@@ -54,8 +54,8 @@ public class SectionControllerIT {
 
     @BeforeEach
     void setup() {
-        this.sectionRepo.deleteAll();
-        this.warehouseRepo.deleteAll();
+        this.sectionRepo.deleteAllInBatch();
+        this.warehouseRepo.deleteAllInBatch();
     }
 
     @Test
