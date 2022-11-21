@@ -393,17 +393,20 @@ class SellerControllerIT {
         response.andExpect(status().isOk());
     }
 
-//    @Test
-//    @DisplayName("Test Delete Seller by ID with No Seller- GET Endpoint")
-//    void deleteByIdetByID_returnNoContent_whenNoSellerExists() throws Exception {
-//
-//        Long id = 1L;
-//
-//        ResultActions response = mockMvc.perform(
-//                delete("/seller/{id}", id)
-//                        .contentType(MediaType.APPLICATION_JSON)
-//        );
-//
-//        response.andExpect(status().isNoContent());
-//    }
+    @Test
+    @DisplayName("Test Delete Seller by ID with No Seller- GET Endpoint")
+    void deleteByIdetByID_returnNoContent_whenNoSellerExists() throws Exception {
+
+        Long id = 1L;
+
+        ResultActions response = mockMvc.perform(
+                delete("/seller/{id}", id)
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        response.andExpect(status().isBadRequest())
+                .andExpect(result -> assertTrue(
+                        result.getResolvedException() instanceof SellerByIdNotFoundException))
+                .andExpect(jsonPath("$.message", CoreMatchers.containsString("Vendedor com id 1 não encontrado")));
+    }
 }
