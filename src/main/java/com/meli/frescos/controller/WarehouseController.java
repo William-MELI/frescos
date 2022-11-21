@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -32,7 +33,7 @@ public class WarehouseController {
      * @return ResponseEntity<WarehouseResponse> with status 201 created
      */
     @PostMapping
-    public ResponseEntity<WarehouseResponse> save(@RequestBody WarehouseRequest request) {
+    public ResponseEntity<WarehouseResponse> save(@Valid @RequestBody WarehouseRequest request) {
         return new ResponseEntity<>(WarehouseResponse.toResponse(this.warehouseService.save(request.toModel())), HttpStatus.CREATED);
     }
 

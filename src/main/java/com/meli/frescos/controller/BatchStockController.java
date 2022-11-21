@@ -172,7 +172,7 @@ public class BatchStockController {
     }
 
     @PutMapping
-    ResponseEntity<BatchStockResponse> update(@RequestBody BatchStockRequest batchStockRequest,
+    ResponseEntity<BatchStockResponse> update(@RequestBody @Valid BatchStockRequest batchStockRequest,
                                             @RequestParam Long batchStockId,
                                             @RequestParam Long representativeId,
                                             @RequestParam Long warehouseId) throws RepresentativeWarehouseNotAssociatedException, RepresentativeNotFoundException, WarehouseNotFoundException, ProductNotPermittedInSectionException, NotEnoughSpaceInSectionException {

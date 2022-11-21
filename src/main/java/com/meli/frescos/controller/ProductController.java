@@ -29,13 +29,10 @@ public class ProductController {
 
     private final IBatchStockService iBatchStockService;
 
-    private final IWarehouseService iWarehouseService;
-
-    public ProductController(IProductService iProductService, IRepresentativeService iRepresentativeService, IBatchStockService iBatchStockService, IWarehouseService iWarehouseService) {
+    public ProductController(IProductService iProductService, IRepresentativeService iRepresentativeService, IBatchStockService iBatchStockService) {
         this.iProductService = iProductService;
         this.iRepresentativeService = iRepresentativeService;
         this.iBatchStockService = iBatchStockService;
-        this.iWarehouseService = iWarehouseService;
     }
     /**
      * Return all Product
