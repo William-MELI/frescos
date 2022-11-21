@@ -2,6 +2,7 @@ package com.meli.frescos.controller;
 
 import com.meli.frescos.controller.dto.RepresentativeRequest;
 import com.meli.frescos.controller.dto.RepresentativeResponse;
+import com.meli.frescos.exception.RepresentativeNotFoundException;
 import com.meli.frescos.exception.WarehouseNotFoundException;
 import com.meli.frescos.model.RepresentativeModel;
 import com.meli.frescos.service.IRepresentativeService;
