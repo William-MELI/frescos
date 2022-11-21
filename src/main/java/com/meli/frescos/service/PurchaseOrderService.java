@@ -7,7 +7,6 @@ import com.meli.frescos.exception.PurchaseOrderByIdNotFoundException;
 import com.meli.frescos.model.*;
 import com.meli.frescos.repository.PurchaseOrderRepository;
 import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -59,7 +58,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
     /**
      * This method check if the product is expired
      *
-     * @param productId       from product Entity
+     * @param productId from product Entity
      * @param desiredQuantity int required due date
      * @return Boolean checking due date
      */
@@ -78,8 +77,8 @@ public class PurchaseOrderService implements IPurchaseOrderService {
      * This method check if the quantity of  products is available
      *
      * @param orderProductsList List of OrderProduct Entity
-     * @return Bollean checking availability
-     * @throws Exception
+     * @return boolean checking availability
+     * @throws OrderProductIsInvalidException when order product is invalid
      */
     private boolean verifyOrderIsValid(List<OrderProductsRequest> orderProductsList) throws OrderProductIsInvalidException {
         Set<Long> productIdListException = new HashSet<>();
@@ -107,8 +106,9 @@ public class PurchaseOrderService implements IPurchaseOrderService {
      *
      * @param purchaseOrderRequest from purchaseOrder instance
      * @return BigDecimal with sum of price the all products listed
-     * @throws Exception
+     * @throws OrderProductIsInvalidException when order product is invalid
      */
+    @Override
     public BigDecimal savePurchaseGetPrice(PurchaseOrderRequest purchaseOrderRequest) {
         boolean isOrderValid = (verifyOrderIsValid(purchaseOrderRequest.getProducts()));
         if (isOrderValid) {
@@ -137,12 +137,13 @@ public class PurchaseOrderService implements IPurchaseOrderService {
     }
 
     /**
-     * This method get Purchase Order with id related
+     * Return PurchaseOrderModel given id
      *
-     * @param purchaseId Long id
-     * @return PurchaseOrderModel
-     * @throws PurchaseOrderByIdNotFoundException
+     * @param purchaseId the PurchaseOrderModel id
+     * @return a PurchaseOrderModel
+     * @throws PurchaseOrderByIdNotFoundException when purchase order not found
      */
+    @Override
     public PurchaseOrderModel getById(Long purchaseId) throws PurchaseOrderByIdNotFoundException {
         return purchaseOrderRepository.findById(purchaseId).orElseThrow(() -> new PurchaseOrderByIdNotFoundException(purchaseId));
     }
@@ -161,7 +162,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
      * This method update status from PurchaseOrder related
      *
      * @param id Long related an purchaseOrder
-     * @throws Exception
+     * @throws Exception when insufficient stock or product has expired due date
      */
     @Override
     public void updateStatus(Long id) throws Exception {

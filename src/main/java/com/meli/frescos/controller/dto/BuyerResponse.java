@@ -14,11 +14,6 @@ import lombok.*;
 public class BuyerResponse {
 
     /**
-     * Seller id
-     */
-    private Long id;
-
-    /**
      * Seller name
      */
     private String name;
@@ -30,7 +25,6 @@ public class BuyerResponse {
      */
     public static BuyerResponse toResponse(BuyerModel buyer) {
         return BuyerResponse.builder()
-                .id(buyer.getId())
                 .name(buyer.getName())
                 .build();
     }

@@ -1,6 +1,8 @@
 package com.meli.frescos.service;
 
 import com.meli.frescos.exception.OneToOneMappingAlreadyDefinedException;
+import com.meli.frescos.exception.RepresentativeNotFoundException;
+import com.meli.frescos.exception.RepresentativeWarehouseNotAssociatedException;
 import com.meli.frescos.exception.WarehouseNotFoundException;
 import com.meli.frescos.model.RepresentativeModel;
 import com.meli.frescos.model.WarehouseModel;
@@ -19,14 +21,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 class RepresentativeServiceTest {
 
     @InjectMocks
-    RepresentativeService  representativeService;
+    RepresentativeService representativeService;
 
     @Mock
     RepresentativeRepository representativeRepository;
@@ -38,7 +41,7 @@ class RepresentativeServiceTest {
     @DisplayName("Create a new Representative successfully")
     void saveNewRepresentative_returnCreatedRepresentative_whenSuccess() throws WarehouseNotFoundException {
         String name = "Representative name";
-        Long warehouse_id =  1L;
+        Long warehouse_id = 1L;
         WarehouseModel warehouseResponse = new WarehouseModel();
         warehouseResponse.setId(warehouse_id);
 
@@ -61,7 +64,7 @@ class RepresentativeServiceTest {
     @DisplayName("Throw exception when Warehouse Id already defined with representative")
     void saveNewRepresentantive_throwsException_OneToOneMappingAlreadyDefinedException() throws WarehouseNotFoundException {
         String name = "Representative name";
-        Long warehouse_id =  1L;
+        Long warehouse_id = 1L;
         WarehouseModel warehouseResponse = new WarehouseModel();
         warehouseResponse.setId(warehouse_id);
 
@@ -80,9 +83,9 @@ class RepresentativeServiceTest {
 
     @Test
     @DisplayName("Returns a Representative by ID")
-    void getById_returnRepresentative_WhenSuccess() throws Exception {
+    void getById_returnRepresentative_WhenSuccess() throws RepresentativeNotFoundException {
         String name = "Representative name";
-        Long warehouse_id =  1L;
+        Long warehouse_id = 1L;
         WarehouseModel warehouseResponse = new WarehouseModel();
         warehouseResponse.setId(warehouse_id);
 
@@ -101,14 +104,28 @@ class RepresentativeServiceTest {
     }
 
     @Test
+    @DisplayName("Throws RepresentativeNotFoundException when ID does not exists")
+    void getById_throwsRepresentativeNotFoundException_WhenRepresentativeDoesNotExists() {
+
+        Long id = -1L;
+
+        Mockito.when(representativeRepository.findById(id)).thenReturn(Optional.empty());
+
+        assertThrows(RepresentativeNotFoundException.class, () -> {
+            representativeService.getById(id);
+        });
+
+    }
+
+    @Test
     @DisplayName("Returns a All Representative")
-    void getAll() throws Exception {
-        WarehouseModel warehouse =  new WarehouseModel("blumenau", "Santa Catarina", "15 de Maio", "5662sdww", "aaaaa");
+    void getAll_returnListOfRepresentative_whenSuccess() {
+        WarehouseModel warehouse = new WarehouseModel("blumenau", "Santa Catarina", "15 de Maio", "5662sdww", "aaaaa");
 
         List<RepresentativeModel> representativeList = new ArrayList<>();
 
         representativeList.add(new RepresentativeModel(1L, "Representante 1", warehouse));
-        representativeList.add(new RepresentativeModel(2L, "Representantee 2" , warehouse));
+        representativeList.add(new RepresentativeModel(2L, "Representantee 2", warehouse));
 
         Mockito.when(representativeRepository.findAll())
                 .thenReturn(representativeList);
@@ -121,32 +138,8 @@ class RepresentativeServiceTest {
 
     @Test
     @DisplayName("Representative belong to the warehouse")
-    void validateRepresentative_whenSuccess() throws Exception {
-        Long warehouse_id =  1L;
-        Long representative_id = 1L;
-        String name = "Representative 1";
-        WarehouseModel warehouseResponse = new WarehouseModel();
-        warehouseResponse.setId(warehouse_id);
-
-        RepresentativeModel representativeModel = new RepresentativeModel()
-                .builder()
-                .id(representative_id)
-                .name(name)
-                .warehouse(new WarehouseModel()
-                        .builder()
-                        .id(warehouse_id)
-                        .build()
-                        ).build();
-
-        Mockito.when(representativeRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(representativeModel));
-
-        representativeService.validateRepresentative(representative_id, warehouse_id);
-    }
-
-    @Test
-    @DisplayName("Throw when Representative does not belong to the warehouse")
-    void validateRepresentative_throwException() {
-        Long warehouse_id =  1L;
+    void validateRepresentative_whenSuccess() throws RepresentativeWarehouseNotAssociatedException, RepresentativeNotFoundException {
+        Long warehouse_id = 1L;
         Long representative_id = 1L;
         String name = "Representative 1";
         WarehouseModel warehouseResponse = new WarehouseModel();
@@ -164,7 +157,31 @@ class RepresentativeServiceTest {
 
         Mockito.when(representativeRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(representativeModel));
 
-        assertThrows(Exception.class, () -> {
+        representativeService.validateRepresentative(representative_id, warehouse_id);
+    }
+
+    @Test
+    @DisplayName("Throw when Representative does not belong to the warehouse")
+    void validateRepresentative_throwException() {
+        Long warehouse_id = 1L;
+        Long representative_id = 1L;
+        String name = "Representative 1";
+        WarehouseModel warehouseResponse = new WarehouseModel();
+        warehouseResponse.setId(warehouse_id);
+
+        RepresentativeModel representativeModel = new RepresentativeModel()
+                .builder()
+                .id(representative_id)
+                .name(name)
+                .warehouse(new WarehouseModel()
+                        .builder()
+                        .id(warehouse_id)
+                        .build()
+                ).build();
+
+        Mockito.when(representativeRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(representativeModel));
+
+        assertThrows(RepresentativeWarehouseNotAssociatedException.class, () -> {
             representativeService.validateRepresentative(representative_id, 2L);
         });
     }
