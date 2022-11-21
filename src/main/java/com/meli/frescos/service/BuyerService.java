@@ -4,10 +4,13 @@ import com.meli.frescos.exception.BuyerNotFoundException;
 import com.meli.frescos.model.BuyerModel;
 import com.meli.frescos.repository.BuyerRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
+/**
+ *  This class contains all Buyer related functions
+ *  Using @Service from spring
+ */
 @Service
 public class BuyerService implements IBuyerService {
 

@@ -8,7 +8,6 @@ import com.meli.frescos.repository.OrderProductsRepository;
 import com.meli.frescos.repository.ProductRepository;
 import com.meli.frescos.repository.PurchaseOrderRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -64,6 +63,13 @@ public class OrderProductService implements IOrderProductService {
         return orderProductsRepository.save(model);
     }
 
+    /**
+     * Returns a list of OrderProductsModel given a PurchaseOrder id
+     *
+     * @param purchaseId the PurchaseOrder id
+     * @return list of OrderProductsModel
+     * @throws Exception when purchase order not found
+     */
     public List<OrderProductsModel> getByPurchaseId(Long purchaseId) throws Exception {
         PurchaseOrderModel purchaseOrderModel = purchaseOrderRepository.findById(purchaseId).orElseThrow(() -> new Exception("Purchase order not found"));
         List<OrderProductsModel> orderProductsModels = orderProductsRepository.findByPurchaseOrderModel_Id(purchaseOrderModel.getId());

@@ -6,10 +6,13 @@ import com.meli.frescos.model.SectionModel;
 import com.meli.frescos.model.WarehouseModel;
 import com.meli.frescos.repository.WarehouseRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
+/**
+ *  This class contains all Warehouse related functions
+ *  Using @Service from spring
+ */
 @Service
 public class WarehouseService implements IWarehouseService {
 
