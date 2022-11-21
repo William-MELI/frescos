@@ -215,7 +215,7 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
      * @param ex The original exception
      * @return A ResponseEntity to represent the HTTP error
      */
-    @ExceptionHandler(RepresentativeNotFoundException.class)
+    @ExceptionHandler(RepresentativeWarehouseNotAssociatedException.class)
     public ResponseEntity<ExceptionDetails> handlerRepresentativeWarehouseNotAssociatedException(RepresentativeWarehouseNotAssociatedException ex) {
         return new ResponseEntity<>(
                 ExceptionDetails.builder()
