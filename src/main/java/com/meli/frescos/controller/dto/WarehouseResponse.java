@@ -46,7 +46,7 @@ public class WarehouseResponse {
     /**
      * Maps WarehouseModel to WarehouseResponse
      * @param warehouse WarehouseModel
-     * @return BatchStockResponse
+     * @return WarehouseResponse
      */
     public static WarehouseResponse toResponse(WarehouseModel warehouse) {
         return WarehouseResponse.builder()
