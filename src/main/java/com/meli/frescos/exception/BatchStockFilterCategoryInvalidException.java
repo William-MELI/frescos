@@ -1,7 +1,7 @@
 package com.meli.frescos.exception;
 
 /**
- * This exception is used when a filter is made with order parameter different from
+ * This exception is used when a filter is made with an invalid parameter
  */
 public class BatchStockFilterCategoryInvalidException extends RuntimeException{
 
