@@ -31,13 +31,15 @@ class PurchaseOrderServiceTest {
     BuyerRepository buyerRepository;
 
     @Mock
+    BuyerService buyerService;
+
+    @Mock
     PurchaseOrderRepository purchaseOrderRepository;
 
 
     @Mock
     BatchStockService batchStockService;
-
-  /*  @Test
+    @Test
     void save_returnPurchaseOrderModel_whenSuccess() {
         String name = "Buyer";
         String cpf = "41937616576";
@@ -63,12 +65,10 @@ class PurchaseOrderServiceTest {
         batchList.add(batch);
 
         LocalDate time = LocalDate.now();
-        String orderStatus = "VALIDO";
         List<OrderProductsRequest> products = new ArrayList<>();
         products.add(new OrderProductsRequest());
 
         PurchaseOrderRequest request = PurchaseOrderRequest.builder()
-                .orderStatus(orderStatus)
                 .buyer(buyer.getId())
                 .date(time)
                 .products(products)
@@ -76,31 +76,22 @@ class PurchaseOrderServiceTest {
 
         PurchaseOrderModel purchaseRequestModel = new PurchaseOrderModel();
         purchaseRequestModel.setId(1L);
-        purchaseRequestModel.setOrderStatus(orderStatus);
         purchaseRequestModel.setDate(time);
         purchaseRequestModel.setBuyer(buyer);
 
-        Mockito.when(buyerRepository.getReferenceById(ArgumentMatchers.any()))
-                .thenReturn(buyer);
-
-        Mockito.when(buyerRepository.getReferenceById(ArgumentMatchers.any()))
+        Mockito.when(buyerService.getById(ArgumentMatchers.any()))
                 .thenReturn(buyer);
 
         Mockito.when(purchaseOrderRepository.save(ArgumentMatchers.any()))
                 .thenReturn(purchaseRequestModel);
 
-        Mockito.when(
-                        batchStockService.findValidProductsByDueDate(
-                                ArgumentMatchers.any(), ArgumentMatchers.any()
-                        )
-                )
-                .thenReturn(batchList);
-
         PurchaseOrderModel purchaseOrderModel = purchaseOrderService.save(request);
 
-        assertEquals(purchaseOrderModel.getOrderStatus(), orderStatus);
         assertEquals(purchaseOrderModel.getBuyer().getId(), buyer.getId());
         assertEquals(purchaseOrderModel.getBuyer().getId(), buyer.getId());
         assertEquals(purchaseOrderModel.getDate(), time);
-    }*/
+    }
+
+
+
 }
