@@ -62,7 +62,6 @@ class OrderProductControllerIT {
         orderProductsRepository.deleteAllInBatch();
         sellerRepository.deleteAllInBatch();
         buyerRepository.deleteAllInBatch();
-        System.out.println("a");
     }
 
 
