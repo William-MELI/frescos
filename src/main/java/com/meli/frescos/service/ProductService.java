@@ -66,12 +66,7 @@ public class ProductService implements IProductService {
      */
     @Override
     public List<ProductModel> getByCategory(String filter) {
-        return switch (filter.toUpperCase()) {
-            case "FS" -> productRepository.findByCategory(CategoryEnum.FRESH);
-            case "FF" -> productRepository.findByCategory(CategoryEnum.FROZEN);
-            case "RF" -> productRepository.findByCategory(CategoryEnum.REFRIGERATED);
-            default -> new ArrayList<>();
-        };
+        return productRepository.findByCategory(CategoryEnum.getEnum(filter));
     }
 
 }
