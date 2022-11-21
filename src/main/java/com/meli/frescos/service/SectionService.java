@@ -43,7 +43,7 @@ public class SectionService implements ISectionService {
      *
      * @param sectionRequest the new Section to store
      * @return the new created client
-     * @throws WarehouseNotFoundException Throws in case Warehouse does not exists
+     * @throws WarehouseNotFoundException Throws in case Warehouse does not exist
      */
     @Override
     public SectionModel save(SectionRequest sectionRequest) throws WarehouseNotFoundException {
@@ -68,7 +68,7 @@ public class SectionService implements ISectionService {
      *
      * @param id the SectionModel id
      * @return SectionModel
-     * @throws SectionByIdNotFoundException Throws in case Warehouse does not exists
+     * @throws SectionByIdNotFoundException Throws in case Warehouse does not exist
      */
     @Override
     public SectionModel getById(Long id) throws SectionByIdNotFoundException {

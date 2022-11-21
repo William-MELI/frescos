@@ -47,7 +47,7 @@ public class SellerService implements ISellerService {
      *
      * @param id the seller id
      * @return The stored Seller
-     * @throws SellerByIdNotFoundException Throws in case Seller does not exists
+     * @throws SellerByIdNotFoundException Throws in case Seller does not exist
      */
     @Override
     public SellerModel getById(Long id) {
@@ -57,8 +57,8 @@ public class SellerService implements ISellerService {
     /**
      * Updates a stored Seller
      *
-     * @param sellerModel Used as reference to update stored Seller. Must contains ID with existent Seller
-     * @throws SellerByIdNotFoundException Throws in case Seller does not exists
+     * @param sellerModel Used as reference to update stored Seller. Must contain ID with existent Seller
+     * @throws SellerByIdNotFoundException Throws in case Seller does not exist
      */
     @Override
     public SellerModel update(SellerModel sellerModel, Long id) {

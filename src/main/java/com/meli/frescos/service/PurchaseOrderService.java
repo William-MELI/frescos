@@ -77,7 +77,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
      * This method check if the quantity of  products is available
      *
      * @param orderProductsList List of OrderProduct Entity
-     * @return Bollean checking availability
+     * @return boolean checking availability
      * @throws OrderProductIsInvalidException when order product is invalid
      */
     private boolean verifyOrderIsValid(List<OrderProductsRequest> orderProductsList) throws OrderProductIsInvalidException {
