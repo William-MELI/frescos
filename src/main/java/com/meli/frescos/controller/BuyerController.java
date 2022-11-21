@@ -68,7 +68,7 @@ public class BuyerController {
      * Return 200 OK when operation is success
      *
      * @param buyerRequest the Buyer instance
-     * @param id           the Buyer id
+     * @param id the Buyer id
      * @return the Buyer instance updated
      */
     @PutMapping("/{id}")
