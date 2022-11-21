@@ -20,7 +20,7 @@ import java.util.List;
  * Using Spring RestController
  */
 @RestController
-@RequestMapping("purchase-order")
+@RequestMapping("/purchase-order")
 public class PurchaseOrderController {
 
     private final PurchaseOrderService purchaseOrderService;

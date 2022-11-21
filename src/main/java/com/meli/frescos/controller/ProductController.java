@@ -61,7 +61,7 @@ public class ProductController {
         return new ResponseEntity<>(ProductDetailedResponse.toResponse(product, stockResponse) , HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping("inboundorder")
     public ResponseEntity<ProductBatchStockResponse> save(@RequestBody ProductBatchStockRequest productBatchStockRequest) throws RepresentativeWarehouseNotAssociatedException, RepresentativeNotFoundException, ProductNotPermittedInSectionException, NotEnoughSpaceInSectionException {
         iRepresentativeService.validateRepresentative(productBatchStockRequest.getInboundOrder().getRepresentativeCode(), productBatchStockRequest.getInboundOrder().getWarehouseCode());
         ProductModel requestProduct = productBatchStockRequest.toProduct();
