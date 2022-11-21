@@ -108,6 +108,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
      * @return BigDecimal with sum of price the all products listed
      * @throws OrderProductIsInvalidException when order product is invalid
      */
+    @Override
     public BigDecimal savePurchaseGetPrice(PurchaseOrderRequest purchaseOrderRequest) {
         boolean isOrderValid = (verifyOrderIsValid(purchaseOrderRequest.getProducts()));
         if (isOrderValid) {
@@ -142,6 +143,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
      * @return a PurchaseOrderModel
      * @throws PurchaseOrderByIdNotFoundException when purchase order not found
      */
+    @Override
     public PurchaseOrderModel getById(Long purchaseId) throws PurchaseOrderByIdNotFoundException {
         return purchaseOrderRepository.findById(purchaseId).orElseThrow(() -> new PurchaseOrderByIdNotFoundException(purchaseId));
     }
@@ -160,7 +162,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
      * This method update status from PurchaseOrder related
      *
      * @param id Long related an purchaseOrder
-     * @throws Exception
+     * @throws Exception when insufficient stock or product has expired due date
      */
     @Override
     public void updateStatus(Long id) throws Exception {
