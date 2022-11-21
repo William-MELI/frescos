@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ExceptionDetails> handlerDataIntegrityViolationException(DataIntegrityViolationException ex) {
+    public ResponseEntity<ExceptionDetails> handlerDataIntegrityViolationException() {
         return new ResponseEntity<>(
                 ExceptionDetails.builder()
                         .title("Dados inválidos")
@@ -178,7 +178,7 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
                         .message(ex.getMessage())
                         .timestamp(LocalDateTime.now())
                         .build(),
-                HttpStatus.NOT_FOUND);
+                HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(SectionByIdNotFoundException.class)
@@ -224,5 +224,49 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
                         .timestamp(LocalDateTime.now())
                         .build(),
                 HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ProductNotPermittedInSectionException.class)
+    public ResponseEntity<ExceptionDetails> handlerProductNotPermittedInSectionException(ProductNotPermittedInSectionException ex) {
+        return new ResponseEntity<>(
+                ExceptionDetails.builder()
+                        .title("Produto não permitido na seção!")
+                        .message(ex.getMessage())
+                        .timestamp(LocalDateTime.now())
+                        .build(),
+                HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NotEnoughSpaceInSectionException.class)
+    public ResponseEntity<ExceptionDetails> handlerNotEnoughSpaceInSectionException(NotEnoughSpaceInSectionException ex) {
+        return new ResponseEntity<>(
+                ExceptionDetails.builder()
+                        .title("Espaço insuficiente na(s) seção(ões)!")
+                        .message(ex.getMessage())
+                        .timestamp(LocalDateTime.now())
+                        .build(),
+                HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NotEnoughStockException.class)
+    public ResponseEntity<ExceptionDetails> handlerNotEnoughStockException(NotEnoughStockException ex) {
+        return new ResponseEntity<>(
+                ExceptionDetails.builder()
+                        .title("Estoque insuficiente para atender o pedido!")
+                        .message(ex.getMessage())
+                        .timestamp(LocalDateTime.now())
+                        .build(),
+                HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NullDueDateException.class)
+    public ResponseEntity<ExceptionDetails> handlerNullDueDateException(NullDueDateException ex) {
+        return new ResponseEntity<>(
+                ExceptionDetails.builder()
+                        .title("Não consta data de validade!")
+                        .message(ex.getMessage())
+                        .timestamp(LocalDateTime.now())
+                        .build(),
+                HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

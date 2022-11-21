@@ -1,7 +1,6 @@
 package com.meli.frescos.service;
 
-import com.meli.frescos.exception.BatchStockByIdNotFoundException;
-import com.meli.frescos.exception.BatchStockFilterOrderInvalidException;
+import com.meli.frescos.exception.*;
 import com.meli.frescos.model.*;
 import com.meli.frescos.repository.BatchStockRepository;
 import org.springframework.stereotype.Service;
@@ -62,7 +61,7 @@ public class BatchStockService implements IBatchStockService {
      * @return the BatchStock created
      */
     @Override
-    public BatchStockModel save(BatchStockModel batchStock) throws Exception {
+    public BatchStockModel save(BatchStockModel batchStock) {
         batchStock.setSection(iSectionService.getById(batchStock.getSection().getId()));
         return batchStockRepository.save(batchStock);
     }
@@ -73,12 +72,7 @@ public class BatchStockService implements IBatchStockService {
      * @return the list BatchStock created
      * @throws Exception when invalid BatchStock
      */
-    private List<BatchStockModel> save(List<BatchStockModel> batchStockList) throws Exception {
-        for (BatchStockModel batchStock : batchStockList) {
-            if (batchStock.getSection() == null || batchStock.getProduct() == null) {
-                throw new Exception("BatchStock inválido!");
-            }
-        }
+    private List<BatchStockModel> save(List<BatchStockModel> batchStockList) {
         return batchStockRepository.saveAll(batchStockList);
     }
 
@@ -102,7 +96,7 @@ public class BatchStockService implements IBatchStockService {
      * @throws Exception
      */
     @Override
-    public List<BatchStockModel> getBySectionId(Long sectionId) throws Exception {
+    public List<BatchStockModel> getBySectionId(Long sectionId) {
         SectionModel section = iSectionService.getById(sectionId);
         return batchStockRepository.findBySection(section);
     }
@@ -113,10 +107,9 @@ public class BatchStockService implements IBatchStockService {
      * @param sectionId the section id
      * @param numberOfDays number of days to be added to the current day to arrive at the due date to be sought
      * @return a list of BatchStock
-     * @throws Exception
      */
     @Override
-    public List<BatchStockModel> getBySectionIdAndDueDate(Long sectionId, Integer numberOfDays) throws Exception {
+    public List<BatchStockModel> getBySectionIdAndDueDate(Long sectionId, Integer numberOfDays) {
         SectionModel section = iSectionService.getById(sectionId);
         return batchStockRepository.findBySectionAndDueDateBetween(section, LocalDate.now(), LocalDate.now().plusDays(numberOfDays));
     }
@@ -127,10 +120,9 @@ public class BatchStockService implements IBatchStockService {
      * @param category the category
      * @param numberOfDays number of days to be added to the current day to arrive at the due date to be sought
      * @return a list of BatchStock
-     * @throws Exception
      */
     @Override
-    public List<BatchStockModel> getByCategoryAndDueDate(CategoryEnum category, Integer numberOfDays) throws Exception {
+    public List<BatchStockModel> getByCategoryAndDueDate(CategoryEnum category, Integer numberOfDays) {
         List<SectionModel> sectionList = iSectionService.getByCategory(category);
         List<BatchStockModel> batchStockList = new ArrayList<>();
         for (SectionModel section : sectionList) {
@@ -144,10 +136,9 @@ public class BatchStockService implements IBatchStockService {
      *
      * @param productId the product id
      * @return a list of BatchStock
-     * @throws Exception
      */
     @Override
-    public Integer getTotalBatchStockQuantity(Long productId) throws Exception {
+    public Integer getTotalBatchStockQuantity(Long productId) {
         return getByProductId(productId).stream().mapToInt(BatchStockModel::getQuantity).sum();
     }
 
@@ -156,11 +147,10 @@ public class BatchStockService implements IBatchStockService {
      *
      * @param productId the product id
      * @return a due date
-     * @throws Exception when product not found with due date valid
      */
     @Override
-    public LocalDate getClosestDueDate(Long productId) throws Exception {
-        return getByProductId(productId).stream().min(Comparator.comparing(BatchStockModel::getDueDate)).orElseThrow(() -> new Exception("Null DueDate on database!")).getDueDate();
+    public LocalDate getClosestDueDate(Long productId) throws NullDueDateException {
+        return getByProductId(productId).stream().min(Comparator.comparing(BatchStockModel::getDueDate)).orElseThrow(() -> new NullDueDateException("Null DueDate on database!")).getDueDate();
     }
 
     /**
@@ -170,7 +160,7 @@ public class BatchStockService implements IBatchStockService {
      * @param batchStockList the list of BatchStock
      * @throws Exception when the product not allowed in the section
      */
-    private void isCategoryPermittedInSections(CategoryEnum category, List<BatchStockModel> batchStockList) throws Exception {
+    private void isCategoryPermittedInSections(CategoryEnum category, List<BatchStockModel> batchStockList) throws ProductNotPermittedInSectionException {
         List<Long> notPermitedSections = new ArrayList<>();
         batchStockList.forEach(b -> {
             if(!b.getSection().getCategory().equals(category)) {
@@ -179,7 +169,7 @@ public class BatchStockService implements IBatchStockService {
         });
 
         if (!notPermitedSections.isEmpty()) {
-            throw new Exception("This product is not permited in these sections: " + notPermitedSections);
+            throw new ProductNotPermittedInSectionException("This product is not permited in these sections: " + notPermitedSections);
         }
     }
 
@@ -190,7 +180,7 @@ public class BatchStockService implements IBatchStockService {
      * @param inboundBatchStockList the list of BatchStock
      * @throws Exception when section have not enough space
      */
-    private void productFitsInSection(ProductModel product, List<BatchStockModel> inboundBatchStockList) throws Exception {
+    private void productFitsInSection(ProductModel product, List<BatchStockModel> inboundBatchStockList) throws NotEnoughSpaceInSectionException {
         HashMap<Long, Double> sectionFreeRoomMap = new HashMap<>();
         HashMap<Long, Double> inboundTotalVolumeMap = new HashMap<>();
         List<SectionModel> sections = inboundBatchStockList.stream().map(b -> b.getSection()).distinct().toList();
@@ -208,7 +198,7 @@ public class BatchStockService implements IBatchStockService {
             }
         });
         if (!notFittingSections.isEmpty()) {
-            throw new Exception("Section(s) " + notFittingSections + " have not enough space.");
+            throw new NotEnoughSpaceInSectionException("Section(s) " + notFittingSections + " have not enough space.");
         }
     }
 
@@ -219,7 +209,7 @@ public class BatchStockService implements IBatchStockService {
      * @return total free room
      * @throws Exception
      */
-    private Double getTotalFreeRoom(SectionModel section) throws Exception {
+    private Double getTotalFreeRoom(SectionModel section) {
         List<BatchStockModel> batchStockList = getBySectionId(section.getId());
         double freeRoom = section.getTotalSize();
         for (BatchStockModel batchStock : batchStockList) {
@@ -236,7 +226,7 @@ public class BatchStockService implements IBatchStockService {
      * @throws Exception
      */
     @Override
-    public void validateBatches(ProductModel product, List<BatchStockModel> batchStockList) throws Exception {
+    public void validateBatches(ProductModel product, List<BatchStockModel> batchStockList) throws ProductNotPermittedInSectionException, NotEnoughSpaceInSectionException {
         for (BatchStockModel batchStock : batchStockList) {
             batchStock.setSection(iSectionService.getById(batchStock.getSection().getId()));
         }
@@ -264,7 +254,7 @@ public class BatchStockService implements IBatchStockService {
      * @return list of BatchStock
      * @throws Exception
      */
-    private List<BatchStockModel> findValidProductsByDueDate(ProductModel productModel) throws Exception {
+    private List<BatchStockModel> findValidProductsByDueDate(ProductModel productModel) {
         return batchStockRepository.findByProductAndDueDateGreaterThanEqual(productModel, LocalDate.now().plusWeeks(3));
     }
 
@@ -275,11 +265,11 @@ public class BatchStockService implements IBatchStockService {
      * @throws Exception
      */
     @Override
-    public void consumeBatchStockOnPurchase(PurchaseOrderModel purchaseOrderModel) throws Exception {
+    public void consumeBatchStockOnPurchase(PurchaseOrderModel purchaseOrderModel) throws NotEnoughStockException {
         List<OrderProductsModel> orderProductsList = iOrderProductService.getByPurchaseId(purchaseOrderModel.getId());
 
         for (OrderProductsModel orderProducts : orderProductsList) {
-            debitBatchStock(orderProducts.getProductModel(),orderProducts.getQuantity());
+            debitBatchStock(orderProducts.getProductModel(), orderProducts.getQuantity());
         }
     }
 
@@ -290,7 +280,7 @@ public class BatchStockService implements IBatchStockService {
      * @param quantity the quantity of product
      * @throws Exception when insufficient stock
      */
-    private void debitBatchStock(ProductModel productModel, Integer quantity) throws Exception {
+    private void debitBatchStock(ProductModel productModel, Integer quantity) throws NotEnoughStockException {
         List<BatchStockModel> batchStockList = findValidProductsByDueDate(productModel);
         batchStockList.sort(Comparator.comparing(BatchStockModel::getDueDate));
 
@@ -307,7 +297,7 @@ public class BatchStockService implements IBatchStockService {
         }
 
         if (quantity != 0) {
-            throw new Exception("Estoque insuficiente para atender o pedido!");
+            throw new NotEnoughStockException("Estoque insuficiente para atender o pedido!");
         }
 
         save(batchStockList);

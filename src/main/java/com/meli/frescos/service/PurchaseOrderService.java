@@ -2,6 +2,7 @@ package com.meli.frescos.service;
 
 import com.meli.frescos.controller.dto.OrderProductsRequest;
 import com.meli.frescos.controller.dto.PurchaseOrderRequest;
+import com.meli.frescos.exception.NotEnoughStockException;
 import com.meli.frescos.exception.OrderProductIsInvalidException;
 import com.meli.frescos.exception.PurchaseOrderByIdNotFoundException;
 import com.meli.frescos.model.*;
@@ -163,7 +164,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
      * @throws Exception
      */
     @Override
-    public void updateStatus(Long id) throws Exception {
+    public void updateStatus(Long id) throws NotEnoughStockException {
         List<OrderProductsModel> orderProductsList = iOrderProductService.getByPurchaseId(id);
         List<OrderProductsRequest> orderProductsRequestList = new ArrayList<>();
         orderProductsList.forEach(item -> orderProductsRequestList.add(OrderProductsRequest.builder()

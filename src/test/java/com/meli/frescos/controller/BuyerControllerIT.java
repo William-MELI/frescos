@@ -1,5 +1,6 @@
 package com.meli.frescos.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.meli.frescos.controller.dto.BuyerRequest;
 import com.meli.frescos.model.BuyerModel;

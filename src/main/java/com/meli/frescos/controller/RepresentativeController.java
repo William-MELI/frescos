@@ -2,6 +2,7 @@ package com.meli.frescos.controller;
 
 import com.meli.frescos.controller.dto.RepresentativeRequest;
 import com.meli.frescos.controller.dto.RepresentativeResponse;
+import com.meli.frescos.exception.RepresentativeNotFoundException;
 import com.meli.frescos.exception.WarehouseNotFoundException;
 import com.meli.frescos.model.RepresentativeModel;
 import com.meli.frescos.service.IRepresentativeService;
@@ -23,13 +24,13 @@ public class RepresentativeController {
     }
 
     @GetMapping
-    ResponseEntity<List<RepresentativeResponse>> getAll() throws Exception {
+    ResponseEntity<List<RepresentativeResponse>> getAll() {
         List<RepresentativeResponse> representativeResponseList = iRepresentativeService.getAll().stream().map(RepresentativeResponse::toResponse).toList();
         return new ResponseEntity<>(representativeResponseList, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    ResponseEntity<RepresentativeResponse> getById(@PathVariable Long id) throws Exception {
+    ResponseEntity<RepresentativeResponse> getById(@PathVariable Long id) throws RepresentativeNotFoundException {
         return new ResponseEntity<>(RepresentativeResponse.toResponse(iRepresentativeService.getById(id)), HttpStatus.OK);
     }
 

@@ -1,6 +1,7 @@
 package com.meli.frescos.service;
 
 import com.meli.frescos.controller.dto.PurchaseOrderRequest;
+import com.meli.frescos.exception.NotEnoughStockException;
 import com.meli.frescos.model.OrderStatusEnum;
 import com.meli.frescos.model.PurchaseOrderModel;
 
@@ -11,5 +12,5 @@ public interface IPurchaseOrderService {
 
     List<PurchaseOrderModel> getAll();
 
-   void updateStatus(Long id)  throws Exception;
+   void updateStatus(Long id) throws NotEnoughStockException;
 }
