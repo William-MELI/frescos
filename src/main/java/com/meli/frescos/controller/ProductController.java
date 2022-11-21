@@ -29,13 +29,10 @@ public class ProductController {
 
     private final IBatchStockService iBatchStockService;
 
-    private final IWarehouseService iWarehouseService;
-
-    public ProductController(IProductService iProductService, IRepresentativeService iRepresentativeService, IBatchStockService iBatchStockService, IWarehouseService iWarehouseService) {
+    public ProductController(IProductService iProductService, IRepresentativeService iRepresentativeService, IBatchStockService iBatchStockService) {
         this.iProductService = iProductService;
         this.iRepresentativeService = iRepresentativeService;
         this.iBatchStockService = iBatchStockService;
-        this.iWarehouseService = iWarehouseService;
     }
     /**
      * Return all Product
@@ -78,7 +75,6 @@ public class ProductController {
      */
     @PostMapping("/inboundorder")
     public ResponseEntity<ProductBatchStockResponse> save(@Valid @RequestBody ProductBatchStockRequest productBatchStockRequest) throws Exception {
-        iWarehouseService.getById(productBatchStockRequest.getInboundOrder().getWarehouseCode());
         iRepresentativeService.validateRepresentative(productBatchStockRequest.getInboundOrder().getRepresentativeCode(), productBatchStockRequest.getInboundOrder().getWarehouseCode());
         ProductModel requestProduct = productBatchStockRequest.toProduct();
         List<BatchStockModel> requestBatchStockList = productBatchStockRequest.toBatchStock();

@@ -273,6 +273,18 @@ public class BatchStockService implements IBatchStockService {
         }
     }
 
+    @Override
+    public BatchStockModel updateBatchStock(BatchStockModel batchStock, Long batchStockId) throws ProductNotPermittedInSectionException, NotEnoughSpaceInSectionException {
+        BatchStockModel savedBatchStock = getById(batchStockId);
+        List<BatchStockModel> batchStockList = new ArrayList<>();
+        batchStock.setId(savedBatchStock.getId());
+        batchStock.setProduct(savedBatchStock.getProduct());
+        batchStock.setSection(savedBatchStock.getSection());
+        batchStockList.add(batchStock);
+        validateBatches(savedBatchStock.getProduct(), batchStockList);
+        return batchStockRepository.save(batchStock);
+    }
+
     /**
      * Debit the quantity of the PurchaseOrder product from BatchStock
      *

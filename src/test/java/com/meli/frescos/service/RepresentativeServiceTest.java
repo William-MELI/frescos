@@ -138,7 +138,7 @@ class RepresentativeServiceTest {
 
     @Test
     @DisplayName("Representative belong to the warehouse")
-    void validateRepresentative_whenSuccess() throws RepresentativeWarehouseNotAssociatedException, RepresentativeNotFoundException {
+    void validateRepresentative_whenSuccess() throws RepresentativeWarehouseNotAssociatedException, RepresentativeNotFoundException, WarehouseNotFoundException {
         Long warehouse_id = 1L;
         Long representative_id = 1L;
         String name = "Representative 1";
