@@ -185,10 +185,44 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
     public ResponseEntity<ExceptionDetails> handlerSectionByIdNotFoundException(SectionByIdNotFoundException ex) {
         return new ResponseEntity<>(
                 ExceptionDetails.builder()
-                        .title("Section não encontrada")
+                        .title("Setor não encontrado")
                         .message(ex.getMessage())
                         .timestamp(LocalDateTime.now())
                         .build(),
                 HttpStatus.NOT_FOUND);
+    }
+
+    /**
+     * This method handles the RepresentativeNotFoundException
+     *
+     * @param ex The original exception
+     * @return A ResponseEntity to represent the HTTP error
+     */
+    @ExceptionHandler(RepresentativeNotFoundException.class)
+    public ResponseEntity<ExceptionDetails> handlerRepresentativeNotFoundException(RepresentativeNotFoundException ex) {
+        return new ResponseEntity<>(
+                ExceptionDetails.builder()
+                        .title("Representante não encontrado")
+                        .message(ex.getMessage())
+                        .timestamp(LocalDateTime.now())
+                        .build(),
+                HttpStatus.NOT_FOUND);
+    }
+
+    /**
+     * This method handles the RepresentativeWarehouseNotAssociatedException
+     *
+     * @param ex The original exception
+     * @return A ResponseEntity to represent the HTTP error
+     */
+    @ExceptionHandler(RepresentativeWarehouseNotAssociatedException.class)
+    public ResponseEntity<ExceptionDetails> handlerRepresentativeWarehouseNotAssociatedException(RepresentativeWarehouseNotAssociatedException ex) {
+        return new ResponseEntity<>(
+                ExceptionDetails.builder()
+                        .title("Representante não associado com Armazém")
+                        .message(ex.getMessage())
+                        .timestamp(LocalDateTime.now())
+                        .build(),
+                HttpStatus.BAD_REQUEST);
     }
 }
