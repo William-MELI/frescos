@@ -5,6 +5,7 @@ import com.meli.frescos.exception.SellerByIdNotFoundException;
 import com.meli.frescos.model.SellerModel;
 import com.meli.frescos.repository.SellerRepository;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -74,7 +75,10 @@ public class SellerService implements ISellerService {
      */
     @Override
     public void deleteById(Long id) {
-        sellerRepository.deleteById(id);
+        SellerModel sellerModel = getById(id);
+        if (sellerModel != null)
+            sellerRepository.deleteById(id);
+
     }
 
     /**
