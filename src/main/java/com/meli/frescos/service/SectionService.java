@@ -2,6 +2,7 @@ package com.meli.frescos.service;
 
 import com.meli.frescos.controller.dto.SectionRequest;
 import com.meli.frescos.exception.SectionByIdNotFoundException;
+import com.meli.frescos.exception.WarehouseNotFoundException;
 import com.meli.frescos.model.CategoryEnum;
 import com.meli.frescos.model.SectionModel;
 import com.meli.frescos.model.WarehouseModel;
@@ -42,13 +43,15 @@ public class SectionService implements ISectionService {
      *
      * @param sectionRequest the new Section to store
      * @return the new created client
+     * @throws WarehouseNotFoundException Throws in case Warehouse does not exists
      */
     @Override
-    public SectionModel save(SectionRequest sectionRequest) {
+    public SectionModel save(SectionRequest sectionRequest) throws WarehouseNotFoundException {
         Optional<WarehouseModel> warehouse = warehouseRepository.findById(sectionRequest.getWarehouse());
 
         if (warehouse.isEmpty()) {
-            throw new NullPointerException("Warehouse not found");
+            String msg = String.format("Warehouse com ID %d não encontrado", sectionRequest.getWarehouse());
+            throw new WarehouseNotFoundException(msg);
         }
 
         SectionModel model = new SectionModel(sectionRequest.getDescription(),
@@ -65,17 +68,23 @@ public class SectionService implements ISectionService {
      *
      * @param id the SectionModel id
      * @return SectionModel
+     * @throws SectionByIdNotFoundException Throws in case Warehouse does not exists
      */
     @Override
-    public SectionModel getById(Long id) {
-        return sectionRepository.findById(id).orElseThrow(() -> new SectionByIdNotFoundException(id));
+    public SectionModel getById(Long id) throws SectionByIdNotFoundException {
+        Optional<SectionModel> sectionModel = sectionRepository.findById(id);
+
+        if (sectionModel.isEmpty()) {
+            throw new SectionByIdNotFoundException(id);
+        }
+        return sectionModel.get();
     }
 
     /**
-     * Return of a Section list given a category
+     * Return SectionModel given Category
      *
-     * @param category the SectionModel
-     * @return list of SectionModel
+     * @param category the SectionModel category
+     * @return List of SectionModel
      */
     @Override
     public List<SectionModel> getByCategory(CategoryEnum category) {

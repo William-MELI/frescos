@@ -2,6 +2,8 @@ package com.meli.frescos.controller;
 
 import com.meli.frescos.controller.dto.SectionRequest;
 import com.meli.frescos.controller.dto.SectionResponse;
+import com.meli.frescos.exception.SectionByIdNotFoundException;
+import com.meli.frescos.exception.WarehouseNotFoundException;
 import com.meli.frescos.model.SectionModel;
 import com.meli.frescos.service.ISectionService;
 import org.springframework.http.HttpStatus;
@@ -38,12 +40,12 @@ public class SectionController {
 
     /**
      * POST endpoint to store a {@link SectionModel}.
-     *
      * @param sectionRequest
      * @return ResponseEntity<SectionModel> to the requester
+     * @throws WarehouseNotFoundException Throws in case Warehouse does not exists
      */
     @PostMapping
-    ResponseEntity<SectionResponse> save(@RequestBody @Valid SectionRequest sectionRequest) throws Exception {
+    ResponseEntity<SectionResponse> save(@RequestBody @Valid SectionRequest sectionRequest) throws WarehouseNotFoundException {
         SectionModel insertSection = service.save(sectionRequest);
         return new ResponseEntity<>(SectionResponse.toResponse(insertSection), HttpStatus.CREATED);
     }
@@ -52,9 +54,10 @@ public class SectionController {
      * Endpoint to return a sectionModel given id
      * @param id the sectionModel id
      * @return a SectionModel related ID
+     * @throws SectionByIdNotFoundException Throws in case Warehouse does not exists
      */
     @GetMapping("/{id}")
-    ResponseEntity<SectionResponse> getById(@PathVariable Long id) {
+    ResponseEntity<SectionResponse> getById(@PathVariable Long id) throws SectionByIdNotFoundException {
         SectionModel section = service.getById(id);
         return new ResponseEntity<>(SectionResponse.toResponse(section), HttpStatus.OK);
     }
