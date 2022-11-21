@@ -271,7 +271,12 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
                 HttpStatus.BAD_REQUEST);
     }
 
-
+    /**
+     * This method handles the SellerByIdNotFoundException
+     *
+     * @param ex The original exception
+     * @return A ResponseEntity to represent the HTTP error
+     */
     @ExceptionHandler(SellerByIdNotFoundException.class)
     public ResponseEntity<ExceptionDetails> handlerSellerByIdNotFoundException(SellerByIdNotFoundException ex) {
         return new ResponseEntity<>(
@@ -283,6 +288,12 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
                 HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * This method handles the ProductNotPermittedInSectionException
+     *
+     * @param ex The original exception
+     * @return A ResponseEntity to represent the HTTP error
+     */
     @ExceptionHandler(ProductNotPermittedInSectionException.class)
     public ResponseEntity<ExceptionDetails> handlerProductNotPermittedInSectionException(ProductNotPermittedInSectionException ex) {
         return new ResponseEntity<>(
@@ -294,6 +305,12 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
                 HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * This method handles the NotEnoughSpaceInSectionException
+     *
+     * @param ex The original exception
+     * @return A ResponseEntity to represent the HTTP error
+     */
     @ExceptionHandler(NotEnoughSpaceInSectionException.class)
     public ResponseEntity<ExceptionDetails> handlerNotEnoughSpaceInSectionException(NotEnoughSpaceInSectionException ex) {
         return new ResponseEntity<>(
@@ -305,6 +322,12 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
                 HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * This method handles the NotEnoughSpaceInSectionException
+     *
+     * @param ex The original exception
+     * @return A ResponseEntity to represent the HTTP error
+     */
     @ExceptionHandler(NotEnoughStockException.class)
     public ResponseEntity<ExceptionDetails> handlerNotEnoughStockException(NotEnoughStockException ex) {
         return new ResponseEntity<>(
@@ -316,6 +339,12 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
                 HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * This method handles the NullDueDateException
+     *
+     * @param ex The original exception
+     * @return A ResponseEntity to represent the HTTP error
+     */
     @ExceptionHandler(NullDueDateException.class)
     public ResponseEntity<ExceptionDetails> handlerNullDueDateException(NullDueDateException ex) {
         return new ResponseEntity<>(
