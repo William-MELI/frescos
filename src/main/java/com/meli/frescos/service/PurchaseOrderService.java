@@ -169,9 +169,9 @@ public class PurchaseOrderService implements IPurchaseOrderService {
         List<OrderProductsModel> orderProductsList = iOrderProductService.getByPurchaseId(id);
         List<OrderProductsRequest> orderProductsRequestList = new ArrayList<>();
         orderProductsList.forEach(item -> orderProductsRequestList.add(OrderProductsRequest.builder()
-                        .productModel(item.getProductModel().getId())
-                        .quantity(item.getQuantity())
-                        .purchaseOrderModel(item.getPurchaseOrderModel().getId())
+                .productModel(item.getProductModel().getId())
+                .quantity(item.getQuantity())
+                .purchaseOrderModel(item.getPurchaseOrderModel().getId())
                 .build()));
 
         verifyOrderIsValid(orderProductsRequestList);
