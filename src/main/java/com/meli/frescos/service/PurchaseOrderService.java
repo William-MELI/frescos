@@ -41,6 +41,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
 
     /**
      * This method save a purchaseOrder and orderProducts
+     *
      * @param purchaseOrderRequest from PurchaseOrderModel instance
      * @return BigDecimal sum from all products
      */
@@ -56,8 +57,9 @@ public class PurchaseOrderService implements IPurchaseOrderService {
     }
 
     /**
-     *  This method check if the product is expired
-     * @param productId from product Entity
+     * This method check if the product is expired
+     *
+     * @param productId       from product Entity
      * @param desiredQuantity int required due date
      * @return Boolean checking due date
      */
@@ -73,7 +75,8 @@ public class PurchaseOrderService implements IPurchaseOrderService {
     }
 
     /**
-     *  This method check if the quantity of  products is available
+     * This method check if the quantity of  products is available
+     *
      * @param orderProductsList List of OrderProduct Entity
      * @return Bollean checking availability
      * @throws Exception
@@ -100,7 +103,8 @@ public class PurchaseOrderService implements IPurchaseOrderService {
     }
 
     /**
-     *This method save the products in orderProducts Entity
+     * This method save the products in orderProducts Entity
+     *
      * @param purchaseOrderRequest from purchaseOrder instance
      * @return BigDecimal with sum of price the all products listed
      * @throws Exception
@@ -132,12 +136,20 @@ public class PurchaseOrderService implements IPurchaseOrderService {
         }
     }
 
+    /**
+     * This method get Purchase Order with id related
+     *
+     * @param purchaseId Long id
+     * @return PurchaseOrderModel
+     * @throws PurchaseOrderByIdNotFoundException
+     */
     public PurchaseOrderModel getById(Long purchaseId) throws PurchaseOrderByIdNotFoundException {
         return purchaseOrderRepository.findById(purchaseId).orElseThrow(() -> new PurchaseOrderByIdNotFoundException(purchaseId));
     }
 
     /**
      * This method get all Purchase Order
+     *
      * @return List of PurchaseOrder entity
      */
     @Override
@@ -147,6 +159,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
 
     /**
      * This method update status from PurchaseOrder related
+     *
      * @param id Long related an purchaseOrder
      * @throws Exception
      */
@@ -155,9 +168,9 @@ public class PurchaseOrderService implements IPurchaseOrderService {
         List<OrderProductsModel> orderProductsList = iOrderProductService.getByPurchaseId(id);
         List<OrderProductsRequest> orderProductsRequestList = new ArrayList<>();
         orderProductsList.forEach(item -> orderProductsRequestList.add(OrderProductsRequest.builder()
-                        .productModel(item.getProductModel().getId())
-                        .quantity(item.getQuantity())
-                        .purchaseOrderModel(item.getPurchaseOrderModel().getId())
+                .productModel(item.getProductModel().getId())
+                .quantity(item.getQuantity())
+                .purchaseOrderModel(item.getPurchaseOrderModel().getId())
                 .build()));
 
         verifyOrderIsValid(orderProductsRequestList);
