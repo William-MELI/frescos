@@ -1,6 +1,8 @@
 package com.meli.frescos.service;
 
 import com.meli.frescos.controller.dto.SectionRequest;
+import com.meli.frescos.exception.SectionByIdNotFoundException;
+import com.meli.frescos.exception.WarehouseNotFoundException;
 import com.meli.frescos.model.CategoryEnum;
 import com.meli.frescos.model.SectionModel;
 import com.meli.frescos.model.WarehouseModel;
@@ -50,7 +52,7 @@ public class SectionServiceTest {
 
     @Test
     @DisplayName("Create a new Section successfully")
-    void createNewSection_returnCreatedSection_whenSuccess() {
+    void createNewSection_returnCreatedSection_whenSuccess() throws WarehouseNotFoundException {
         String description = "Laranja Bahia";
         CategoryEnum category = CategoryEnum.FRESH;
         Double totalSize = 5.5;
@@ -106,14 +108,12 @@ public class SectionServiceTest {
                 .temperature(temperature)
                 .build();
 
-        assertThrows(NullPointerException.class, () -> {
-            SectionModel responsSection = sectionService.save(newSectionRequest);
-        });
+        assertThrows(WarehouseNotFoundException.class, () -> sectionService.save(newSectionRequest));
     }
 
     @Test
     @DisplayName("Returns a Section by ID ")
-    void getById_returnsSection_WhenSuccess() throws Exception {
+    void getById_returnsSection_WhenSuccess() {
         String description = "Laranja Bahia";
         CategoryEnum category = CategoryEnum.FRESH;
         Double totalSize = 5.5;
@@ -141,6 +141,15 @@ public class SectionServiceTest {
         assertEquals(totalSize, responseSection.getTotalSize());
         assertEquals(temperature, responseSection.getTemperature());
         assertEquals(warehouse_id, responseSection.getWarehouse().getId());
+    }
+
+    @Test
+    @DisplayName("Returns a Section by ID ")
+    void getById_throwsSectionByIdNotFoundExceptio_whenIdIsInvalid() {
+        Mockito.when(sectionRepository.findById(ArgumentMatchers.anyLong()))
+                .thenReturn(Optional.empty());
+
+        assertThrows(SectionByIdNotFoundException.class, () -> sectionService.getById(ArgumentMatchers.anyLong()));
     }
 
     @Test

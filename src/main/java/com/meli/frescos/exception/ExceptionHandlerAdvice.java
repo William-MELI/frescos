@@ -185,7 +185,7 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
     public ResponseEntity<ExceptionDetails> handlerSectionByIdNotFoundException(SectionByIdNotFoundException ex) {
         return new ResponseEntity<>(
                 ExceptionDetails.builder()
-                        .title("Section não encontrada")
+                        .title("Setor não encontrada")
                         .message(ex.getMessage())
                         .timestamp(LocalDateTime.now())
                         .build(),
