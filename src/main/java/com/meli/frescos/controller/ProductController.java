@@ -7,9 +7,12 @@ import com.meli.frescos.model.ProductModel;
 import com.meli.frescos.service.IBatchStockService;
 import com.meli.frescos.service.IProductService;
 import com.meli.frescos.service.IRepresentativeService;
+import com.meli.frescos.service.IWarehouseService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,10 +29,13 @@ public class ProductController {
 
     private final IBatchStockService iBatchStockService;
 
-    public ProductController(IProductService iProductService, IRepresentativeService iRepresentativeService, IBatchStockService iBatchStockService) {
+    private final IWarehouseService iWarehouseService;
+
+    public ProductController(IProductService iProductService, IRepresentativeService iRepresentativeService, IBatchStockService iBatchStockService, IWarehouseService iWarehouseService) {
         this.iProductService = iProductService;
         this.iRepresentativeService = iRepresentativeService;
         this.iBatchStockService = iBatchStockService;
+        this.iWarehouseService = iWarehouseService;
     }
 
     @GetMapping
@@ -62,7 +68,8 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductBatchStockResponse> save(@RequestBody ProductBatchStockRequest productBatchStockRequest) throws RepresentativeWarehouseNotAssociatedException, RepresentativeNotFoundException, ProductNotPermittedInSectionException, NotEnoughSpaceInSectionException {
+    public ResponseEntity<ProductBatchStockResponse> save(@Valid @RequestBody ProductBatchStockRequest productBatchStockRequest) throws Exception {
+        iWarehouseService.getById(productBatchStockRequest.getInboundOrder().getWarehouseCode());
         iRepresentativeService.validateRepresentative(productBatchStockRequest.getInboundOrder().getRepresentativeCode(), productBatchStockRequest.getInboundOrder().getWarehouseCode());
         ProductModel requestProduct = productBatchStockRequest.toProduct();
         List<BatchStockModel> requestBatchStockList = productBatchStockRequest.toBatchStock();
@@ -72,7 +79,7 @@ public class ProductController {
             requestBatchStock.setProduct(requestProduct);
             requestBatchStock = iBatchStockService.save(requestBatchStock);
         }
-        return new ResponseEntity<>(ProductBatchStockResponse.toResponse(requestProduct, requestBatchStockList), HttpStatus.OK);
+        return new ResponseEntity<>(ProductBatchStockResponse.toResponse(requestProduct, requestBatchStockList), HttpStatus.CREATED);
     }
 
     @GetMapping("/list")
