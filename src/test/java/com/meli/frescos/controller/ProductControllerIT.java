@@ -2,9 +2,12 @@ package com.meli.frescos.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.meli.frescos.controller.dto.BuyerRequest;
-import com.meli.frescos.model.BuyerModel;
+import com.meli.frescos.controller.dto.SectionRequest;
+import com.meli.frescos.controller.dto.WarehouseRequest;
+import com.meli.frescos.exception.WarehouseNotFoundException;
+import com.meli.frescos.model.*;
 import com.meli.frescos.repository.BuyerRepository;
-import com.meli.frescos.service.IBuyerService;
+import com.meli.frescos.service.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-class BuyerControllerIT {
+class ProductControllerIT {
 
     @Autowired
     private MockMvc mockMvc;
@@ -35,6 +38,18 @@ class BuyerControllerIT {
 
     @Autowired
     private IBuyerService buyerService;
+
+    @Autowired
+    private IWarehouseService warehouseService;
+
+    @Autowired
+    private ISellerService sellerService;
+
+    @Autowired
+    private IRepresentativeService representativeService;
+
+    @Autowired
+    private ISectionService sectionService;
 
     @BeforeEach
     void setup() {
@@ -167,6 +182,67 @@ class BuyerControllerIT {
 
         response.andExpect(status().isOk())
                 .andExpect(content().json(expectedJson));
+    }
 
+    WarehouseModel createWarehouse(){
+        String city = "Tramandaí";
+        String district = "Zona Nova";
+        String state = "Rio Grande do Sul";
+        String postalCode = "99999999";
+        String street = "Avenida Emancipacao";
+
+        WarehouseRequest newWarehouseRequest = WarehouseRequest
+                .builder()
+                .city(city)
+                .street(street)
+                .state(state)
+                .postalCode(postalCode)
+                .district(district).build();
+        return warehouseService.save(newWarehouseRequest.toModel());
+    }
+
+    SellerModel createSeller(){
+        Long id = 1L;
+        String name = "Vendedor 1";
+        String cpf = "12345678900";
+        double rating = 4.2;
+
+        SellerModel seller = new SellerModel(id, name, cpf, rating);
+
+        return sellerService.save(seller);
+    }
+
+    RepresentativeController createRepresentative(long warehouseCode) throws WarehouseNotFoundException {
+        String name = "Representative name";
+        Long warehouse_id = 1L;
+        WarehouseModel warehouseResponse = new WarehouseModel();
+        warehouseResponse.setId(warehouse_id);
+
+        RepresentativeModel responseModel = RepresentativeModel
+                .builder()
+                .name(name)
+                .build();
+
+        return representativeService.save(responseModel, warehouseCode);
+    }
+
+    SectionModel createSection() throws WarehouseNotFoundException {
+        String description = "Laranja Bahia";
+        CategoryEnum category = CategoryEnum.FRESH;
+        Double totalSize = 5.5;
+        Double temperature = 2.0;
+        Long warehouse_id = 1L;
+        WarehouseModel warehouseResponse = new WarehouseModel();
+        warehouseResponse.setId(warehouse_id);
+
+        SectionRequest newSectionRequest = SectionRequest
+                .builder()
+                .description(description)
+                .category(category)
+                .totalSize(totalSize)
+                .temperature(temperature)
+                .warehouse(warehouse_id).build();
+
+        return sectionService.save(newSectionRequest);
     }
 }
