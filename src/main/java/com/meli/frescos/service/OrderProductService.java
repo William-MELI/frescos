@@ -1,6 +1,9 @@
 package com.meli.frescos.service;
 
 import com.meli.frescos.controller.dto.OrderProductsRequest;
+import com.meli.frescos.exception.OrderProductIsInvalidException;
+import com.meli.frescos.exception.ProductByIdNotFoundException;
+import com.meli.frescos.exception.PurchaseOrderByIdNotFoundException;
 import com.meli.frescos.model.OrderProductsModel;
 import com.meli.frescos.model.ProductModel;
 import com.meli.frescos.model.PurchaseOrderModel;
@@ -8,8 +11,8 @@ import com.meli.frescos.repository.OrderProductsRepository;
 import com.meli.frescos.repository.ProductRepository;
 import com.meli.frescos.repository.PurchaseOrderRepository;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
-import java.util.Optional;
 
 /**
  * This class contains all OrderProducts related functions
@@ -33,7 +36,6 @@ public class OrderProductService implements IOrderProductService {
 
     /**
      * Return all OrderProducts
-     *
      * @return List of OrderProductsModel
      */
     @Override
@@ -43,35 +45,36 @@ public class OrderProductService implements IOrderProductService {
 
     /**
      * Save a new OrderProducts at storage
-     *
      * @param orderProductsRequest the new OrderProducts to store
      * @return the new created OrderProducts
+     * @throws ProductByIdNotFoundException Throws in case Product does not exists
+     * @throws PurchaseOrderByIdNotFoundException Throws in case Ptroduct does not exists
      */
     @Override
-    public OrderProductsModel save(OrderProductsRequest orderProductsRequest) {
-        Optional<ProductModel> product = productRepository.findById(orderProductsRequest.getProductModel());
-        Optional<PurchaseOrderModel> purchaseOrder = purchaseOrderRepository.findById(orderProductsRequest.getPurchaseOrderModel());
+    public OrderProductsModel save(OrderProductsRequest orderProductsRequest) throws ProductByIdNotFoundException, PurchaseOrderByIdNotFoundException {
+        ProductModel product = productRepository.findById(orderProductsRequest.getProductModel())
+                .orElseThrow(() -> new ProductByIdNotFoundException(orderProductsRequest.getProductModel()));
 
-        if (product.isEmpty()) {
-            throw new NullPointerException("Product_id not found");
-        }
+        PurchaseOrderModel purchaseOrder = purchaseOrderRepository.findById(orderProductsRequest.getPurchaseOrderModel())
+                .orElseThrow(() -> new PurchaseOrderByIdNotFoundException(orderProductsRequest.getPurchaseOrderModel()));
 
         OrderProductsModel model = new OrderProductsModel(
-                product.get(),
+                product,
                 orderProductsRequest.getQuantity(),
-                purchaseOrder.get());
+                purchaseOrder);
         return orderProductsRepository.save(model);
     }
 
     /**
-     * Returns a list of OrderProductsModel given a PurchaseOrder id
-     *
-     * @param purchaseId the PurchaseOrder id
-     * @return list of OrderProductsModel
-     * @throws Exception when purchase order not found
+     * Return PurchaseOrderModel given id
+     * @param purchaseId the PurchaseOrderModel id
+     * @return List of OrderProductsModel
      */
-    public List<OrderProductsModel> getByPurchaseId(Long purchaseId) throws Exception {
-        PurchaseOrderModel purchaseOrderModel = purchaseOrderRepository.findById(purchaseId).orElseThrow(() -> new Exception("Purchase order not found"));
+    @Override
+    public List<OrderProductsModel> getByPurchaseId(Long purchaseId) throws PurchaseOrderByIdNotFoundException {
+        PurchaseOrderModel purchaseOrderModel = purchaseOrderRepository.findById(purchaseId)
+                .orElseThrow(() -> new PurchaseOrderByIdNotFoundException(purchaseId));
+
         List<OrderProductsModel> orderProductsModels = orderProductsRepository.findByPurchaseOrderModel_Id(purchaseOrderModel.getId());
 
         return orderProductsModels;
@@ -79,12 +82,13 @@ public class OrderProductService implements IOrderProductService {
 
     /**
      * Return OrderProductsModel given id
-     *
      * @param id the OrderProductsModel id
      * @return OrderProductsModel
+     * @throws OrderProductIsInvalidException Throws in case OrderProduct does not exists
      */
     @Override
-    public OrderProductsModel getById(Long id) throws Exception {
-        return orderProductsRepository.findById(id).orElseThrow(() -> new Exception("OrderProduct not found"));
+    public OrderProductsModel getById(Long id) throws OrderProductIsInvalidException {
+        return orderProductsRepository.findById(id)
+                .orElseThrow(() -> new OrderProductIsInvalidException("Pedido de compra inválido"));
     }
 }

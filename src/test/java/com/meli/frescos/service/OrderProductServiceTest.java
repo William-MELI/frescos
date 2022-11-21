@@ -1,6 +1,9 @@
 package com.meli.frescos.service;
 
 import com.meli.frescos.controller.dto.OrderProductsRequest;
+import com.meli.frescos.exception.OrderProductIsInvalidException;
+import com.meli.frescos.exception.ProductByIdNotFoundException;
+import com.meli.frescos.exception.PurchaseOrderByIdNotFoundException;
 import com.meli.frescos.model.OrderProductsModel;
 import com.meli.frescos.model.ProductModel;
 import com.meli.frescos.model.PurchaseOrderModel;
@@ -73,7 +76,7 @@ class OrderProductServiceTest {
 
     @Test
     @DisplayName("Test OrderProductService save method with inexistent ProductModel")
-    void save_throwsNullPointerException_whenProductDoesNotExists() {
+    void save_throwsProductByIdNotFoundException_whenProductDoesNotExists() {
         OrderProductsRequest request = OrderProductsRequest.builder()
                 .productModel(1L)
                 .purchaseOrderModel(1L)
@@ -82,10 +85,8 @@ class OrderProductServiceTest {
 
         Mockito.when(productRepository.findById(1L))
                 .thenReturn(Optional.empty());
-        BDDMockito.when(purchaseOrderRepository.findById(1L))
-                .thenReturn(Optional.empty());
 
-        assertThrows(NullPointerException.class, () -> orderProductService.save(request));
+        assertThrows(ProductByIdNotFoundException.class, () -> orderProductService.save(request));
 
     }
 
@@ -110,7 +111,7 @@ class OrderProductServiceTest {
 
     @Test
     @DisplayName("Test OrderProductService getByPurchaseId method with valid parameters")
-    void getByPurchaseId_returnOrderProductModel_whenSuccess() throws Exception {
+    void getByPurchaseId_returnOrderProductModel_whenSuccess() throws PurchaseOrderByIdNotFoundException {
         PurchaseOrderModel purchaseOrderModel = new PurchaseOrderModel();
         purchaseOrderModel.setId(1L);
 
@@ -132,7 +133,7 @@ class OrderProductServiceTest {
 
     @Test
     @DisplayName("Returns a OrderProduct from Storage.")
-    void getById_returnsOrderProductModel_WhenSuccess() throws Exception {
+    void getById_returnsOrderProductModel_WhenSuccess() throws OrderProductIsInvalidException {
         PurchaseOrderModel purchaseOrderModel = new PurchaseOrderModel();
         purchaseOrderModel.setId(1L);
         ProductModel productModel = new ProductModel();
@@ -157,24 +158,23 @@ class OrderProductServiceTest {
 
     @Test
     @DisplayName("Test OrderProductService findById with valid parameters")
-    void getByPurchaseId_throwsException_whenPurchaseOrderDoesNotExists() throws Exception {
-
+    void getByPurchaseId_throwsPurchaseOrderByIdNotFoundException_whenPurchaseOrderDoesNotExists() throws PurchaseOrderByIdNotFoundException {
 
         BDDMockito.when(purchaseOrderRepository.findById(1L))
                 .thenReturn(Optional.empty());
 
-        assertThrows(Exception.class, () -> orderProductService.getByPurchaseId(1L));
+        assertThrows(PurchaseOrderByIdNotFoundException.class, () -> orderProductService.getByPurchaseId(1L));
     }
 
 
     @Test
     @DisplayName("Throw exception when ID is not found.")
-    void getById_throwsException_WhenIdIsInvalid() {
+    void getById_throwsOrderProductIsInvalidException_WhenIdIsInvalid() {
 
         Mockito.when(orderProductsRepository.findById(1L))
                 .thenReturn(Optional.empty());
 
-        assertThrows(Exception.class, () -> orderProductService.getById(1L));
+        assertThrows(OrderProductIsInvalidException.class, () -> orderProductService.getById(1L));
 
     }
 }
