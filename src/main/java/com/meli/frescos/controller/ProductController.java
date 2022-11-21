@@ -1,7 +1,7 @@
 package com.meli.frescos.controller;
 
 import com.meli.frescos.controller.dto.*;
-import com.meli.frescos.exception.*;
+import com.meli.frescos.exception.NullDueDateException;
 import com.meli.frescos.model.BatchStockModel;
 import com.meli.frescos.model.ProductModel;
 import com.meli.frescos.service.IBatchStockService;
@@ -37,7 +37,11 @@ public class ProductController {
         this.iBatchStockService = iBatchStockService;
         this.iWarehouseService = iWarehouseService;
     }
-
+    /**
+     * Return all Product
+     * Return 200 OK when operation is success
+     * @return a list with all ProductResponse instance
+     */
     @GetMapping
     public ResponseEntity<List<ProductResponse>> getAll() throws NullDueDateException {
         List<ProductResponse> productResponseList = new ArrayList<>();
@@ -66,7 +70,12 @@ public class ProductController {
         }
         return new ResponseEntity<>(ProductDetailedResponse.toResponse(product, stockResponse) , HttpStatus.OK);
     }
-
+    /**
+     * Creates a new Product instance.
+     * Returns 201 CREATED when operation is success
+     * @param productBatchStockRequest ProductBatchStockRequest instance
+     * @return a ProductBatchStockResponse instance
+     */
     @PostMapping("/inboundorder")
     public ResponseEntity<ProductBatchStockResponse> save(@Valid @RequestBody ProductBatchStockRequest productBatchStockRequest) throws Exception {
         iWarehouseService.getById(productBatchStockRequest.getInboundOrder().getWarehouseCode());
@@ -82,6 +91,11 @@ public class ProductController {
         return new ResponseEntity<>(ProductBatchStockResponse.toResponse(requestProduct, requestBatchStockList), HttpStatus.CREATED);
     }
 
+    /**
+     * Returns the product filtered by category
+     * Return 200 OK when operation is success
+     * @return a list with all ProductResponse instance
+     */
     @GetMapping("/list")
     public ResponseEntity<List<ProductResponse>> getByCategory(@RequestParam("querytype") String filter) throws NullDueDateException {
         List<ProductModel> products = iProductService.getByCategory(filter);

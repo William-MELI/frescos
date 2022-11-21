@@ -66,6 +66,12 @@ public class OrderProductsController {
         return new ResponseEntity<>(OrderProductsResponse.toResponse(order), HttpStatus.OK);
     }
 
+    /**
+     * Return a OrderProducts given idOrder
+     * Return 200 OK when operation is success
+     * @param idOrder the OrderProducts ID
+     * @return the OrderProducts instance related id
+     */
     @GetMapping("/idOrder/{idOrder}")
     public ResponseEntity<List<OrderProductsResponse>> getByPurchaseId(@PathVariable Long idOrder) {
         List<OrderProductsModel> orderByPurchase = iOrderProductService.getByPurchaseId(idOrder);
