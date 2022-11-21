@@ -4,6 +4,8 @@ import com.meli.frescos.controller.dto.BatchStockOrderResponse;
 import com.meli.frescos.controller.dto.BatchStockRequest;
 import com.meli.frescos.controller.dto.BatchStockResponse;
 import com.meli.frescos.exception.BatchStockByIdNotFoundException;
+import com.meli.frescos.exception.RepresentativeNotFoundException;
+import com.meli.frescos.exception.RepresentativeWarehouseNotAssociatedException;
 import com.meli.frescos.model.BatchStockModel;
 import com.meli.frescos.model.CategoryEnum;
 import com.meli.frescos.service.IBatchStockService;
@@ -64,7 +66,7 @@ public class BatchStockController {
 
     @GetMapping("/section")
     ResponseEntity<List<BatchStockResponse>> getBySectionDueDate(@RequestParam Long sectionId,
-                                                                 @RequestParam Integer numberOfDays) throws Exception {
+                                                                 @RequestParam Integer numberOfDays) {
         List<BatchStockResponse> batchStockResponseList = iBatchStockService
                 .getBySectionIdAndDueDate(sectionId, numberOfDays)
                 .stream()
@@ -75,7 +77,7 @@ public class BatchStockController {
 
     @GetMapping("/category")
     ResponseEntity<List<BatchStockResponse>> getByCategoryDueDate(@RequestParam CategoryEnum category,
-                                                                 @RequestParam Integer numberOfDays) throws Exception {
+                                                                 @RequestParam Integer numberOfDays) {
         List<BatchStockResponse> batchStockResponseList = iBatchStockService
                 .getByCategoryAndDueDate(category, numberOfDays)
                 .stream()
@@ -93,7 +95,7 @@ public class BatchStockController {
     ResponseEntity<BatchStockResponse> save(@RequestBody BatchStockRequest batchStockRequest,
                                             @RequestParam Long productId,
                                             @RequestParam Long representativeId,
-                                            @RequestParam Long warehouseId) throws Exception {
+                                            @RequestParam Long warehouseId) throws RepresentativeWarehouseNotAssociatedException, RepresentativeNotFoundException {
         iRepresentativeService.validateRepresentative(representativeId, warehouseId);
         BatchStockModel batchStock = batchStockRequest.toModel();
         batchStock.setProduct(iProductService.getById(productId));

@@ -145,13 +145,32 @@ class SellerServiceTest {
         BDDMockito.when(repository.save(ArgumentMatchers.any(SellerModel.class)))
                 .thenReturn(seller);
 
+        BDDMockito.when(repository.findById(ArgumentMatchers.anyLong()))
+                .thenReturn(Optional.of(seller));
+
         SellerModel sellerTest = service.save(seller);
 
         service.deleteById(sellerTest.getId());
 
-        assertThrows(SellerByIdNotFoundException.class, () -> {
-            SellerModel sellerModel = service.getById(id);
-        });
+    }
+
+    @Test
+    @DisplayName("Delete Seller throws exception when does not exists")
+    void deleteById_throwsSellerByIdNotFoundException_whenSellerDoesNotExists() {
+        Long id = 1L;
+
+
+        BDDMockito.when(repository.findById(ArgumentMatchers.anyLong()))
+                .thenThrow(new SellerByIdNotFoundException(id));
+
+
+        assertThrows(
+                SellerByIdNotFoundException.class,
+                () -> {
+                    service.deleteById(id);
+                });
+
+
 
     }
 

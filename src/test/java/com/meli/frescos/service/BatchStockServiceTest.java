@@ -2,6 +2,7 @@ package com.meli.frescos.service;
 
 import com.meli.frescos.exception.BatchStockByIdNotFoundException;
 import com.meli.frescos.exception.BatchStockFilterOrderInvalidException;
+import com.meli.frescos.exception.NullDueDateException;
 import com.meli.frescos.model.*;
 import com.meli.frescos.repository.BatchStockRepository;
 import org.assertj.core.api.Assertions;
@@ -96,7 +97,7 @@ public class BatchStockServiceTest {
 
     @Test
     @DisplayName("Create a new BatchStock successfully")
-    void saveBatchStock_returnsCreatedBatchStock_whenSuccess() throws Exception {
+    void saveBatchStock_returnsCreatedBatchStock_whenSuccess() {
         BDDMockito.when(sectionService.getById(ArgumentMatchers.anyLong()))
                 .thenReturn(section);
         BDDMockito.when(batchStockRepository.save(ArgumentMatchers.any(BatchStockModel.class)))
@@ -123,7 +124,7 @@ public class BatchStockServiceTest {
 
     @Test
     @DisplayName("Return a list batch stock by section ID")
-    void getBySectionId_returnListBatchStock_whenSuccess() throws Exception {
+    void getBySectionId_returnListBatchStock_whenSuccess() {
         BDDMockito.when(sectionService.getById(ArgumentMatchers.anyLong()))
                 .thenReturn(section);
         BDDMockito.when(batchStockRepository.findBySection(ArgumentMatchers.any(SectionModel.class)))
@@ -137,7 +138,7 @@ public class BatchStockServiceTest {
 
     @Test
     @DisplayName("Return a list batch stock by section ID and due date")
-    void getBySectionIdAndDueDate_returnListBatchStock_whenDueDateNotExpired() throws Exception {
+    void getBySectionIdAndDueDate_returnListBatchStock_whenDueDateNotExpired() {
         int plusDays = 10;
         LocalDate dueDate = LocalDate.now().plusDays(plusDays);
         batchStockList.get(0).setDueDate(dueDate);
@@ -155,7 +156,7 @@ public class BatchStockServiceTest {
 
     @Test
     @DisplayName("Return a list batch stock empty by section ID and due date expired")
-    void getBySectionIdAndDueDate_returnListEmpty_whenDueDateIsExpired() throws Exception {
+    void getBySectionIdAndDueDate_returnListEmpty_whenDueDateIsExpired() {
         BDDMockito.when(sectionService.getById(ArgumentMatchers.anyLong()))
                 .thenReturn(section);
         BDDMockito.when(batchStockRepository.findBySectionAndDueDateBetween(ArgumentMatchers.any(SectionModel.class), ArgumentMatchers.any(), ArgumentMatchers.any()))
@@ -168,7 +169,7 @@ public class BatchStockServiceTest {
 
     @Test
     @DisplayName("Return a list batch stock by Category and due date")
-    void getByCategoryAndDueDate_returnListBatchStock_whenCategoryExistsAndDueDateNotExpired() throws Exception {
+    void getByCategoryAndDueDate_returnListBatchStock_whenCategoryExistsAndDueDateNotExpired() {
         List<SectionModel> sectionList = new ArrayList<>();
         sectionList.add(section);
         int plusDays = 10;
@@ -189,7 +190,7 @@ public class BatchStockServiceTest {
 
     @Test
     @DisplayName("Return a list batch stock empty when Category not exists or due date expired")
-    void getByCategoryAndDueDate_returnListBatchStock_whenCategoryNotExistsOrDueDateExpired() throws Exception {
+    void getByCategoryAndDueDate_returnListBatchStock_whenCategoryNotExistsOrDueDateExpired() {
         List<SectionModel> sectionList = new ArrayList<>();
         sectionList.add(section);
 
@@ -206,7 +207,7 @@ public class BatchStockServiceTest {
 
     @Test
     @DisplayName("Return the sum quantity of products by product ID")
-    void getTotalBatchStockQuantity_returnCorrectQuantity_whenSuccess() throws Exception {
+    void getTotalBatchStockQuantity_returnCorrectQuantity_whenSuccess() {
         batchStockList.get(0).setQuantity(50);
         BatchStockModel batchStock2 = new BatchStockModel(1L, "ABC123", 100, LocalDate.of(2022,10,10), LocalDateTime.of(2022,10,10,15,00), LocalDate.of(2023,01,15), product, section);
         batchStockList.add(batchStock2);
@@ -225,7 +226,7 @@ public class BatchStockServiceTest {
 
     @Test
     @DisplayName("Return the closest due date of product by product ID")
-    void getClosestDueDate_returnClosestDueDate_whenSuccess() throws Exception {
+    void getClosestDueDate_returnClosestDueDate_whenSuccess() throws NullDueDateException {
         LocalDate dueDate1 = LocalDate.now().plusDays(30);
         LocalDate dueDate2 = LocalDate.now().plusDays(20);
         batchStockList.get(0).setDueDate(dueDate1);
@@ -245,7 +246,7 @@ public class BatchStockServiceTest {
 
     @Test
     @DisplayName("Don't return exceptions when batches are valid")
-    void validateBatches_notReturnException_whenSuccess() throws Exception {
+    void validateBatches_notReturnException_whenSuccess() {
         section.setTotalSize(100.0);
         section.setCategory(CategoryEnum.FRESH);
         batchStockList.get(0).setQuantity(1);
@@ -280,7 +281,7 @@ public class BatchStockServiceTest {
 
     @Test
     @DisplayName("Don't return exceptions when successfully consuming batch stock on purchase")
-    void consumeBatchStockOnPurchase_notReturnException_whenSuccess() throws Exception {
+    void consumeBatchStockOnPurchase_notReturnException_whenSuccess() {
         PurchaseOrderModel purchaseOrder = new PurchaseOrderModel(1L, LocalDate.now(), OrderStatusEnum.OPEN, new BuyerModel("Buyer Name", "123.456.789-00"));
         List<OrderProductsModel> orderProducts = new ArrayList<>();
         orderProducts.add(new OrderProductsModel(batchStockList.get(0).getProduct(), 0, purchaseOrder));
