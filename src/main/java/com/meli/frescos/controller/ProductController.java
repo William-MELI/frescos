@@ -30,7 +30,11 @@ public class ProductController {
         this.iRepresentativeService = iRepresentativeService;
         this.iBatchStockService = iBatchStockService;
     }
-
+    /**
+     * Return all Product
+     * Return 200 OK when operation is success
+     * @return a list with all ProductResponse instance
+     */
     @GetMapping
     public ResponseEntity<List<ProductResponse>> getAll() throws Exception {
         List<ProductResponse> productResponseList = new ArrayList<>();
@@ -59,7 +63,12 @@ public class ProductController {
         }
         return new ResponseEntity<>(ProductDetailedResponse.toResponse(product, stockResponse) , HttpStatus.OK);
     }
-
+    /**
+     * Creates a new Product instance.
+     * Returns 201 CREATED when operation is success
+     * @param productBatchStockRequest ProductBatchStockRequest instance
+     * @return a ProductBatchStockResponse instance
+     */
     @PostMapping
     public ResponseEntity<ProductBatchStockResponse> save(@RequestBody ProductBatchStockRequest productBatchStockRequest) throws Exception {
         iRepresentativeService.validateRepresentative(productBatchStockRequest.getInboundOrder().getRepresentativeCode(), productBatchStockRequest.getInboundOrder().getWarehouseCode());
@@ -74,6 +83,11 @@ public class ProductController {
         return new ResponseEntity<>(ProductBatchStockResponse.toResponse(requestProduct, requestBatchStockList), HttpStatus.OK);
     }
 
+    /**
+     * Returns the product filtered by category
+     * Return 200 OK when operation is success
+     * @return a list with all ProductResponse instance
+     */
     @GetMapping("/list")
     public ResponseEntity<List<ProductResponse>> getByCategory(@RequestParam("querytype") String filter) throws Exception {
         List<ProductModel> products = iProductService.getByCategory(filter);

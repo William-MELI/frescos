@@ -38,6 +38,7 @@ public class BatchStockController {
 
     /**
      * Endpoint to return all BatchStocks
+     * Return 200 OK when operation is success
      *
      * @return a List with all BatchStockResponse with status 200 ok
      */
@@ -52,6 +53,7 @@ public class BatchStockController {
 
     /**
      * Endpoint to return a backStockModel given id
+     * Return 200 OK when operation is success
      *
      * @param id the backStockModel id
      * @return a BatchStockModel  related ID
@@ -62,6 +64,14 @@ public class BatchStockController {
         return new ResponseEntity<>(BatchStockResponse.toResponse((iBatchStockService.getById(id))), HttpStatus.OK);
     }
 
+    /**
+     * Return a list of BatchStock given section id and number of days to a BatchStock due date
+     * Return 200 OK when operation is success
+     *
+     * @param sectionId the section id
+     * @param numberOfDays number of days to be added to the current day to arrive at the due date to be sought
+     * @return a list of BatchStock
+     */
     @GetMapping("/section")
     ResponseEntity<List<BatchStockResponse>> getBySectionDueDate(@RequestParam Long sectionId,
                                                                  @RequestParam Integer numberOfDays) throws Exception {
@@ -73,6 +83,14 @@ public class BatchStockController {
         return new ResponseEntity<>(batchStockResponseList, HttpStatus.OK);
     }
 
+    /**
+     * Return a list of BatchStock given category and number of days to a BatchStock due date
+     * Return 200 OK when operation is success
+     *
+     * @param category the category
+     * @param numberOfDays number of days to be added to the current day to arrive at the due date to be sought
+     * @return a list of BatchStock
+     */
     @GetMapping("/category")
     ResponseEntity<List<BatchStockResponse>> getByCategoryDueDate(@RequestParam CategoryEnum category,
                                                                  @RequestParam Integer numberOfDays) throws Exception {
@@ -84,11 +102,29 @@ public class BatchStockController {
         return new ResponseEntity<>(batchStockResponseList, HttpStatus.OK);
     }
 
+    /**
+     * Return BatchStock given id
+     * Return 200 OK when operation is success
+     *
+     * @param productId the batchStockModel id
+     * @return BatchStockModel
+     * @throws BatchStockByIdNotFoundException when BatchStock not found
+     */
     @GetMapping("/product-id/{productId}")
     ResponseEntity<BatchStockResponse> getByProductId(@PathVariable Long productId) throws BatchStockByIdNotFoundException {
         return new ResponseEntity<>(BatchStockResponse.toResponse((iBatchStockService.getById(productId))), HttpStatus.OK);
     }
 
+    /**
+     * Create a new BatchStock given model
+     * Return 201 CREATED when operation is success
+     *
+     * @param batchStockRequest new BatchStock to create
+     * @param productId the Prosuct id
+     * @param representativeId the Representative id
+     * @param warehouseId Warehousde id
+     * @return the BatchStock created
+     */
     @PostMapping("/product-id")
     ResponseEntity<BatchStockResponse> save(@RequestBody BatchStockRequest batchStockRequest,
                                             @RequestParam Long productId,
@@ -101,6 +137,13 @@ public class BatchStockController {
                 HttpStatus.CREATED);
     }
 
+    /**
+     * Returns a Batch Stock list with due date between the current day and three weeks ahead given a product
+     * Return 200 OK when operation is success
+     *
+     * @param id the product
+     * @return list of BatchStock
+     */
     @GetMapping("/list")
     public ResponseEntity<List<BatchStockOrderResponse>> getBatchStockByProduct(@RequestParam("idProduct") Long id) {
         List<BatchStockOrderResponse> batchStock = iBatchStockService.findValidProductsByDueDate(id, LocalDate.now().now().plusDays(21)).stream().map(BatchStockOrderResponse::toResponse).toList();
@@ -110,6 +153,14 @@ public class BatchStockController {
         return new ResponseEntity<>(batchStock, HttpStatus.OK);
     }
 
+    /**
+     * Return a List BatchStockModel by ProductId and
+     * Return 200 OK when operation is success
+     *
+     * @param id the ProductModel id
+     * @param order list sorting
+     * @return a list with all BatchStockOrderResponse instance
+     */
     @GetMapping("/list/order")
     public ResponseEntity<List<BatchStockOrderResponse>> getBatchStockByProductOrder(@RequestParam("idProduct") Long id, @RequestParam("order") String order) {
         List<BatchStockModel> batchStock = iBatchStockService.getByProductOrder(id, order);
