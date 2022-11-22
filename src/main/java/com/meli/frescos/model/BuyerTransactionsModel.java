@@ -1,9 +1,6 @@
 package com.meli.frescos.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -11,6 +8,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "buyer_transaction")
@@ -28,7 +26,6 @@ public class BuyerTransactionsModel {
 
     @Column(nullable = false)
     private String typeOfTransaction;
-
 
     @JoinColumn(name = "buyer_wallet")
     @ManyToOne

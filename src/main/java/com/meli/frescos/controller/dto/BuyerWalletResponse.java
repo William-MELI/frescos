@@ -3,6 +3,9 @@ package com.meli.frescos.controller.dto;
 import com.meli.frescos.model.BuyerWalletModel;
 import lombok.*;
 
+/**
+ * Response DTO to endpoints response Buyer wallet
+ */
 @Getter
 @Setter
 @AllArgsConstructor
@@ -10,8 +13,14 @@ import lombok.*;
 @Builder
 public class BuyerWalletResponse {
 
+    /**
+     * Balance from wallet
+     */
     private Double balance;
 
+    /**
+     * Buyer name
+     */
     private String buyerName;
 
     public static BuyerWalletResponse toResponse(BuyerWalletModel buyerWalletModel) {

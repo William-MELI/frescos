@@ -281,4 +281,26 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
                         .build(),
                 HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler(BuyerAlreadyHasWalletException.class)
+    public ResponseEntity<ExceptionDetails> handleBuyerAlreadyHasWalletException(BuyerAlreadyHasWalletException ex) {
+        return new ResponseEntity<>(
+                ExceptionDetails.builder()
+                        .title("Já possue uma conta")
+                        .message(ex.getMessage())
+                        .timestamp(LocalDateTime.now())
+                        .build(),
+                HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(BuyerWalletNotExistException.class)
+    public ResponseEntity<ExceptionDetails> handleBuyerWalletNotExistException(BuyerWalletNotExistException ex) {
+        return new ResponseEntity<>(
+                ExceptionDetails.builder()
+                        .title("Conta inexistente.")
+                        .message(ex.getMessage())
+                        .timestamp(LocalDateTime.now())
+                        .build(),
+                HttpStatus.NOT_FOUND);
+    }
 }
