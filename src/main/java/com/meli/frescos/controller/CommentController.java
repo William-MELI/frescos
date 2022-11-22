@@ -41,7 +41,12 @@ public class CommentController {
     @GetMapping("/{id}")
     public ResponseEntity<CommentResponse> getRecentComment(@PathVariable("id") Long productId) {
         List<CommentModel> responseCommentModel = iCommentService.getRecentComments(productId);
-        CommentResponse response = CommentResponse.toResponse(responseCommentModel);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        if (responseCommentModel.isEmpty())
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        else {
+            CommentResponse response = CommentResponse.toResponse(responseCommentModel);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+
     }
 }
