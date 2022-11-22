@@ -373,4 +373,20 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
                 HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * This method handles the GetByIdMessageNotFoundException
+     *
+     * @param ex The original exception
+     * @return A ResponseEntity to represent the HTTP error
+     */
+    @ExceptionHandler(GetByIdMessageNotFoundException.class)
+    public ResponseEntity<ExceptionDetails> GetByIdMessageNotFoundException(GetByIdMessageNotFoundException ex) {
+        return new ResponseEntity<>(
+                ExceptionDetails.builder()
+                        .title("Mensagem inválida")
+                        .message(ex.getMessage())
+                        .timestamp(LocalDateTime.now())
+                        .build(),
+                HttpStatus.BAD_REQUEST);
+    }
 }
