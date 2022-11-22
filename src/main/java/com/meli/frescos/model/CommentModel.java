@@ -27,11 +27,11 @@ public class CommentModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 255, nullable = false)
+    @Column(nullable = false)
     private String comment;
 
     @Column(nullable = false)
-    LocalDate createdAt;
+    LocalDate createdAt = LocalDate.now();
 
     @ManyToOne
     @JoinColumn(name = "product_id")

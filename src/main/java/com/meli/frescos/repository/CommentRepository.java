@@ -7,5 +7,9 @@ import java.util.List;
 
 public interface CommentRepository extends JpaRepository<CommentModel, Long> {
 
-    public List<CommentModel> findByProductIdAndBuyerIdOrderByCreatedAt(Long productId, Long buyerId);
+    public List<CommentModel> findByProductIdOrderByCreatedAt(Long productId);
+
+    public CommentModel findByBuyerIdAndProductId(Long buyerId, long productId);
+
+
 }

@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -25,9 +26,7 @@ public interface BatchStockRepository extends JpaRepository<BatchStockModel, Lon
     @Query("FROM BatchStockModel bsm where bsm.product.id = :productId and bsm.dueDate >= :dateToCompare")
     List<BatchStockModel> findProducts(@Param("productId") Long productModel, @Param("dateToCompare") LocalDate dateToCompare);
 
-
-    @Query("SELECT count(pom) > 0 FROM PurchaseOrderModel pom INNER JOIN OrderProductsModel opm on opm.purchaseOrderModel.buyer = pom.buyer WHERE pom.orderStatus = 'CLOSED' AND pom.buyer = :buyer AND opm.productModel = :product")
-    boolean productBoughtByUser(@Param("buyer") BuyerModel buyerModel, @Param("product") ProductModel productModel);
-
+    @Query(value = "SELECT count(*) > 0 FROM Purchase_order po INNER JOIN Order_Products op on po.id = op.purchase_order_id WHERE po.order_Status = 'CLOSED' AND po.buyer_id = :buyerId AND op.product_id = :productId", nativeQuery = true)
+    BigInteger findByBuyerAndProduct(Long buyerId, Long productId);
 
 }

@@ -9,5 +9,5 @@ public interface ICommentService {
 
     CommentModel save(CommentModel commentModel) throws InvalidCommentException;
 
-    List<CommentModel> getRecentComments(CommentModel commentModel);
+    List<CommentModel> getRecentComments(Long productId);
 }
