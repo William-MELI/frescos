@@ -92,7 +92,7 @@ class ProductControllerIT {
 
 
         ResultActions response = mockMvc.perform(
-                post("/product")
+                post("/product/inboundorder")
                         .content(objectMapper.writeValueAsString(productBatchStockRequest))
                         .contentType(MediaType.APPLICATION_JSON)
         );
@@ -127,7 +127,7 @@ class ProductControllerIT {
 
 
         ResultActions response = mockMvc.perform(
-                post("/product")
+                post("/product/inboundorder")
                         .content(objectMapper.writeValueAsString(productBatchStockRequest))
                         .contentType(MediaType.APPLICATION_JSON)
         );
@@ -158,7 +158,7 @@ class ProductControllerIT {
 
 
         ResultActions response = mockMvc.perform(
-                post("/product")
+                post("/product/inboundorder")
                         .content(objectMapper.writeValueAsString(productBatchStockRequest))
                         .contentType(MediaType.APPLICATION_JSON)
         );
@@ -191,7 +191,7 @@ class ProductControllerIT {
 
 
         ResultActions response = mockMvc.perform(
-                post("/product")
+                post("/product/inboundorder")
                         .content(objectMapper.writeValueAsString(productBatchStockRequest))
                         .contentType(MediaType.APPLICATION_JSON)
         );
@@ -221,7 +221,7 @@ class ProductControllerIT {
 
 
         ResultActions response = mockMvc.perform(
-                post("/product")
+                post("/product/inboundorder")
                         .content(objectMapper.writeValueAsString(productBatchStockRequest))
                         .contentType(MediaType.APPLICATION_JSON)
         );
