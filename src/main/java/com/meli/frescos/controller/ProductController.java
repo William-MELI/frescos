@@ -2,12 +2,12 @@ package com.meli.frescos.controller;
 
 import com.meli.frescos.controller.dto.*;
 import com.meli.frescos.exception.NullDueDateException;
+import com.meli.frescos.exception.ProductByIdNotFoundException;
 import com.meli.frescos.model.BatchStockModel;
 import com.meli.frescos.model.ProductModel;
 import com.meli.frescos.service.IBatchStockService;
 import com.meli.frescos.service.IProductService;
 import com.meli.frescos.service.IRepresentativeService;
-import com.meli.frescos.service.IWarehouseService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,9 +34,11 @@ public class ProductController {
         this.iRepresentativeService = iRepresentativeService;
         this.iBatchStockService = iBatchStockService;
     }
+
     /**
      * Return all Product
      * Return 200 OK when operation is success
+     *
      * @return a list with all ProductResponse instance
      */
     @GetMapping
@@ -50,26 +52,34 @@ public class ProductController {
 
     /**
      * Endpoint to return a Product given id
+     *
      * @param id the Product id
      * @return a Product related ID
      */
     @GetMapping("/{id}")
-    public ResponseEntity<ProductDetailedResponse> getById(@PathVariable Long id) {
+    public ResponseEntity<ProductDetailedResponse> getById(@PathVariable Long id) throws ProductByIdNotFoundException {
         ProductModel product = iProductService.getById(id);
-        List<BatchStockModel> batchStockList = iBatchStockService.getByProductId(id);
-        List<SimplifiedBatchStockResponse> stockResponse = new ArrayList<>();
+        List<BatchStockModel> batchStockListWithDuplicatedSections = iBatchStockService.getAll().stream().filter(x -> x.getProduct().getId() == product.getId()).toList();
+        List<SimplifiedBatchStockResponse> stockResponseList = new ArrayList<>();
 
-        for (BatchStockModel stock : batchStockList) {
-            SimplifiedBatchStockResponse response = new SimplifiedBatchStockResponse(stock.getSection().getId(), iBatchStockService.getTotalBatchStockQuantity(product.getId()));
-            if (!stockResponse.stream().anyMatch(x -> x.getSectionId() == response.getSectionId() && x.getProductQuantity() == response.getProductQuantity())) {
-                stockResponse.add(response);
+        batchStockListWithDuplicatedSections.forEach(x -> stockResponseList.add(new SimplifiedBatchStockResponse(x.getSection().getId(), x.getQuantity())));
+
+        for (BatchStockModel stock : batchStockListWithDuplicatedSections) {
+            List<SimplifiedBatchStockResponse> stockResponseFilteredBySectionId = stockResponseList.stream().filter(x -> x.getSectionId() == stock.getSection().getId()).toList();
+
+            if(stockResponseFilteredBySectionId.size() > 1) {
+                Integer totalStockProductQuantity = stockResponseFilteredBySectionId.stream().mapToInt(SimplifiedBatchStockResponse::getProductQuantity).sum();
+                stockResponseList.removeIf(x -> x.getSectionId() == stock.getSection().getId());
+                stockResponseList.add(new SimplifiedBatchStockResponse(stock.getSection().getId(), totalStockProductQuantity));
             }
         }
-        return new ResponseEntity<>(ProductDetailedResponse.toResponse(product, stockResponse) , HttpStatus.OK);
+        return new ResponseEntity<>(ProductDetailedResponse.toResponse(product, stockResponseList), HttpStatus.OK);
     }
+
     /**
      * Creates a new Product instance.
      * Returns 201 CREATED when operation is success
+     *
      * @param productBatchStockRequest ProductBatchStockRequest instance
      * @return a ProductBatchStockResponse instance
      */
@@ -90,6 +100,7 @@ public class ProductController {
     /**
      * Returns the product filtered by category
      * Return 200 OK when operation is success
+     *
      * @return a list with all ProductResponse instance
      */
     @GetMapping("/list")
