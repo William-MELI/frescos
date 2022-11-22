@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -31,7 +32,7 @@ public class CommentModel {
     private String comment;
 
     @Column(nullable = false)
-    LocalDate createdAt = LocalDate.now();
+    LocalDateTime createdAt = LocalDateTime.now();
 
     @ManyToOne
     @JoinColumn(name = "product_id")

@@ -55,12 +55,12 @@ class CommentServiceTest {
 
         BDDMockito.when(commentRepository.save(ArgumentMatchers.any(CommentModel.class)))
                 .thenReturn(commentModel);
-        BDDMockito.when(commentRepository.findByBuyerIdAnAndProductId(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong()))
+        BDDMockito.when(commentRepository.findByBuyerIdAndProductId(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong()))
                 .thenReturn(null);
         BDDMockito.when(iProductService.getById(ArgumentMatchers.anyLong()))
                 .thenReturn(productModel);
         BDDMockito.when(batchStockRepository.findByBuyerAndProduct(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong()))
-                .thenReturn(BigInteger.valueOf(1L));
+                .thenReturn(true);
 
         CommentModel newComment = commentService.save(commentModel);
 
@@ -91,7 +91,7 @@ class CommentServiceTest {
         BDDMockito.when(iProductService.getById(ArgumentMatchers.anyLong()))
                 .thenReturn(productModel);
         BDDMockito.when(batchStockRepository.findByBuyerAndProduct(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong()))
-                .thenReturn(BigInteger.valueOf(0L));
+                .thenReturn(false);
 
         assertThrows(
                 InvalidCommentException.class,
@@ -120,11 +120,9 @@ class CommentServiceTest {
         BDDMockito.when(iProductService.getById(ArgumentMatchers.anyLong()))
                 .thenReturn(productModel);
         BDDMockito.when(batchStockRepository.findByBuyerAndProduct(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong()))
-                .thenReturn(BigInteger.valueOf(0L));
-        BDDMockito.when(commentRepository.findByBuyerIdAnAndProductId(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong()))
+                .thenReturn(true);
+        BDDMockito.when(commentRepository.findByBuyerIdAndProductId(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong()))
                 .thenReturn(commentModel);
-        BDDMockito.when(batchStockRepository.findByBuyerAndProduct(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong()))
-                .thenReturn(BigInteger.valueOf(1L));
 
         assertThrows(
                 InvalidCommentException.class,
@@ -154,7 +152,7 @@ class CommentServiceTest {
         List<CommentModel> commentModelList = new ArrayList<>();
         commentModelList.add(commentModel);
 
-        BDDMockito.when(commentRepository.findByProductIdOrderByCreatedAt(ArgumentMatchers.anyLong()))
+        BDDMockito.when(commentRepository.findByProductIdOrderByCreatedAtDesc(ArgumentMatchers.anyLong()))
                 .thenReturn(commentModelList);
 
         List<CommentModel> newCommentModelList = commentService.getRecentComments(commentModel.getId());
@@ -164,108 +162,4 @@ class CommentServiceTest {
 
     }
 
-
-    //    @Test
-//    @DisplayName("Return all Buyer")
-//    void findAll_returnAllSeller_whenSuccess() {
-//        List<BuyerModel> buyerModelList = new ArrayList<>();
-//        buyerModelList.add(new BuyerModel("Buyer", "12345678900"));
-//
-//        BDDMockito.when(repository.findAll())
-//                .thenReturn(buyerModelList);
-//
-//        List<BuyerModel> buyerList = service.getAll();
-//
-//        assertThat(buyerList).isNotNull();
-//        assertThat(buyerList).isEqualTo(buyerModelList);
-//    }
-//
-//    @Test
-//    @DisplayName("Return a Buyer by id")
-//    void findById_returnBuyer_whenSucess() throws BuyerNotFoundException {
-//        Long id = 1L;
-//        String name = "Buyer";
-//        String cpf = "12345678900";
-//        BuyerModel buyer = new BuyerModel(id, name, cpf);
-//
-//        BDDMockito.when(repository.findById(ArgumentMatchers.anyLong()))
-//                .thenReturn(Optional.of(buyer));
-//
-//        BuyerModel buyerTest = service.getById(id);
-//
-//        assertThat(buyerTest).isNotNull();
-//        assertThat(buyerTest).isEqualTo(buyer);
-//    }
-//
-//    @Test
-//    @DisplayName("Throw exception when ID is not found.")
-//    void findByIdSeller_returnBuyerByIdNotFoundException_whenInvalidId() {
-//        assertThrows(BuyerNotFoundException.class, () -> {
-//            BuyerModel buyerModel = service.getById(ArgumentMatchers.anyLong());
-//        });
-//    }
-//
-//    @Test
-//    @DisplayName("Return updated Buyer")
-//    void updateSeller_returnBuyerUpdated_whenSuccess() throws BuyerNotFoundException {
-//        Long id = 1L;
-//        String name = "Buyer";
-//        String cpf = "12345678900";
-//
-//        BuyerModel buyer = new BuyerModel(id, name, cpf);
-//
-//        BDDMockito.when(repository.save(ArgumentMatchers.any(BuyerModel.class)))
-//                .thenReturn(buyer);
-//
-//        BDDMockito.when(repository.findById(ArgumentMatchers.anyLong()))
-//                .thenReturn(Optional.of(buyer));
-//
-//        String newName = "Vendedor teste";
-//        BuyerModel buyerTest = new BuyerModel(id, newName, cpf);
-//
-//        service.update(buyerTest, id);
-//
-//        assertThat(buyerTest).isNotNull();
-//        assertEquals(id, buyerTest.getId());
-//        assertEquals(newName, buyerTest.getName());
-//        assertEquals(cpf, buyerTest.getCpf());
-//    }
-//
-////    @Test
-////    @DisplayName("Delete Buyer")
-////    void deleteById_notReturn_whenSuccess() {
-////        Long id = 1L;
-////        String name = "Buyer";
-////        String cpf = "12345678900";
-////        BuyerModel buyer = new BuyerModel(id, name, cpf);
-////
-////        BDDMockito.when(repository.save(ArgumentMatchers.any(BuyerModel.class)))
-////                .thenReturn(buyer);
-////
-////        BuyerModel buyerTest = service.save(buyer);
-////
-////        service.deleteById(buyerTest.getId());
-////
-////        assertThrows(BuyerNotFoundException.class, () -> {
-////            BuyerModel buyerModel = service.findById(id);
-////        });
-////
-////    }
-//
-//    @Test
-//    @DisplayName("Return a Buyer by cpf")
-//    void findByCpf_returnBuyer_whenSuccess() {
-//        Long id = 1L;
-//        String name = "Buyer";
-//        String cpf = "12345678900";
-//        BuyerModel buyer = new BuyerModel(id, name, cpf);
-//
-//        BDDMockito.when(repository.findByCpf(ArgumentMatchers.anyString()))
-//                .thenReturn(Optional.of(buyer));
-//
-//        Optional<BuyerModel> buyerTest = service.getByCpf(cpf);
-//
-//        assertThat(buyerTest).isNotNull();
-//        assertThat(buyerTest.get()).isEqualTo(buyer);
-//    }
 }

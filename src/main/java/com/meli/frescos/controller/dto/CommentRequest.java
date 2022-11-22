@@ -12,7 +12,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * Request DTO for Section endpoints
@@ -34,7 +34,7 @@ public class CommentRequest {
      * Commentary created date
      */
     @NotNull(message = "A data não pode estar em branco")
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     /**
      * Buyer Id

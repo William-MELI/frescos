@@ -4,6 +4,7 @@ import com.meli.frescos.model.CommentModel;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,7 +70,7 @@ public class CommentResponse {
     private static class CommentSimplified {
 
         String comment;
-        LocalDate createdAt;
+        LocalDateTime createdAt;
 
         public static CommentSimplified toResponse(CommentModel commentModel) {
             return CommentSimplified.builder()
