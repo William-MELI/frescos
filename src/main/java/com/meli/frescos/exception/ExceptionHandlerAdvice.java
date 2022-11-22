@@ -125,13 +125,13 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
      */
     @ExceptionHandler(CpfDuplicateException.class)
     public ResponseEntity<ExceptionDetails> handlerCpfDuplicateException(CpfDuplicateException ex) {
-            return new ResponseEntity<>(
-                    ExceptionDetails.builder()
-                            .title("CPF duplicado")
-                            .message(ex.getMessage())
-                            .timestamp(LocalDateTime.now())
-                            .build(),
-                    HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(
+                ExceptionDetails.builder()
+                        .title("CPF duplicado")
+                        .message(ex.getMessage())
+                        .timestamp(LocalDateTime.now())
+                        .build(),
+                HttpStatus.BAD_REQUEST);
     }
 
     /**
@@ -367,6 +367,23 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(
                 ExceptionDetails.builder()
                         .title("Filtro inválido")
+                        .message(ex.getMessage())
+                        .timestamp(LocalDateTime.now())
+                        .build(),
+                HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * This method handles the InvalidCommentException
+     *
+     * @param ex The original exception
+     * @return A ResponseEntity to represent the HTTP error
+     */
+    @ExceptionHandler(InvalidCommentException.class)
+    public ResponseEntity<ExceptionDetails> handlerInvalidCommentException(InvalidCommentException ex) {
+        return new ResponseEntity<>(
+                ExceptionDetails.builder()
+                        .title("Comentário inválido")
                         .message(ex.getMessage())
                         .timestamp(LocalDateTime.now())
                         .build(),
