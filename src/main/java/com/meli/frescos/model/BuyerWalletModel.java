@@ -1,13 +1,11 @@
 package com.meli.frescos.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,7 +20,6 @@ public class BuyerWalletModel {
     @Column(nullable = false)
     private Double balance;
 
-    @Column(nullable = false)
     @OneToOne
     @JoinColumn(name = "buyer")
     private BuyerModel buyer;
