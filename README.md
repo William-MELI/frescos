@@ -3,7 +3,7 @@
 Projeto proposto pelo curso da [Digital House](https://www.digitalhouse.com/br)  em que deveria ser desenvolvida uma API para gerenciar produtos que necessitam de refrigeração em um centro de distribuicão do Mercado livre.
 
 ## Funcionalidades
--  Cadastrar/atualizar os produtos em um armazém.
+- Cadastrar/atualizar os produtos em um armazém.
 - Listar todos os produtos.
 - Listra os produtos por categorias: Frescos, Refrigerados ou Congelados.
 - Cadastrar um pedido.
@@ -13,6 +13,15 @@ Projeto proposto pelo curso da [Digital House](https://www.digitalhouse.com/br) 
 - Listar a quantidade total de produto por setor.
 - Filtrar os lotes de produtos por data de vencimento.
 - Listar os lotes de produtos filtrados pela categoria: Frescos, Refrigerados ou Congelados.
+
+## Funcionalidades Extras
+- Filtrar um produto por parte da descrição, retorno ordenado pelos vendedores melhores avaliados. 
+- Avaliar um vendedor após uma compra.
+- Listar todas as avaliações de todos os vendedores
+
+### Links úteis das funcionalidades extras
+- Caso de uso consultar [aqui](https://docs.google.com/document/d/1LXoMDqJHvHSrnqapwEcmPyN15ym0PY8v/edit#).
+- Postman [aqui](https://www.getpostman.com/collections/18ecd88e6b480d58b104)
 
 ## Tecnologias usadas
 > **Backend**: Desenvolvido usando: Java 17, Spring Boot, Mysql
