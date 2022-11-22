@@ -1,6 +1,7 @@
 package com.meli.frescos.controller.dto;
 
 import com.meli.frescos.model.SellerModel;
+import com.meli.frescos.model.UserProfileEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -50,6 +51,7 @@ public class SellerRequest {
                 .name(this.name)
                 .cpf(this.cpf)
                 .rating(this.rating)
+                .userProfileEnum(UserProfileEnum.Seller)
                 .build();
     }
 }

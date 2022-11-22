@@ -44,6 +44,9 @@ public class SellerModel {
      */
     private Double rating;
 
+    @Column(columnDefinition = "varchar(32) default 'Seller'")
+    private UserProfileEnum userProfileEnum = UserProfileEnum.Seller;
+
     public SellerModel(String name, String cpf, Double rating) {
         this.name = name;
         this.cpf = cpf;
