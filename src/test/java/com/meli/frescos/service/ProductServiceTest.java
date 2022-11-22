@@ -1,5 +1,6 @@
 package com.meli.frescos.service;
 
+import com.meli.frescos.exception.BatchStockFilterCategoryInvalidException;
 import com.meli.frescos.exception.ProductByIdNotFoundException;
 import com.meli.frescos.model.CategoryEnum;
 import com.meli.frescos.model.ProductModel;
@@ -139,11 +140,11 @@ class ProductServiceTest {
     }
 
     @Test
-    @DisplayName("Return list null when category is not found")
-    void getByCategory_returnEmpty_whenNotFound() {
-        List<ProductModel> productTest = service.getByCategory("XX");
-
-        assertThat(productTest).isEqualTo(new ArrayList<ProductModel>());
+    @DisplayName("Return exception BatchStockFilterCategoryInvalidException when invalid category")
+    void getByCategory_returnBatchStockFilterCategoryInvalidException_whenInvalidCategory() {
+        assertThrows(BatchStockFilterCategoryInvalidException.class, () -> {
+            List<ProductModel> productTest = service.getByCategory("XX");
+        });
     }
 
 }
