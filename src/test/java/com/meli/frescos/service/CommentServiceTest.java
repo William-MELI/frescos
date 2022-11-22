@@ -60,7 +60,7 @@ class CommentServiceTest {
         BDDMockito.when(iProductService.getById(ArgumentMatchers.anyLong()))
                 .thenReturn(productModel);
         BDDMockito.when(batchStockRepository.findByBuyerAndProduct(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong()))
-                .thenReturn(true);
+                .thenReturn(BigInteger.valueOf(1L));
 
         CommentModel newComment = commentService.save(commentModel);
 
@@ -91,7 +91,7 @@ class CommentServiceTest {
         BDDMockito.when(iProductService.getById(ArgumentMatchers.anyLong()))
                 .thenReturn(productModel);
         BDDMockito.when(batchStockRepository.findByBuyerAndProduct(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong()))
-                .thenReturn(false);
+                .thenReturn(BigInteger.valueOf(0L));
 
         assertThrows(
                 InvalidCommentException.class,
@@ -120,7 +120,7 @@ class CommentServiceTest {
         BDDMockito.when(iProductService.getById(ArgumentMatchers.anyLong()))
                 .thenReturn(productModel);
         BDDMockito.when(batchStockRepository.findByBuyerAndProduct(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong()))
-                .thenReturn(true);
+                .thenReturn(BigInteger.valueOf(1L));
         BDDMockito.when(commentRepository.findByBuyerIdAndProductId(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong()))
                 .thenReturn(commentModel);
 
