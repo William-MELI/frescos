@@ -26,7 +26,7 @@ public interface BatchStockRepository extends JpaRepository<BatchStockModel, Lon
     @Query("FROM BatchStockModel bsm where bsm.product.id = :productId and bsm.dueDate >= :dateToCompare")
     List<BatchStockModel> findProducts(@Param("productId") Long productModel, @Param("dateToCompare") LocalDate dateToCompare);
 
-    @Query(value = "SELECT count(*) > 0 FROM Purchase_order po INNER JOIN Order_Products op on po.id = op.purchase_order_id WHERE po.order_Status = 'CLOSED' AND po.buyer_id = :buyerId AND op.product_id = :productId", nativeQuery = true)
-    boolean findByBuyerAndProduct(Long buyerId, Long productId);
+    @Query(value = "SELECT count(*) FROM Purchase_order po INNER JOIN Order_Products op on po.id = op.purchase_order_id WHERE po.order_Status = 'CLOSED' AND po.buyer_id = :buyerId AND op.product_id = :productId", nativeQuery = true)
+    BigInteger findByBuyerAndProduct(Long buyerId, Long productId);
 
 }

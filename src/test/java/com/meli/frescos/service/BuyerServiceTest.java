@@ -112,28 +112,6 @@ class BuyerServiceTest {
         assertEquals(newName, buyerTest.getName());
         assertEquals(cpf, buyerTest.getCpf());
     }
-
-//    @Test
-//    @DisplayName("Delete Buyer")
-//    void deleteById_notReturn_whenSuccess() {
-//        Long id = 1L;
-//        String name = "Buyer";
-//        String cpf = "12345678900";
-//        BuyerModel buyer = new BuyerModel(id, name, cpf);
-//
-//        BDDMockito.when(repository.save(ArgumentMatchers.any(BuyerModel.class)))
-//                .thenReturn(buyer);
-//
-//        BuyerModel buyerTest = service.save(buyer);
-//
-//        service.deleteById(buyerTest.getId());
-//
-//        assertThrows(BuyerNotFoundException.class, () -> {
-//            BuyerModel buyerModel = service.findById(id);
-//        });
-//
-//    }
-
     @Test
     @DisplayName("Return a Buyer by cpf")
     void findByCpf_returnBuyer_whenSuccess() {
