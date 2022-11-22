@@ -1,10 +1,7 @@
 package com.meli.frescos.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.meli.frescos.controller.dto.BatchStockRequest;
-import com.meli.frescos.controller.dto.InboundOrderRequest;
-import com.meli.frescos.controller.dto.ProductBatchStockRequest;
-import com.meli.frescos.controller.dto.WarehouseRequest;
+import com.meli.frescos.controller.dto.*;
 import com.meli.frescos.exception.RepresentativeNotFoundException;
 import com.meli.frescos.exception.SellerByIdNotFoundException;
 import com.meli.frescos.exception.WarehouseNotFoundException;
@@ -558,4 +555,36 @@ class ProductControllerIT {
 
         return inboundOrderRequest;
     }
+
+    @Test
+    @DisplayName("Return list of products when success")
+    void getByDescriptionContaining_returnListProducts_whenSuccess() throws Exception {
+        WarehouseModel warehouseModel = createWarehouse();
+        SellerModel sellerModel = createSeller();
+        SectionModel sectionModel = createSection(warehouseModel.getId());
+        RepresentativeModel representativeModel = createRepresentative(warehouseModel.getId());
+
+        BatchStockRequest batchStockRequest = createBatchStockRequest(sectionModel.getId());
+
+        List<BatchStockRequest> batchStockRequestList = new ArrayList<>();
+        batchStockRequestList.add(batchStockRequest);
+        InboundOrderRequest inboundOrderRequest = createInboundOrderRequest(warehouseModel.getId(), sellerModel.getId(), representativeModel.getId(), batchStockRequestList);
+
+        ProductBatchStockRequest productBatchStockRequest = new ProductBatchStockRequest();
+        productBatchStockRequest.setInboundOrder(inboundOrderRequest);
+
+        ProductModel newProduct = productRepository.save(productBatchStockRequest.toProduct());
+        List<BatchStockModel> productBatchsStockList = productBatchStockRequest.toBatchStock();
+        productBatchsStockList.get(0).setProduct(newProduct);
+
+        batchStockRepository.save(productBatchsStockList.get(0));
+
+        ResultActions response = mockMvc.perform(
+                get("/product/description-containing?description=te")
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        response.andExpect(status().isOk());
+    }
+
 }

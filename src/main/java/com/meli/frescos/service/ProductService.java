@@ -69,4 +69,15 @@ public class ProductService implements IProductService {
         return productRepository.findByCategory(CategoryEnum.getEnum(filter));
     }
 
+    /**
+     * Return a list ProductModel by product description
+     *
+     * @param description the description product
+     * @return list of ProductModel
+     */
+    @Override
+    public List<ProductModel> getByDescriptionContaining(String description) {
+        return productRepository.findByDescriptionContaining(description);
+    }
+
 }

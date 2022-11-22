@@ -12,4 +12,6 @@ public interface IProductService {
     ProductModel save(ProductModel product);
 
     List<ProductModel> getByCategory(String filter);
+
+    List<ProductModel> getByDescriptionContaining(String description);
 }

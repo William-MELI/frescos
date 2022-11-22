@@ -146,4 +146,21 @@ class ProductServiceTest {
         assertThat(productTest).isEqualTo(new ArrayList<ProductModel>());
     }
 
+    @Test
+    @DisplayName("Return list of products when success")
+    void getByDescriptionContaining_returnListProducts_whenSuccess() {
+        SellerModel seller = new SellerModel(1L, "Afonso", "123.456.789-00", 4.5);
+        List<ProductModel> products = new ArrayList<>();
+        products.add(new ProductModel(1L, "Manga", "Manga Tommy", new BigDecimal(2.99), CategoryEnum.REFRIGERATED, 5.0, 5.0, LocalDate.now(), seller));
+
+        BDDMockito.when(repository.findByDescriptionContaining(ArgumentMatchers.anyString()))
+                .thenReturn(products);
+
+        List<ProductModel> productTest = service.getByDescriptionContaining("tom");
+
+        assertThat(productTest).isNotNull();
+        assertThat(productTest).isEqualTo(products);
+
+    }
+
 }

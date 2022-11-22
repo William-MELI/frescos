@@ -7,14 +7,14 @@ import com.meli.frescos.model.ProductModel;
 import com.meli.frescos.service.IBatchStockService;
 import com.meli.frescos.service.IProductService;
 import com.meli.frescos.service.IRepresentativeService;
-import com.meli.frescos.service.IWarehouseService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @RestController to Product
@@ -107,5 +107,25 @@ public class ProductController {
 
         return new ResponseEntity<>(productResponse, HttpStatus.OK);
     }
+
+    /**
+     * Returns the products filtered by description and sorted by top rating seller
+     * @param description title to be searched
+     * @return list of all products that contain the searched text in the description
+     * @throws NullDueDateException when there are no products within the due date
+     */
+    @GetMapping("description-containing")
+    public ResponseEntity<List<ProductContainDescriptionResponse>> getByDescriptionContaining(@RequestParam String description) throws NullDueDateException {
+        List<ProductModel> products = iProductService.getByDescriptionContaining(description);
+
+        List<ProductContainDescriptionResponse> productResponse = new ArrayList<>();
+
+        for (ProductModel product : products) {
+            productResponse.add(ProductContainDescriptionResponse.toResponse(product, iBatchStockService.getClosestDueDate(product.getId())));
+        }
+        productResponse = productResponse.stream().sorted(Comparator.comparing(ProductContainDescriptionResponse::getRatingSeller).reversed()).collect(Collectors.toList());
+        return new ResponseEntity<>(productResponse, HttpStatus.OK);
+    }
+
 
 }

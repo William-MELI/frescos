@@ -373,4 +373,55 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
                 HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * This method handles the PurchaseOrderByIdNotFoundException
+     *
+     * @param ex The original exception
+     * @return A ResponseEntity to represent the HTTP error
+     */
+    @ExceptionHandler(PurchaseOrderByIdNotFoundException.class)
+    public ResponseEntity<ExceptionDetails> handlerPurchaseOrderByIdNotFoundException(PurchaseOrderByIdNotFoundException ex) {
+        return new ResponseEntity<>(
+                ExceptionDetails.builder()
+                        .title("Ordem de compra não encontrada")
+                        .message(ex.getMessage())
+                        .timestamp(LocalDateTime.now())
+                        .build(),
+                HttpStatus.NOT_FOUND);
+    }
+
+    /**
+     * This method handles the PurchaseOrderWithIvalidStatusException
+     *
+     * @param ex The original exception
+     * @return A ResponseEntity to represent the HTTP error
+     */
+    @ExceptionHandler(PurchaseOrderWithIvalidStatusException.class)
+    public ResponseEntity<ExceptionDetails> handlerPurchaseOrderWithIvalidStatusException(PurchaseOrderWithIvalidStatusException ex) {
+        return new ResponseEntity<>(
+                ExceptionDetails.builder()
+                        .title("Ordem de compra com status inválido para operação")
+                        .message(ex.getMessage())
+                        .timestamp(LocalDateTime.now())
+                        .build(),
+                HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * This method handles the SellerRatingAlreadyExist
+     *
+     * @param ex The original exception
+     * @return A ResponseEntity to represent the HTTP error
+     */
+    @ExceptionHandler(SellerRatingAlreadyExist.class)
+    public ResponseEntity<ExceptionDetails> handlerSellerRatingAlreadyExist(SellerRatingAlreadyExist ex) {
+        return new ResponseEntity<>(
+                ExceptionDetails.builder()
+                        .title("Avaliação já registrada")
+                        .message(ex.getMessage())
+                        .timestamp(LocalDateTime.now())
+                        .build(),
+                HttpStatus.BAD_REQUEST);
+    }
+
 }
