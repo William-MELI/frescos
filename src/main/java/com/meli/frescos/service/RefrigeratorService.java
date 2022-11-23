@@ -7,6 +7,7 @@ import com.meli.frescos.repository.RefrigeratorRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
@@ -81,7 +82,7 @@ public class RefrigeratorService implements IRefrigeratorService {
     @Override
     public Refrigerator executeRevision(Long refrigeratorId) throws RefrigeratorNotFoundException {
         Refrigerator refrigerator = getById(refrigeratorId);
-        refrigerator.setLastRevision(LocalDateTime.now());
+        refrigerator.setLastRevision(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
         return refrigeratorRepository.save(refrigerator);
     }
 }

@@ -58,7 +58,14 @@ public class BatchStockServiceTest {
         seller = new SellerModel(1L, "Tadeu", "123456789-00", 5.0);
         product = new ProductModel(1L, "Melão", "Melão", new BigDecimal(4.5), CategoryEnum.FRESH, 10.0, 10.0, LocalDate.now(), seller);
         warehouse = new WarehouseModel(1L, "São Paulo", "SP", "São Paulo", "Rua A", "11111-111");
-        section = new SectionModel(1L, "Sessão Frutas", CategoryEnum.FRESH, 200.0, 25.0, warehouse);
+        section = SectionModel.builder()
+                .id(1L)
+                .description("Sessão Frutas")
+                .category(CategoryEnum.FRESH)
+                .totalSize(200.0)
+                .temperature(25.0)
+                .warehouse(warehouse)
+                .build();
         batchStock = new BatchStockModel(1L, "ABC123", 50, LocalDate.of(2022,10,10), LocalDateTime.of(2022,10,10,15,00), LocalDate.of(2023,01,15), product, section);
         batchStockList.add(batchStock);
     }

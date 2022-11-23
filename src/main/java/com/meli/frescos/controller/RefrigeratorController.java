@@ -38,7 +38,7 @@ public class RefrigeratorController {
 
     @PostMapping
     public ResponseEntity<RefrigeratorResponse> save(@RequestBody @Valid RefrigeratorRequest refrigeratorRequest) throws RefrigeratorNotFoundException {
-        return new ResponseEntity<>(RefrigeratorResponse.toResponse(iRefrigeratorService.save(refrigeratorRequest.toModel())), HttpStatus.OK);
+        return new ResponseEntity<>(RefrigeratorResponse.toResponse(iRefrigeratorService.save(refrigeratorRequest.toModel())), HttpStatus.CREATED);
     }
 
     @PatchMapping("/section")
