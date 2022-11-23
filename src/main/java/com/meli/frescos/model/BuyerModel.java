@@ -38,11 +38,16 @@ public class BuyerModel {
     @Column(nullable = false, unique = true, length = 11)
     private String cpf;
 
-    @Column(columnDefinition = "varchar(32) default 'Buyer'")
-    private UserProfileEnum userProfileEnum = UserProfileEnum.Buyer;
+    /**
+     * Buyer userProfile.
+     * Not-nullable
+     */
+    @Column(nullable = false)
+    private UserProfileEnum userProfileEnum;
 
-    public BuyerModel(String name, String cpf) {
+    public BuyerModel(String name, String cpf, UserProfileEnum userProfileEnum) {
         this.name = name;
         this.cpf = cpf;
+        this.userProfileEnum = userProfileEnum;
     }
 }

@@ -1,10 +1,7 @@
 package com.meli.frescos.controller.dto;
 
 import com.meli.frescos.model.UserProfileEnum;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * Request DTO for Message endpoints
@@ -16,6 +13,7 @@ import javax.validation.constraints.Size;
 
 @Builder
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class MessageRequest {

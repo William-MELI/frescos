@@ -89,7 +89,7 @@ public class MessageService implements IMessageService {
     /**
      * Return all Message given receiverId
      *
-     * @param receiverId      the Message receiverId
+     * @param receiverId the Message receiverId
      * @param receiverProfile the Message ReceiverProfile
      * @return List of Messages
      */
@@ -108,7 +108,7 @@ public class MessageService implements IMessageService {
                         .messageReaded(model.isMessageReaded())
                         .received_at(model.getCreated_at())
                         .build());
-            } else {
+            } else if (model.getSenderProfileEnum() == UserProfileEnum.Seller) {
                 SellerModel seller = sellerService.getById(model.getSender_id());
                 response.add(MyMessagesResponse.builder()
                         .message_id(model.getId())
