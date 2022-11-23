@@ -373,7 +373,7 @@ class ProductControllerIT {
         String cpf = "12345678900";
         double rating = 4.2;
 
-        SellerModel seller = new SellerModel(id, name, cpf, rating);
+        SellerModel seller = new SellerModel(id, name, cpf, rating, UserProfileEnum.Seller);
 
         return sellerRepository.save(seller);
     }

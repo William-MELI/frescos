@@ -44,12 +44,17 @@ public class SellerModel {
      */
     private Double rating;
 
-    @Column(columnDefinition = "varchar(32) default 'Seller'")
-    private UserProfileEnum userProfileEnum = UserProfileEnum.Seller;
+    /**
+     * SellerModel userProfile
+     * Not nullable
+     */
+    @Column(nullable = false)
+    private UserProfileEnum userProfileEnum;
 
-    public SellerModel(String name, String cpf, Double rating) {
+    public SellerModel(String name, String cpf, Double rating, UserProfileEnum userProfileEnum) {
         this.name = name;
         this.cpf = cpf;
         this.rating = rating;
+        this.userProfileEnum = userProfileEnum;
     }
 }

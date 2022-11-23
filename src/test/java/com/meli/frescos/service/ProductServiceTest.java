@@ -5,6 +5,7 @@ import com.meli.frescos.exception.ProductByIdNotFoundException;
 import com.meli.frescos.model.CategoryEnum;
 import com.meli.frescos.model.ProductModel;
 import com.meli.frescos.model.SellerModel;
+import com.meli.frescos.model.UserProfileEnum;
 import com.meli.frescos.repository.ProductRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,7 +38,7 @@ class ProductServiceTest {
     @Test
     @DisplayName("Return all storage Product")
     void getAll_returnAllProducts_whenSuccess() {
-        SellerModel seller = new SellerModel(1L, "Afonso", "123.456.789-00", 4.5);
+        SellerModel seller = new SellerModel(1L, "Afonso", "123.456.789-00", 4.5, UserProfileEnum.Seller);
         List<ProductModel> products = new ArrayList<>();
         products.add(new ProductModel(1L, "Manga", "Manga Tommy", new BigDecimal(2.99), CategoryEnum.FRESH, 5.0, 5.0, LocalDate.now(), seller));
 
@@ -53,7 +54,7 @@ class ProductServiceTest {
     @Test
     @DisplayName("Return a Product by id")
     void getById_returnProduct_whenSucess() {
-        SellerModel seller = new SellerModel(1L, "Afonso", "123.456.789-00", 4.5);
+        SellerModel seller = new SellerModel(1L, "Afonso", "123.456.789-00", 4.5, UserProfileEnum.Seller);
         ProductModel product = new ProductModel(1L, "Manga", "Manga Tommy", new BigDecimal(2.99), CategoryEnum.FRESH, 5.0, 5.0, LocalDate.now(), seller);
 
         BDDMockito.when(repository.findById(ArgumentMatchers.anyLong()))
@@ -76,7 +77,7 @@ class ProductServiceTest {
     @Test
     @DisplayName("Create a new Product successfully")
     void saveProduct_returnsCreatedProduct_whenSuccess() {
-        SellerModel seller = new SellerModel(1L, "Afonso", "123.456.789-00", 4.5);
+        SellerModel seller = new SellerModel(1L, "Afonso", "123.456.789-00", 4.5, UserProfileEnum.Seller);
         ProductModel product = new ProductModel(1L, "Manga", "Manga Tommy", new BigDecimal(2.99), CategoryEnum.FRESH, 5.0, 5.0, LocalDate.now(), seller);
 
         BDDMockito.when(sellerService.getById(ArgumentMatchers.anyLong()))
@@ -94,7 +95,7 @@ class ProductServiceTest {
     @Test
     @DisplayName("Return all storage Product by category fresh")
     void getByCategory_returnListProductsFresh_whenSucess() {
-        SellerModel seller = new SellerModel(1L, "Afonso", "123.456.789-00", 4.5);
+        SellerModel seller = new SellerModel(1L, "Afonso", "123.456.789-00", 4.5, UserProfileEnum.Seller);
         List<ProductModel> products = new ArrayList<>();
         products.add(new ProductModel(1L, "Manga", "Manga Tommy", new BigDecimal(2.99), CategoryEnum.FRESH, 5.0, 5.0, LocalDate.now(), seller));
 
@@ -110,7 +111,7 @@ class ProductServiceTest {
     @Test
     @DisplayName("Return all storage Product by category frozen")
     void getByCategory_returnListProductsFrozen_whenSucess() {
-        SellerModel seller = new SellerModel(1L, "Afonso", "123.456.789-00", 4.5);
+        SellerModel seller = new SellerModel(1L, "Afonso", "123.456.789-00", 4.5, UserProfileEnum.Seller);
         List<ProductModel> products = new ArrayList<>();
         products.add(new ProductModel(1L, "Manga", "Manga Tommy", new BigDecimal(2.99), CategoryEnum.FROZEN, 5.0, 5.0, LocalDate.now(), seller));
 
@@ -126,7 +127,7 @@ class ProductServiceTest {
     @Test
     @DisplayName("Return all storage Product by category refrigerated")
     void getByCategory_returnListProductsRefrigerated_whenSucess() {
-        SellerModel seller = new SellerModel(1L, "Afonso", "123.456.789-00", 4.5);
+        SellerModel seller = new SellerModel(1L, "Afonso", "123.456.789-00", 4.5, UserProfileEnum.Seller);
         List<ProductModel> products = new ArrayList<>();
         products.add(new ProductModel(1L, "Manga", "Manga Tommy", new BigDecimal(2.99), CategoryEnum.REFRIGERATED, 5.0, 5.0, LocalDate.now(), seller));
 

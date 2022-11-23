@@ -55,7 +55,7 @@ public class BatchStockServiceTest {
         createBatchStock();
     }
     void createBatchStock() {
-        seller = new SellerModel(1L, "Tadeu", "123456789-00", 5.0);
+        seller = new SellerModel(1L, "Tadeu", "123456789-00", 5.0, UserProfileEnum.Seller);
         product = new ProductModel(1L, "Melão", "Melão", new BigDecimal(4.5), CategoryEnum.FRESH, 10.0, 10.0, LocalDate.now(), seller);
         warehouse = new WarehouseModel(1L, "São Paulo", "SP", "São Paulo", "Rua A", "11111-111");
         section = new SectionModel(1L, "Sessão Frutas", CategoryEnum.FRESH, 200.0, 25.0, warehouse);
@@ -282,7 +282,7 @@ public class BatchStockServiceTest {
     @Test
     @DisplayName("Don't return exceptions when successfully consuming batch stock on purchase")
     void consumeBatchStockOnPurchase_notReturnException_whenSuccess() {
-        PurchaseOrderModel purchaseOrder = new PurchaseOrderModel(1L, LocalDate.now(), OrderStatusEnum.OPEN, new BuyerModel("Buyer Name", "123.456.789-00"));
+        PurchaseOrderModel purchaseOrder = new PurchaseOrderModel(1L, LocalDate.now(), OrderStatusEnum.OPEN, new BuyerModel("Buyer Name", "123.456.789-00", UserProfileEnum.Buyer));
         List<OrderProductsModel> orderProducts = new ArrayList<>();
         orderProducts.add(new OrderProductsModel(batchStockList.get(0).getProduct(), 0, purchaseOrder));
 

@@ -142,7 +142,7 @@ class OrderProductControllerIT {
         Long id = 1L;
         String name = "Buyer";
         String cpf = "12345678900";
-        BuyerModel buyer = new BuyerModel(id, name, cpf);
+        BuyerModel buyer = new BuyerModel(id, name, cpf, UserProfileEnum.Buyer);
 
         return buyerRepository.save(buyer);
     }
@@ -152,7 +152,7 @@ class OrderProductControllerIT {
         String name = "Vendedor 1";
         String cpf = "12345678900";
         double rating = 4.2;
-        SellerModel sellerModel = new SellerModel(id, name, cpf, rating);
+        SellerModel sellerModel = new SellerModel(id, name, cpf, rating, UserProfileEnum.Seller);
 
         return sellerRepository.save(sellerModel);
     }

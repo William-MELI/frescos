@@ -2,6 +2,7 @@ package com.meli.frescos.service;
 
 import com.meli.frescos.exception.BuyerNotFoundException;
 import com.meli.frescos.model.BuyerModel;
+import com.meli.frescos.model.UserProfileEnum;
 import com.meli.frescos.repository.BuyerRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,9 +37,9 @@ class BuyerServiceTest {
         String cpf = "12345678900";
 
         BDDMockito.when(repository.save(ArgumentMatchers.any(BuyerModel.class)))
-                .thenReturn(new BuyerModel(1L, name, cpf));
+                .thenReturn(new BuyerModel(1L, name, cpf, UserProfileEnum.Buyer));
 
-        BuyerModel newBuyer = service.save(new BuyerModel(name, cpf));
+        BuyerModel newBuyer = service.save(new BuyerModel(name, cpf, UserProfileEnum.Buyer));
 
         assertThat(newBuyer).isNotNull();
         assertThat(newBuyer.getId()).isPositive();
@@ -51,7 +52,7 @@ class BuyerServiceTest {
     @DisplayName("Return all Buyer")
     void findAll_returnAllSeller_whenSuccess() {
         List<BuyerModel> buyerModelList = new ArrayList<>();
-        buyerModelList.add(new BuyerModel("Buyer", "12345678900"));
+        buyerModelList.add(new BuyerModel("Buyer", "12345678900", UserProfileEnum.Buyer));
 
         BDDMockito.when(repository.findAll())
                 .thenReturn(buyerModelList);
@@ -68,7 +69,7 @@ class BuyerServiceTest {
         Long id = 1L;
         String name = "Buyer";
         String cpf = "12345678900";
-        BuyerModel buyer = new BuyerModel(id, name, cpf);
+        BuyerModel buyer = new BuyerModel(id, name, cpf, UserProfileEnum.Buyer);
 
         BDDMockito.when(repository.findById(ArgumentMatchers.anyLong()))
                 .thenReturn(Optional.of(buyer));
@@ -94,7 +95,7 @@ class BuyerServiceTest {
         String name = "Buyer";
         String cpf = "12345678900";
 
-        BuyerModel buyer = new BuyerModel(id, name, cpf);
+        BuyerModel buyer = new BuyerModel(id, name, cpf, UserProfileEnum.Buyer);
 
         BDDMockito.when(repository.save(ArgumentMatchers.any(BuyerModel.class)))
                 .thenReturn(buyer);
@@ -103,7 +104,7 @@ class BuyerServiceTest {
                 .thenReturn(Optional.of(buyer));
 
         String newName = "Vendedor teste";
-        BuyerModel buyerTest = new BuyerModel(id, newName, cpf);
+        BuyerModel buyerTest = new BuyerModel(id, newName, cpf, UserProfileEnum.Buyer);
 
         service.update(buyerTest, id);
 
@@ -118,7 +119,7 @@ class BuyerServiceTest {
         Long id = 1L;
         String name = "Buyer";
         String cpf = "12345678900";
-        BuyerModel buyer = new BuyerModel(id, name, cpf);
+        BuyerModel buyer = new BuyerModel(id, name, cpf, UserProfileEnum.Buyer);
 
         BDDMockito.when(repository.findByCpf(ArgumentMatchers.anyString()))
                 .thenReturn(Optional.of(buyer));
