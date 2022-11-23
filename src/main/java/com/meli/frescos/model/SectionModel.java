@@ -56,6 +56,9 @@ public class SectionModel {
     @JoinColumn(name = "warehouse_id")
     private WarehouseModel warehouse;
 
+    @OneToOne
+    private Refrigerator refrigerator;
+
     public SectionModel(String description,
                         CategoryEnum category,
                         Double totalSize,

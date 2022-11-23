@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -72,9 +71,9 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
     /**
      * This method handles the MethodArgumentNotValid
      *
-     * @param ex      The original exception
+     * @param ex The original exception
      * @param headers The headers from exception
-     * @param status  The status from exception
+     * @param status The status from exception
      * @param request The request from exception
      * @return A ResponseEntity to represent the HTTP error
      */
@@ -126,13 +125,13 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
      */
     @ExceptionHandler(CpfDuplicateException.class)
     public ResponseEntity<ExceptionDetails> handlerCpfDuplicateException(CpfDuplicateException ex) {
-        return new ResponseEntity<>(
-                ExceptionDetails.builder()
-                        .title("CPF duplicado")
-                        .message(ex.getMessage())
-                        .timestamp(LocalDateTime.now())
-                        .build(),
-                HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(
+                    ExceptionDetails.builder()
+                            .title("CPF duplicado")
+                            .message(ex.getMessage())
+                            .timestamp(LocalDateTime.now())
+                            .build(),
+                    HttpStatus.BAD_REQUEST);
     }
 
     /**
@@ -391,4 +390,16 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
                         .build(),
                 HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(RefrigeratorNotFoundException.class)
+    public ResponseEntity<ExceptionDetails> handlerRefrigeratorNotFoundException(RefrigeratorNotFoundException ex) {
+        return new ResponseEntity<>(
+                ExceptionDetails.builder()
+                        .title("Refrigerador não encontrado!")
+                        .message(ex.getMessage())
+                        .timestamp(LocalDateTime.now())
+                        .build(),
+                HttpStatus.NOT_FOUND);
+    }
+
 }

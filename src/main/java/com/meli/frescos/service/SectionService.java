@@ -90,4 +90,11 @@ public class SectionService implements ISectionService {
     public List<SectionModel> getByCategory(CategoryEnum category) {
         return sectionRepository.findByCategory(category);
     }
+
+    @Override
+    public SectionModel setTemperature(Long sectionId, Double temperature) {
+        SectionModel section = getById(sectionId);
+        section.setTemperature(temperature);
+        return sectionRepository.save(section);
+    }
 }

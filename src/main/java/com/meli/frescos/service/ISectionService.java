@@ -17,4 +17,6 @@ public interface ISectionService {
     SectionModel getById(Long id) throws SectionByIdNotFoundException;
 
     List<SectionModel> getByCategory(CategoryEnum category);
+
+    SectionModel setTemperature(Long sectionId, Double temperature);
 }
