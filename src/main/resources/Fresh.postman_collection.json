@@ -1,0 +1,889 @@
+{
+	"info": {
+		"_postman_id": "20814fac-4c34-4f0c-aa67-6e929dd2de1e",
+		"name": "Fresh",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23718309"
+	},
+	"item": [
+		{
+			"name": "Refrigerator setTemperature",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/v1/fresh-products/refrigerator/section?refrigeratorId=1&sectionId=1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"refrigerator",
+						"section"
+					],
+					"query": [
+						{
+							"key": "refrigeratorId",
+							"value": "1"
+						},
+						{
+							"key": "sectionId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Refrigerator executeRevision",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/v1/fresh-products/refrigerator/section?refrigeratorId=1&sectionId=1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"refrigerator",
+						"section"
+					],
+					"query": [
+						{
+							"key": "refrigeratorId",
+							"value": "1"
+						},
+						{
+							"key": "sectionId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Refrigerator setTurnedOn",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/v1/fresh-products/refrigerator/turnedon?refrigeratorId=1&turnedOn=true",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"refrigerator",
+						"turnedon"
+					],
+					"query": [
+						{
+							"key": "refrigeratorId",
+							"value": "1"
+						},
+						{
+							"key": "turnedOn",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Refrigerator setSection",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/v1/fresh-products/refrigerator/section?refrigeratorId=1&sectionId=1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"refrigerator",
+						"section"
+					],
+					"query": [
+						{
+							"key": "refrigeratorId",
+							"value": "1"
+						},
+						{
+							"key": "sectionId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Refrigerator findAll",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/v1/fresh-products/refrigerator",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"refrigerator"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Refrigerator findBySectionId",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/v1/fresh-products/refrigerator/section/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"refrigerator",
+						"section",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Refrigerator findById",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/v1/fresh-products/refrigerator/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"refrigerator",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Refrigerator save",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"brand\": \"Marca Teste\",\n    \"model\": \"Modelo Teste\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/fresh-products/refrigerator",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"refrigerator"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BatchStock update",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"sectionCode\": 1,\n    \"batchNumber\": \"456DEFG\",\n    \"productQuantity\": 101,\n    \"manufacturingDate\": \"2021-05-22\",\n    \"manufacturingTime\": \"2022-01-31T12:32:00\",\n    \"dueDate\": \"2023-06-30\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/fresh-products/batch-stock/?batchStockId=2&representativeId=1&warehouseId=1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"batch-stock",
+						""
+					],
+					"query": [
+						{
+							"key": "batchStockId",
+							"value": "2"
+						},
+						{
+							"key": "representativeId",
+							"value": "1"
+						},
+						{
+							"key": "warehouseId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BatchStock findByProduct",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/v1/fresh-products/batch-stock/product-id/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"batch-stock",
+						"product-id",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BatchStock findValidByProduct",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/v1/fresh-products/batch-stock/list?idProduct=1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"batch-stock",
+						"list"
+					],
+					"query": [
+						{
+							"key": "idProduct",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BatchStock findByCategory",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/v1/fresh-products/batch-stock/category?category=FF&numberOfDays=300&order=asc",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"batch-stock",
+						"category"
+					],
+					"query": [
+						{
+							"key": "category",
+							"value": "FF"
+						},
+						{
+							"key": "numberOfDays",
+							"value": "300"
+						},
+						{
+							"key": "order",
+							"value": "asc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BatchStock findBySection",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/v1/fresh-products/batch-stock/section?sectionId=1&numberOfDays=1000",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"batch-stock",
+						"section"
+					],
+					"query": [
+						{
+							"key": "sectionId",
+							"value": "1"
+						},
+						{
+							"key": "numberOfDays",
+							"value": "1000"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PurchaseOrder close",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/v1/fresh-products/purchase-order/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"purchase-order",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PurchaseOrder save",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"date\": \"2022-11-11\",\n    \"orderStatus\": \"OPEN\",\n    \"buyer\": 1,\n    \"products\": [\n        {\n            \"productModel\": 1,\n            \"quantity\": 30\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/fresh-products/purchase-order",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"purchase-order"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Buyer findAll",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/v1/fresh-products/buyer",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"buyer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Buyer findById",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/v1/fresh-products/buyer/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"buyer",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Buyer save",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"TESTEOOO\",\n    \"cpf\": \"15024717287\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/fresh-products/buyer",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"buyer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Product findAll",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/v1/fresh-products/product",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"product"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Product findById",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/v1/fresh-products/product/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"product",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Product save",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"inboundOrder\": {\n        \"productTitle\": \"Test Product\",\n        \"productDescription\": \"Test Description\",\n        \"unitVolume\": 0.05,\n        \"unitWeight\": 0.2,\n        \"price\": 13.99,\n        \"category\": \"FROZEN\",\n        \"representativeCode\": 1,\n        \"sellerCode\": 1,\n        \"warehouseCode\": 1,\n        \"batchStock\": [\n            {\n                \"sectionCode\": 1,\n                \"batchNumber\": \"123ABC\",\n                \"productQuantity\": 150,\n                \"manufacturingDate\": \"2021-05-22\",\n                \"manufacturingDatetime\": \"2021-06-22T12:32\",\n                \"dueDate\": \"2022-11-15\"\n            },\n            {\n                \"sectionCode\": 1,\n                \"batchNumber\": \"456DEF\",\n                \"productQuantity\": 100,\n                \"manufacturingDate\": \"2021-05-22\",\n                \"manufacturingDatetime\": \"2022-01-31T12:32\",\n                \"dueDate\": \"2023-06-30\"\n            }\n            ,\n            {\n                \"sectionCode\": 1,\n                \"batchNumber\": \"789GHI\",\n                \"productQuantity\": 120,\n                \"manufacturingDate\": \"2021-05-22\",\n                \"manufacturingDatetime\": \"2022-01-31T12:32\",\n                \"dueDate\": \"2023-06-30\"\n            }\n        ]\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/fresh-products/product/inboundorder",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"product",
+						"inboundorder"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Representative findAll",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/v1/fresh-products/representative",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"representative"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Representative findById",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/v1/fresh-products/representative/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"representative",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Representative save",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Representative name\",\n    \"warehouseCode\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/fresh-products/representative",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"representative"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Section findAll",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/v1/fresh-products/section",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"section"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Section findById",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/v1/fresh-products/section/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"section",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Section save",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"description\": \"marca\",\n    \"category\": \"FROZEN\",\n    \"totalSize\": 40,\n    \"temperature\": 4.8,\n    \"warehouse\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/fresh-products/section",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"section"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Seller findAll",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/v1/fresh-products/seller",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"seller"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Seller findById",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/v1/fresh-products/seller/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"seller",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Seller save",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\":\"Vendedor 1\",\n    \"cpf\":\"70087309181\",\n    \"rating\":3.2\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/fresh-products/seller",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"seller"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Warehouse findAll",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/v1/fresh-products/warehouse",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"warehouse"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Warehouse findById",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/v1/fresh-products/warehouse/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"warehouse",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Warehouse save",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"district\": \"District\",\n    \"state\": \"State\",\n    \"city\": \"City\",\n    \"street\": \"Street\",\n    \"postalCode\": \"12345678\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/fresh-products/warehouse",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"warehouse"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
