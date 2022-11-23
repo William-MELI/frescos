@@ -64,6 +64,9 @@ class CommentControllerIT {
     @Autowired
     private RepresentativeRepository representativeRepository;
 
+    @Autowired
+    private RefrigeratorRepository refrigeratorRepository;
+
     @BeforeEach
     @AfterEach
     void setup() {
@@ -76,6 +79,7 @@ class CommentControllerIT {
         buyerRepository.deleteAllInBatch();
         productRepository.deleteAllInBatch();
         sellerRepository.deleteAllInBatch();
+        refrigeratorRepository.deleteAllInBatch();
         sectionRepository.deleteAllInBatch();
         warehouseRepository.deleteAllInBatch();
 
