@@ -53,12 +53,14 @@ public class CommentListResponse {
 
         String comment;
         LocalDateTime createdAt;
+        Long id;
 
         public static CommentDetails toResponse(CommentModel commentModel) {
             return CommentDetails
                     .builder()
                     .comment(commentModel.getComment())
                     .createdAt(commentModel.getCreatedAt())
+                    .id(commentModel.getId())
                     .build();
         }
     }
