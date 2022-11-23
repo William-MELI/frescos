@@ -3,7 +3,6 @@ package com.meli.frescos.controller.dto;
 import com.meli.frescos.model.CommentModel;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CommentResponse {
-
+public class CommentListResponse {
     /**
      * Product name
      */
@@ -26,7 +24,7 @@ public class CommentResponse {
     /**
      * Seller rating
      */
-    private List<CommentSimplified> comments;
+    private List<CommentDetails> comments;
 
     /**
      * Maps SellerModel to SellerResponse
@@ -34,46 +32,31 @@ public class CommentResponse {
      * @param commentModelList
      * @return CommentResponse
      */
-    public static CommentResponse toResponse(List<CommentModel> commentModelList) {
-        List<CommentSimplified> comments = new ArrayList<>();
+    public static CommentListResponse toResponse(List<CommentModel> commentModelList) {
+        List<CommentDetails> comments = new ArrayList<>();
 
         for (CommentModel commentModel : commentModelList)
-            comments.add(CommentSimplified.toResponse(commentModel));
+            comments.add(CommentDetails.toResponse(commentModel));
 
-        return CommentResponse.builder()
+        return CommentListResponse.builder()
                 .comments(comments)
                 .productName(commentModelList.get(0).getProduct().getProductTitle())
                 .build();
     }
-
-    /**
-     * Maps SellerModel to SellerResponse
-     *
-     * @param commentModel
-     * @return CommentResponse
-     */
-    public static CommentResponse toResponse(CommentModel commentModel) {
-        List<CommentSimplified> comments = new ArrayList<>();
-        comments.add(CommentSimplified.toResponse(commentModel));
-        return CommentResponse.builder()
-                .comments(comments)
-                .productName(commentModel.getProduct().getProductTitle())
-                .build();
-    }
-
 
     @Getter
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    private static class CommentSimplified {
+    private static class CommentDetails {
 
         String comment;
         LocalDateTime createdAt;
 
-        public static CommentSimplified toResponse(CommentModel commentModel) {
-            return CommentSimplified.builder()
+        public static CommentDetails toResponse(CommentModel commentModel) {
+            return CommentDetails
+                    .builder()
                     .comment(commentModel.getComment())
                     .createdAt(commentModel.getCreatedAt())
                     .build();

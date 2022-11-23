@@ -1,5 +1,6 @@
 package com.meli.frescos.service;
 
+import com.meli.frescos.exception.CommentNotFoundException;
 import com.meli.frescos.exception.InvalidCommentException;
 import com.meli.frescos.model.BuyerModel;
 import com.meli.frescos.model.CommentModel;
@@ -18,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -37,6 +39,9 @@ class CommentServiceTest {
     @Mock
     IProductService iProductService;
 
+    @Mock
+    IBuyerService iBuyerService;
+
     @Test
     @DisplayName("Create a new Comment successfully")
     void save_returnsCreatedComment_whenSuccess() throws InvalidCommentException {
@@ -53,6 +58,10 @@ class CommentServiceTest {
         commentModel.setBuyer(buyer);
         commentModel.setId(1L);
 
+        BDDMockito.when(iBuyerService.getById(ArgumentMatchers.anyLong()))
+                .thenReturn(buyer);
+        BDDMockito.when(iProductService.getById(ArgumentMatchers.anyLong()))
+                .thenReturn(productModel);
         BDDMockito.when(commentRepository.save(ArgumentMatchers.any(CommentModel.class)))
                 .thenReturn(commentModel);
         BDDMockito.when(commentRepository.findByBuyerIdAndProductId(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong()))
@@ -90,6 +99,8 @@ class CommentServiceTest {
 
         BDDMockito.when(iProductService.getById(ArgumentMatchers.anyLong()))
                 .thenReturn(productModel);
+        BDDMockito.when(iBuyerService.getById(ArgumentMatchers.anyLong()))
+                .thenReturn(buyer);
         BDDMockito.when(batchStockRepository.findByBuyerAndProduct(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong()))
                 .thenReturn(BigInteger.valueOf(0L));
 
@@ -119,6 +130,8 @@ class CommentServiceTest {
 
         BDDMockito.when(iProductService.getById(ArgumentMatchers.anyLong()))
                 .thenReturn(productModel);
+        BDDMockito.when(iBuyerService.getById(ArgumentMatchers.anyLong()))
+                .thenReturn(buyer);
         BDDMockito.when(batchStockRepository.findByBuyerAndProduct(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong()))
                 .thenReturn(BigInteger.valueOf(1L));
         BDDMockito.when(commentRepository.findByBuyerIdAndProductId(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong()))
@@ -131,7 +144,6 @@ class CommentServiceTest {
                 }
         );
     }
-
 
     @Test
     @DisplayName("Return a list of  Comment successfully")
@@ -159,6 +171,90 @@ class CommentServiceTest {
 
         assertEquals(commentModelList.size(), newCommentModelList.size());
         assertEquals(commentModelList.get(0).getId(), newCommentModelList.get(0).getId());
+
+    }
+
+    @Test
+    @DisplayName("Delete Seller")
+    void delete_notReturn_whenSuccess() throws InvalidCommentException, CommentNotFoundException {
+        ProductModel productModel = new ProductModel();
+        productModel.setId(1L);
+
+        BuyerModel buyer = new BuyerModel();
+        buyer.setId(1L);
+
+        CommentModel commentModel = new CommentModel();
+        commentModel.setComment("test");
+        commentModel.setProduct(productModel);
+        commentModel.setBuyer(buyer);
+        commentModel.setId(1L);
+
+        BDDMockito.when(iBuyerService.getById(ArgumentMatchers.anyLong()))
+                .thenReturn(buyer);
+        BDDMockito.when(iProductService.getById(ArgumentMatchers.anyLong()))
+                .thenReturn(productModel);
+        BDDMockito.when(commentRepository.save(ArgumentMatchers.any(CommentModel.class)))
+                .thenReturn(commentModel);
+        BDDMockito.when(commentRepository.findById(ArgumentMatchers.anyLong()))
+                .thenReturn(Optional.of(commentModel));
+        BDDMockito.when(commentRepository.findByBuyerIdAndProductId(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong()))
+                .thenReturn(null);
+        BDDMockito.when(batchStockRepository.findByBuyerAndProduct(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong()))
+                .thenReturn(BigInteger.valueOf(1));
+
+        CommentModel buyerTest = commentService.save(commentModel);
+
+        commentService.delete(buyerTest);
+
+    }
+
+    @Test
+    @DisplayName("Delete Seller throws exception when does not exists")
+    void deleteById_throwsCommentNotFoundException_whenSellerDoesNotExists() {
+        Long id = 1L;
+        CommentModel commentModel = new CommentModel();
+        commentModel.setId(id);
+
+        BDDMockito.when(commentRepository.findById(ArgumentMatchers.anyLong()))
+                .thenReturn(Optional.empty());
+
+
+        assertThrows(
+                CommentNotFoundException.class,
+                () -> {
+                    commentService.delete(commentModel);
+                });
+
+
+    }
+
+    @Test
+    @DisplayName("Updates a new Comment successfully")
+    void update_returnsCreatedComment_whenSuccess() throws InvalidCommentException, CommentNotFoundException {
+
+        ProductModel productModel = new ProductModel();
+        productModel.setId(1L);
+
+        BuyerModel buyer = new BuyerModel();
+        buyer.setId(1L);
+
+        CommentModel commentModel = new CommentModel();
+        commentModel.setComment("test");
+        commentModel.setProduct(productModel);
+        commentModel.setBuyer(buyer);
+        commentModel.setId(1L);
+
+
+        BDDMockito.when(commentRepository.save(ArgumentMatchers.any(CommentModel.class)))
+                .thenReturn(commentModel);
+        BDDMockito.when(commentRepository.findById(ArgumentMatchers.anyLong()))
+                .thenReturn(Optional.of(commentModel));
+
+        CommentModel newComment = commentService.update(commentModel);
+
+        assertThat(newComment).isNotNull();
+        assertThat(newComment.getId()).isPositive();
+        assertEquals(commentModel.getComment(), newComment.getComment());
 
     }
 

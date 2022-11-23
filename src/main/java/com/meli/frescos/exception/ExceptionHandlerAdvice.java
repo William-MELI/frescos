@@ -391,4 +391,21 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
                         .build(),
                 HttpStatus.BAD_REQUEST);
     }
+
+    /**
+     * This method handles the CommentNotFoundException
+     *
+     * @param ex The original exception
+     * @return A ResponseEntity to represent the HTTP error
+     */
+    @ExceptionHandler(CommentNotFoundException.class)
+    public ResponseEntity<ExceptionDetails> handlerCommentNotFoundException(CommentNotFoundException ex) {
+        return new ResponseEntity<>(
+                ExceptionDetails.builder()
+                        .title("Comentário não existe")
+                        .message(ex.getMessage())
+                        .timestamp(LocalDateTime.now())
+                        .build(),
+                HttpStatus.NOT_FOUND);
+    }
 }

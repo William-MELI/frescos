@@ -1,8 +1,10 @@
 package com.meli.frescos.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.meli.frescos.controller.dto.CommentRequest;
+import com.meli.frescos.controller.dto.CommentPatchRequest;
+import com.meli.frescos.controller.dto.CommentPostRequest;
 import com.meli.frescos.controller.dto.WarehouseRequest;
+import com.meli.frescos.exception.CommentNotFoundException;
 import com.meli.frescos.exception.InvalidCommentException;
 import com.meli.frescos.model.*;
 import com.meli.frescos.repository.*;
@@ -18,14 +20,14 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -97,7 +99,7 @@ class CommentControllerIT {
 
         String comment = "Test";
         LocalDateTime date = LocalDateTime.now();
-        CommentRequest commentRequest = CommentRequest.builder()
+        CommentPostRequest commentRequest = CommentPostRequest.builder()
                 .comment(comment)
                 .createdAt(date)
                 .buyerId(buyer.getId())
@@ -128,7 +130,7 @@ class CommentControllerIT {
 
         String comment = "Test";
         LocalDateTime date = LocalDateTime.now();
-        CommentRequest commentRequest = CommentRequest.builder()
+        CommentPostRequest commentRequest = CommentPostRequest.builder()
                 .comment(comment)
                 .createdAt(date)
                 .buyerId(buyer.getId())
@@ -164,7 +166,7 @@ class CommentControllerIT {
 
         String comment = "Test";
         LocalDateTime date = LocalDateTime.now();
-        CommentRequest commentRequest = CommentRequest.builder()
+        CommentPostRequest commentRequest = CommentPostRequest.builder()
                 .comment(comment)
                 .createdAt(date)
                 .buyerId(buyer.getId())
@@ -209,7 +211,7 @@ class CommentControllerIT {
         PurchaseOrderModel purchaseOrder3 = createPurchaseOrder(OrderStatusEnum.CLOSED, buyer3);
         createOrderProduct(product, purchaseOrder3, 10);
 
-        commentRepository.save(CommentRequest.builder()
+        commentRepository.save(CommentPostRequest.builder()
                 .comment("Latest coment")
                 .createdAt(LocalDateTime.now())
                 .buyerId(buyer.getId())
@@ -217,7 +219,7 @@ class CommentControllerIT {
                 .build()
                 .toModel()
         );
-        commentRepository.save(CommentRequest.builder()
+        commentRepository.save(CommentPostRequest.builder()
                 .comment("Mid comment")
                 .createdAt(LocalDateTime.now())
                 .buyerId(buyer2.getId())
@@ -225,7 +227,7 @@ class CommentControllerIT {
                 .build()
                 .toModel()
         );
-        commentRepository.save(CommentRequest.builder()
+        commentRepository.save(CommentPostRequest.builder()
                 .comment("Earliest comment")
                 .createdAt(LocalDateTime.now())
                 .buyerId(buyer3.getId())
@@ -247,58 +249,199 @@ class CommentControllerIT {
         ;
     }
 
-//
-//    @Test
-//    @DisplayName("Test Seller Creation with wrong rating - POST Endpoint")
-//    void create_throwsMethodArgumentNotValidException_whenRatingIsAboveMax() throws Exception {
-//        String name = "Seller";
-//        String cpf = "41937616576";
-//        Double rating = Double.valueOf(10.0);
-//
-//        SellerRequest sellerRequest = SellerRequest.builder()
-//                .cpf(cpf)
-//                .name(name)
-//                .rating(rating)
-//                .build();
-//
-//        ResultActions response = mockMvc.perform(
-//                post("/seller")
-//                        .content(objectMapper.writeValueAsString(sellerRequest))
-//                        .contentType(MediaType.APPLICATION_JSON)
-//        );
-//
-//        response.andExpect(status().isBadRequest())
-//                .andExpect(result -> assertTrue(
-//                        result.getResolvedException() instanceof MethodArgumentNotValidException))
-//                .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString("A avaliação do vendedor não pode ser maior que 5 e deve conter no máximo duas casas decimais")))
-//                .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.containsString("A avaliação do vendedor deve ser de 0 à 5")));
-//    }
-//
-//    @Test
-//    @DisplayName("Test Get all Seller - GET Endpoint")
-//    void getAll_returnListOfSeller_whenSuccess() throws Exception {
-//        String name = "Seller";
-//        String cpf = "41937616576";
-//        Double rating = Double.valueOf(5.0);
-//
-//        SellerRequest sellerRequest = SellerRequest.builder()
-//                .cpf(cpf)
-//                .name(name)
-//                .rating(rating)
-//                .build();
-//
-//
-//        sellerService.save(sellerRequest.toModel());
-//
-//        ResultActions response = mockMvc.perform(
-//                get("/seller")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//        );
-//
-//        response.andExpect(status().isOk())
-//                .andExpect(jsonPath("$", hasSize(1)));
-//    }
+    @Test
+    @DisplayName("Test Comment Successfull returns NO_CONTENT - GET Endpoint")
+    void getRecentComment_returnsNoContentStatus_whenListIsEmpty() throws Exception {
+        WarehouseModel warehouse = createWarehouse();
+        SectionModel section = createSection(warehouse.getId());
+        SellerModel seller = createSeller();
+        createRepresentative(warehouse.getId());
+        ProductModel product = createProduct(seller);
+        createBatchStockRequest(section, product);
 
+        ResultActions response = mockMvc.perform(
+                get("/comment/{productId}", product.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        response.andExpect(status().isNoContent())
+        ;
+    }
+
+    @Test
+    @DisplayName("Test Delete Comment Succesfull - DELETE Endpoint")
+    void delete_returnsOKStatus_whenSuccess() throws Exception {
+        WarehouseModel warehouse = createWarehouse();
+        SectionModel section = createSection(warehouse.getId());
+        SellerModel seller = createSeller();
+        BuyerModel buyer = createBuyer("08392648609", "Test Buyer");
+        createRepresentative(warehouse.getId());
+        ProductModel product = createProduct(seller);
+        createBatchStockRequest(section, product);
+        PurchaseOrderModel purchaseOrder = createPurchaseOrder(OrderStatusEnum.CLOSED, buyer);
+        createOrderProduct(product, purchaseOrder, 10);
+
+        String comment = "Test";
+        LocalDateTime date = LocalDateTime.now();
+        CommentPostRequest commentRequest = CommentPostRequest.builder()
+                .comment(comment)
+                .createdAt(date)
+                .buyerId(buyer.getId())
+                .productId(product.getId())
+                .build();
+
+        CommentModel createdCommentEntity = commentRepository.save(commentRequest.toModel());
+
+        ResultActions response = mockMvc.perform(
+                delete("/comment/{id}", createdCommentEntity.getId())
+                        .content(objectMapper.writeValueAsString(commentRequest))
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        response.andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("Test Delete Comment with inexistent Comment  - DELETE Endpoint")
+    void delete_throwsCommentNotFoundException_whenCommentDoesNotExists() throws Exception {
+        Long id = 1L;
+        ResultActions response = mockMvc.perform(
+                delete("/comment/{id}", id)
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        response.andExpect(status().isNotFound())
+                .andExpect(result -> assertTrue(
+                        result.getResolvedException() instanceof CommentNotFoundException))
+                .andExpect(jsonPath("$.message",
+                        CoreMatchers.is(String.format("Comentário de ID %d não encontrado", id))));
+    }
+
+    @Test
+    @DisplayName("Test Update Comment - PATCH Endpoint")
+    void update_returnUpdatedCommentary_whenSuccess() throws Exception {
+        WarehouseModel warehouse = createWarehouse();
+        SectionModel section = createSection(warehouse.getId());
+        SellerModel seller = createSeller();
+        createRepresentative(warehouse.getId());
+        ProductModel product = createProduct(seller);
+        createBatchStockRequest(section, product);
+
+        BuyerModel buyer = createBuyer("08392648609", "Test Buyer");
+        PurchaseOrderModel purchaseOrder = createPurchaseOrder(OrderStatusEnum.CLOSED, buyer);
+        createOrderProduct(product, purchaseOrder, 10);
+
+        String newCommentary = "NewCommentary";
+
+        CommentModel oldComment = commentRepository.save(CommentPostRequest.builder()
+                .comment("Latest coment")
+                .createdAt(LocalDateTime.now())
+                .buyerId(buyer.getId())
+                .productId(product.getId())
+                .build()
+                .toModel()
+        );
+
+        CommentPatchRequest commentPatchRequest = CommentPatchRequest.builder()
+                .comment(newCommentary)
+                .id(oldComment.getId())
+                .build();
+
+        ResultActions response = mockMvc.perform(
+                patch("/comment")
+                        .content(objectMapper.writeValueAsString(commentPatchRequest))
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        response.andExpect(status().isOk())
+                .andExpect(jsonPath("$.comment", CoreMatchers.is(newCommentary)))
+                .andExpect(jsonPath("$.id", CoreMatchers.is(oldComment.getId().intValue())));
+
+    }
+
+    @Test
+    @DisplayName("Test Update Comment Throw Exception when ID is negative - PATCH Endpoint")
+    void update_returnThrowException_whenIdIsNegative() throws Exception {
+        WarehouseModel warehouse = createWarehouse();
+        SectionModel section = createSection(warehouse.getId());
+        SellerModel seller = createSeller();
+        createRepresentative(warehouse.getId());
+        ProductModel product = createProduct(seller);
+        createBatchStockRequest(section, product);
+
+        BuyerModel buyer = createBuyer("08392648609", "Test Buyer");
+        PurchaseOrderModel purchaseOrder = createPurchaseOrder(OrderStatusEnum.CLOSED, buyer);
+        createOrderProduct(product, purchaseOrder, 10);
+
+        String newCommentary = "NewCommentary";
+
+        commentRepository.save(CommentPostRequest.builder()
+                .comment("Latest coment")
+                .createdAt(LocalDateTime.now())
+                .buyerId(buyer.getId())
+                .productId(product.getId())
+                .build()
+                .toModel()
+        );
+
+        CommentPatchRequest commentPatchRequest = CommentPatchRequest.builder()
+                .comment(newCommentary)
+                .id(-1L)
+                .build();
+
+        ResultActions response = mockMvc.perform(
+                patch("/comment")
+                        .content(objectMapper.writeValueAsString(commentPatchRequest))
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        response.andExpect(status().isBadRequest())
+                .andExpect(result -> assertTrue(
+                        result.getResolvedException() instanceof MethodArgumentNotValidException))
+                .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.is("ID do comentário deve ser positivo.")));
+    }
+
+    @Test
+    @DisplayName("Test Update Comment Throw Exception when ID is null - PATCH Endpoint")
+    void update_returnThrowException_whenIdIsNotSetted() throws Exception {
+        WarehouseModel warehouse = createWarehouse();
+        SectionModel section = createSection(warehouse.getId());
+        SellerModel seller = createSeller();
+        createRepresentative(warehouse.getId());
+        ProductModel product = createProduct(seller);
+        createBatchStockRequest(section, product);
+
+        BuyerModel buyer = createBuyer("08392648609", "Test Buyer");
+        PurchaseOrderModel purchaseOrder = createPurchaseOrder(OrderStatusEnum.CLOSED, buyer);
+        createOrderProduct(product, purchaseOrder, 10);
+
+        String newCommentary = "NewCommentary";
+
+        commentRepository.save(CommentPostRequest.builder()
+                .comment("Latest coment")
+                .createdAt(LocalDateTime.now())
+                .buyerId(buyer.getId())
+                .productId(product.getId())
+                .build()
+                .toModel()
+        );
+
+        CommentPatchRequest commentPatchRequest = CommentPatchRequest.builder()
+                .comment(newCommentary)
+                .id(null)
+                .build();
+
+        ResultActions response = mockMvc.perform(
+                patch("/comment")
+                        .content(objectMapper.writeValueAsString(commentPatchRequest))
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        response.andExpect(status().isBadRequest())
+                .andExpect(result -> assertTrue(
+                        result.getResolvedException() instanceof MethodArgumentNotValidException))
+                .andExpect(jsonPath("$.fieldsMessages", CoreMatchers.is("ID do comentário não pode ser nulo.")));
+    }
 
     WarehouseModel createWarehouse() {
         String city = "Tramandaí";

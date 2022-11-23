@@ -1,5 +1,6 @@
 package com.meli.frescos.service;
 
+import com.meli.frescos.exception.CommentNotFoundException;
 import com.meli.frescos.exception.InvalidCommentException;
 import com.meli.frescos.model.BuyerModel;
 import com.meli.frescos.model.CommentModel;
@@ -51,4 +52,27 @@ public class CommentService implements ICommentService {
         iProductService.getById(productId);
         return commentRepository.findByProductIdOrderByCreatedAtDesc(productId);
     }
+
+    @Override
+    public void delete(CommentModel commentModel) throws CommentNotFoundException {
+        findById(commentModel.getId());
+        commentRepository.delete(commentModel);
+    }
+
+    @Override
+    public CommentModel update(CommentModel commentModel) throws CommentNotFoundException {
+        CommentModel originalComment = findById(commentModel.getId());
+        commentModel.setBuyer(originalComment.getBuyer());
+        commentModel.setProduct(originalComment.getProduct());
+        commentModel.setCreatedAt(originalComment.getCreatedAt());
+
+        return commentRepository.save(commentModel);
+
+    }
+
+    protected CommentModel findById(Long id) throws CommentNotFoundException {
+        return commentRepository.findById(id).orElseThrow(() -> new CommentNotFoundException(String.format("Comentário de ID %d não encontrado", id)));
+    }
+
+
 }

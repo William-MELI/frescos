@@ -21,7 +21,8 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommentRequest {
+public class CommentPostRequest {
+
 
     /**
      * Commentary
