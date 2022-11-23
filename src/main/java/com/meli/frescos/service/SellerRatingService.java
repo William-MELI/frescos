@@ -46,7 +46,7 @@ public class SellerRatingService implements ISellerRatingService{
      *
      * @param seller the SellerModel
      * @param buyer the BuyerModel
-     * @param purchaseOrder the PurcheseOrderModel
+     * @param purchaseOrder the PurchaseOrderModel
      * @return a SellerRatingModel
      */
     @Override
@@ -67,7 +67,7 @@ public class SellerRatingService implements ISellerRatingService{
     /**
      * Update seller rating
      *
-     * @param seller the SellerModel
+     * @param seller the SellerRating
      */
     private void updateSellerRating(SellerRatingModel seller){
 

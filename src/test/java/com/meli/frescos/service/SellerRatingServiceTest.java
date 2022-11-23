@@ -3,6 +3,7 @@ package com.meli.frescos.service;
 import com.meli.frescos.exception.SellerRatingAlreadyExist;
 import com.meli.frescos.model.*;
 import com.meli.frescos.repository.SellerRatingRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,13 +30,23 @@ class SellerRatingServiceTest {
     @Mock
     private ISellerService iSellerService;
 
+    private SellerModel seller;
+    private BuyerModel buyer;
+    private PurchaseOrderModel purchaseOrder;
+    private SellerRatingModel sellerRating;
+
+    @BeforeEach
+    void setup(){
+        seller = new SellerModel(1L, "Antônio", "78945613-99", null);
+        buyer = new BuyerModel(1L, "Katarina", "123456789-00");
+        purchaseOrder = new PurchaseOrderModel(1L, LocalDate.now(), OrderStatusEnum.CLOSED, buyer);
+        sellerRating = new SellerRatingModel(1L, seller, purchaseOrder, buyer, 5.00);
+    }
+
     @Test
     @DisplayName("Create a new SellerRating successfully")
     void saveSellerRating_returnsCreatedSellerRating_whenSuccess() {
-        SellerModel seller = new SellerModel(1L, "Antônio", "78945613-99", null);
-        BuyerModel buyer = new BuyerModel(1L, "Katarina", "123456789-00");
-        PurchaseOrderModel purchaseOrder = new PurchaseOrderModel(1L, LocalDate.now(), OrderStatusEnum.CLOSED, buyer);
-        SellerRatingModel sellerRating = new SellerRatingModel(1L, seller, purchaseOrder, buyer, 5.00);
+
         List<SellerRatingModel> sellerRatingList = new ArrayList<>();
         sellerRatingList.add(sellerRating);
 
@@ -62,11 +73,6 @@ class SellerRatingServiceTest {
     @Test
     @DisplayName("Throw exception when the same record already exists.")
     void save_throwsSellerRatingAlreadyExist_whenSameRecordAlreadyExists() {
-        SellerModel seller = new SellerModel(1L, "Antônio", "78945613-99", null);
-        BuyerModel buyer = new BuyerModel(1L, "Katarina", "123456789-00");
-        PurchaseOrderModel purchaseOrder = new PurchaseOrderModel(1L, LocalDate.now(), OrderStatusEnum.CLOSED, buyer);
-        SellerRatingModel sellerRating = new SellerRatingModel(1L, seller, purchaseOrder, buyer, 5.00);
-
         BDDMockito.when(sellerRatingRepository.findBySellerAndBuyerAndPurchaseOrder(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any()))
                 .thenReturn(sellerRating);
 
@@ -78,10 +84,6 @@ class SellerRatingServiceTest {
     @Test
     @DisplayName("Returns a SellerRating when the record already exist")
     void getBySellerAndBuyerAndPurchaseOrder_returnSellerRating_whenAlreadyExist() {
-        SellerModel seller = new SellerModel(1L, "Antônio", "78945613-99", null);
-        BuyerModel buyer = new BuyerModel(1L, "Katarina", "123456789-00");
-        PurchaseOrderModel purchaseOrder = new PurchaseOrderModel(1L, LocalDate.now(), OrderStatusEnum.CLOSED, buyer);
-        SellerRatingModel sellerRating = new SellerRatingModel(1L, seller, purchaseOrder, buyer, 5.00);
         List<SellerRatingModel> sellerRatingList = new ArrayList<>();
         sellerRatingList.add(sellerRating);
 
@@ -100,10 +102,6 @@ class SellerRatingServiceTest {
     @Test
     @DisplayName("Returns null when the record does not exist")
     void getBySellerAndBuyerAndPurchaseOrder_returnNull_whenDoesNotExist() {
-        SellerModel seller = new SellerModel(1L, "Antônio", "78945613-99", null);
-        BuyerModel buyer = new BuyerModel(1L, "Katarina", "123456789-00");
-        PurchaseOrderModel purchaseOrder = new PurchaseOrderModel(1L, LocalDate.now(), OrderStatusEnum.CLOSED, buyer);
-
         BDDMockito.when(sellerRatingRepository.findBySellerAndBuyerAndPurchaseOrder(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any()))
                 .thenReturn(null);
 
@@ -115,10 +113,6 @@ class SellerRatingServiceTest {
     @Test
     @DisplayName("Return all storage SellerRating")
     void getAll_returnAllSellerRating_whenSuccess() {
-        SellerModel seller = new SellerModel(1L, "Antônio", "78945613-99", null);
-        BuyerModel buyer = new BuyerModel(1L, "Katarina", "123456789-00");
-        PurchaseOrderModel purchaseOrder = new PurchaseOrderModel(1L, LocalDate.now(), OrderStatusEnum.CLOSED, buyer);
-        SellerRatingModel sellerRating = new SellerRatingModel(1L, seller, purchaseOrder, buyer, 5.00);
         List<SellerRatingModel> sellerRatingList = new ArrayList<>();
         sellerRatingList.add(sellerRating);
 
@@ -129,5 +123,37 @@ class SellerRatingServiceTest {
 
         assertThat(sellerRatingTest).isNotNull();
         assertThat(sellerRatingTest).isEqualTo(sellerRatingList);
+    }
+
+    @Test
+    @DisplayName("calculates the average correctly when successfully")
+    void saveSellerRating_calculatesAverageCorrectly_whenSuccess() {
+        Double rating1 = 4.3;
+        Double rating2 = 3.2;
+        Double ratingAvg = 3.75;
+
+        sellerRating.setRating(rating1);
+        SellerRatingModel sellerRating2 = new SellerRatingModel(2L, seller, purchaseOrder, buyer, rating2);
+        List<SellerRatingModel> sellerRatingList = new ArrayList<>();
+        sellerRatingList.add(sellerRating);
+        sellerRatingList.add(sellerRating2);
+        seller.setRating(ratingAvg);
+
+        BDDMockito.when(sellerRatingRepository.findBySellerAndBuyerAndPurchaseOrder(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any()))
+                .thenReturn(null);
+        BDDMockito.when(sellerRatingRepository.save(ArgumentMatchers.any()))
+                .thenReturn(sellerRating);
+        BDDMockito.when(iSellerService.getById(ArgumentMatchers.anyLong()))
+                .thenReturn(seller);
+        BDDMockito.when(sellerRatingRepository.findBySeller(ArgumentMatchers.any()))
+                .thenReturn(sellerRatingList);
+        BDDMockito.when(iSellerService.update(seller, seller.getId()))
+                .thenReturn(seller);
+
+        SellerModel sellerTest = iSellerService.update(seller, seller.getId());
+        SellerRatingModel sellerRatingTest = sellerRatingService.save(sellerRating);
+
+        assertThat(sellerTest).isNotNull();
+        assertEquals(sellerTest.getRating(), ratingAvg);
     }
 }
